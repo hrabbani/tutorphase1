@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Connection List{% endblock title %}
+
+{% block content %}
+
+<h3>Connections</h3>
+
+
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Connected On</th>
+                <th scope="col">Student</th>
+                <th scope="col">Tutor</th>
+                <th scope="col">Last Feedback</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in object_list %}
+            <tr>
+                <td>{{obj.created|date:"d M Y"}}</td>
+                <td><a href="{{obj.student.get_absolute_url}}">{{obj.student.first_name}} {{obj.student.last_name}}</a></td>
+                <td><a href="{{obj.tutor.get_absolute_url}}">{{obj.tutor.first_name}} {{obj.tutor.last_name}}</a></td>
+                <td>None</td>
+                <td>
+                    {% if obj.status == 'connected' %}
+                    <div><span class="badge badge-success">Connected</div>
+                    {% elif obj.status == 'disconnected' %}
+                    <div><span class="badge badge-danger">Disconnected</div>
+                    {% elif obj.status == 'inactive' %}
+                    <div><span class="badge badge-warning">Inactive</div>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if obj.status == 'connected' %}
+                    <form action="{% url 'profiles:remove-connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{obj.student.pk}}>
+                        <input type="hidden" name="tutor_pk" value={{obj.tutor.pk}}>
+                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                    </form>
+
+                    {% elif obj.status == 'disconnected' %}
+                    <a href="{% url 'profiles:student-detail-view' obj.student.slug %}"><button type="submit"
+                            class="btn btn-info">Connect Tutor</button></a>
+
+                    {% elif obj.status == 'inactive' %}
+                    <a href=#><button type="submit" class="btn btn-secondary">Contact Tutor</button></a>
+
+                    {% endif %}
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}

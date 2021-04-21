@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Create Connection{% endblock title %}
+
+
+{% block content %}
+
+<h3>Create Connection</h3>
+<div>Create a connection between a Student and Tutor</div>
+</br>
+<h3>Student: {{profile.first_name}} {{profile.last_name}}</h3>
+
+</br>
+
+<h3>Tutors</h3>
+
+
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Age</th>
+                <th scope="col">Subjects</th>
+                <th scope="col">School</th>
+                <th scope="col">Student</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for tutor in tutors %}
+            <tr>
+                <td>{{tutor.first_name}}</td>
+                <td>{{tutor.email}}</td>
+                <td>{{tutor.age}}</td>
+
+                <td>
+                    {% for subject in tutor.get_subjects %}
+                    <li>{{subject}}</li>
+                    {% endfor %}
+                </td>
+                <td>{{tutor.school}}</td>
+                <td>
+                    {% for friend in tutor.get_friends %}
+                    <li>{{friend.first_name}} {{friend.last_name}}</li>
+                    {% endfor %}
+
+                </td>
+                <td>
+
+                    {% for friend in tutor.get_friends %}
+                    <div><span class="badge badge-success">Connected</span></div>
+                    {% empty %}
+                    <div><span class="badge badge-danger">Not Connected</div>
+                    {% endfor %}
+
+                </td>
+
+                <td>
+                    <form action="{% url 'profiles:connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{profile.pk}}>
+                        <input type="hidden" name="tutor_pk" value={{tutor.pk}}>
+                        <button type="submit" class="btn btn-success">Connect</button>
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock content %}

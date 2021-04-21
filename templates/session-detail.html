@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Session List{% endblock title %}
+
+{% block content %}
+
+<h3>Session Form Response</h3>
+</br>
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Student</h5>
+                <p class="card-text">{{session.connection.student.first_name}} {{session.connection.student.last_name}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Feedback</h5>
+                <p class="card-text">{{session.feedback}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Tutor</h5>
+                <p class="card-text">{{session.connection.tutor.first_name}} {{session.connection.tutor.last_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Challenges</h5>
+                <p class="card-text">{{session.challenge}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Length</h5>
+                <p class="card-text">{{session.length}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Date</h5>
+                <p class="card-text">{{session.created}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Subjects</h5>
+                {% for subject in session.get_subjects %}
+                <p>{{subject}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Other Notes</h5>
+                <p class="card-text">{{session.notes}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

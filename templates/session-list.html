@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Session List{% endblock title %}
+
+{% block content %}
+
+<h3>Sessions</h3>
+
+
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Student</th>
+                <th scope="col">Tutor</th>
+                <th scope="col">Length</th>
+                <th scope="col">Subjets</th>
+                <th scope="col">Feedback</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in object_list %}
+            <tr>
+                <td>{{obj.created|date:"d M Y"}}</td>
+                <td><a href="{{obj.connection.student.get_absolute_url}}">{{obj.connection.student.first_name}}
+                        {{obj.connection.student.last_name}}</a></td>
+                <td><a href="{{obj.connection.tutor.get_absolute_url}}">{{obj.connection.tutor.first_name}}
+                        {{obj.connection.tutor.last_name}}</a></td>
+                <td>{{obj.length}} hr</td>
+                <td>
+                    {% for subject in obj.get_subjects %}
+                    <li>{{subject}}</li>
+                    {% endfor %}
+                </td>
+                <td>{{obj.feedback}}</td>
+                <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                            Form</button></a></td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}
