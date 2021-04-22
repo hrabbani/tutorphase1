@@ -113,7 +113,8 @@ class Session(models.Model):
     def get_subjects(self):
         return self.subjects.all()
 
+    def get_subjects_no(self):
+        return self.subjects.all().count()
+
     def get_absolute_url(self):
         return reverse("profiles:session-detail-view", kwargs={"pk": self.pk})
-
-

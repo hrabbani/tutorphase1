@@ -12,6 +12,7 @@ from .views import (
     SessionDetailView,
     tutor_profile_form,
     student_profile_form,
+    dashboard,
     
     
 
@@ -32,6 +33,8 @@ urlpatterns = [
     path('<pk>/session/', SessionDetailView.as_view(), name='session-detail-view'),
     path('tutor-profile-input/', tutor_profile_form, name='tutor-profile-form'),
     path('student-profile-input/', student_profile_form, name='student-profile-form'),
+    path('dashboard/', dashboard, name='dashboard'),
+
 
     
 ]

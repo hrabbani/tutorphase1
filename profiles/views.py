@@ -1,6 +1,6 @@
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Profile, Connection, Session
+from .models import Profile, Connection, Session, Subject
 from .forms import ProfileModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
@@ -9,6 +9,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponse, JsonResponse
 import json
+from datetime import timedelta
+from datetime import date
+from django.db.models import Sum
+from django.utils import timezone
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
+import collections
+
 
 
 
@@ -144,7 +152,7 @@ class SessionListView(ListView):
     template_name = 'session-list.html'
 
     def get_queryset(self):
-        qs = Session.objects.all()
+        qs = Session.objects.all().order_by('-created')
         return qs
 
 
@@ -198,3 +206,48 @@ def student_profile_form(request):
 
 
 
+
+def dashboard(request):
+
+    x = 0
+    for tutor in Profile.objects.filter(role='tutor'):
+        if tutor.get_friends_no() == 0:
+            x = x + 1
+
+    y = 0
+    for student in Profile.objects.filter(role='student'):
+        if student.get_friends_no() == 0:
+            y = y + 1
+
+    todays_date = timezone.now()
+    thirty_days_ago = todays_date-timedelta(days=30)
+    thirty_days_session = Session.objects.filter(created__gte=thirty_days_ago, created__lte=todays_date)
+
+    num_session = thirty_days_session.count()
+    hour_session = thirty_days_session.aggregate(Sum('length'))
+  
+    num_math = thirty_days_session.filter(subjects__in=[1]).count()
+    num_english = thirty_days_session.filter(subjects__in=[2]).count()
+
+    month = Session.objects.annotate(month=TruncMonth('created')).values('month').annotate(total=Count('connection'))
+    recent_session = Session.objects.all().order_by('-created')[:5]
+
+    z = []
+    for session in Session.objects.filter():
+        z.append(list(session.get_subjects().values('name')))
+
+    flat_list = [item for sublist in z for item in sublist]
+    unique_counts = dict(collections.Counter(e['name'] for e in flat_list))
+
+    context = {'month':month,
+                'x':x,
+                'y':y,
+                'num_session':num_session,
+                'hour_session':hour_session,
+                'num_math':num_math,
+                'num_english':num_english,
+                'recent_session':recent_session,
+                'unique_counts':unique_counts,
+                }
+
+    return render(request, 'dashboard.html', context)
