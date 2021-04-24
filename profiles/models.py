@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms.models import ModelChoiceField
 from django.shortcuts import reverse
 from django.contrib.auth.models import User
 from .utils import get_random_code
@@ -95,17 +96,42 @@ class Connection(models.Model):
     def __str__(self):
         return f"{self.student}-{self.tutor}-{self.status}"
 
+    def get_absolute_url(self):
+        return reverse("profiles:connection-detail-view", kwargs={"pk": self.pk})
+
+    def get_sessions(self):
+        return self.session_set.filter(submit_status=True)[:1]
+
+
+CONT_STATUS_CHOICES = (
+    ('yes', 'yes'),
+    ('no', 'no'),
+)
+
+
+class Support(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Session(models.Model):
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
+    meet = models.IntegerField(null=True, blank=True)
     length = models.FloatField(null=True, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name='sessionsubjects')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-    feedback = models.TextField(max_length=1000)
-    challenge = models.TextField(max_length=1000)
-    notes = models.TextField(max_length=1000)
+    feedback = models.TextField(null=True, blank=True, max_length=1000)
+    change = models.TextField(null=True, blank=True, max_length=1000)
+    support = models.ManyToManyField(Support, blank=True, related_name='supports')
+    othersupport = models.CharField(null=True, blank=True, max_length=200)
+    question = models.TextField(null=True, blank=True, max_length=1000)
+    cont = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
+    submit_status = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.connection.student.first_name}-{self.connection.tutor.first_name}"
@@ -115,6 +141,9 @@ class Session(models.Model):
 
     def get_subjects_no(self):
         return self.subjects.all().count()
+
+    def get_supports(self):
+        return self.support.all()
 
     def get_absolute_url(self):
         return reverse("profiles:session-detail-view", kwargs={"pk": self.pk})

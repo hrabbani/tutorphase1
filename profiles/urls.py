@@ -13,6 +13,10 @@ from .views import (
     tutor_profile_form,
     student_profile_form,
     dashboard,
+    SessionUpdateView,
+    generate_session_form,
+    session_submitted,
+    ConnectionDetailView,
     
     
 
@@ -34,6 +38,10 @@ urlpatterns = [
     path('tutor-profile-input/', tutor_profile_form, name='tutor-profile-form'),
     path('student-profile-input/', student_profile_form, name='student-profile-form'),
     path('dashboard/', dashboard, name='dashboard'),
+    path('<pk>/submit-feedback/', SessionUpdateView.as_view(), name='submit-feedback'),
+    path('generate-session-form/', generate_session_form, name='generate-session-form'),
+    path('session-submitted/', session_submitted, name='session-submitted'),
+    path('<pk>/connection-detail', ConnectionDetailView.as_view(), name='connection-detail-view'),
 
 
     

@@ -1,7 +1,7 @@
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Connection, Session, Subject
-from .forms import ProfileModelForm
+from .forms import ProfileModelForm, SessionModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -16,6 +16,8 @@ from django.utils import timezone
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
 import collections
+from django.urls import reverse_lazy
+
 
 
 
@@ -72,7 +74,7 @@ class ProfileDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         slug = self.kwargs.get('slug')
         profile = Profile.objects.get(slug=slug)
-        sessions = Session.objects.filter(Q(connection__tutor=profile) | Q(connection__student=profile))
+        sessions = Session.objects.filter(submit_status=True).filter(Q(connection__tutor=profile) | Q(connection__student=profile))
         sessions_ = []
         for item in sessions:
             sessions_.append(item)
@@ -83,7 +85,6 @@ class ProfileDetailView(DetailView):
 class TutorProfileListView(ListView):
     model = Profile
     template_name = 'tutor-profile-list.html'
-    # context_object_name = 'qs'
 
     def get_queryset(self):
         qs = Profile.objects.filter(role='tutor')
@@ -94,7 +95,6 @@ class TutorProfileListView(ListView):
 class StudentProfileListView(ListView):
     model = Profile
     template_name = 'student-profile-list.html'
-    # context_object_name = 'qs'
 
     def get_queryset(self):
         qs = Profile.objects.filter(role='student')
@@ -127,8 +127,32 @@ class ConnectionListView(ListView):
     template_name = 'connection-list.html'
 
     def get_queryset(self):
-        qs = Connection.objects.all()
+        qs = Connection.objects.all().order_by('-created')
         return qs
+
+
+
+class ConnectionDetailView(DetailView):
+    model = Connection
+    template_name = 'connection-detail.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        connection = Connection.objects.get(pk=pk)
+        return connection
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        connection = Connection.objects.get(pk=pk)
+        sessions = Session.objects.filter(submit_status=True).filter(connection=connection)
+        sessions_ = []
+        for item in sessions:
+            sessions_.append(item)
+        context["sessions"] = sessions_
+        return context
+
+
 
 
 def remove_connection(request):
@@ -152,7 +176,7 @@ class SessionListView(ListView):
     template_name = 'session-list.html'
 
     def get_queryset(self):
-        qs = Session.objects.all().order_by('-created')
+        qs = Session.objects.filter(submit_status=True).order_by('-created')
         return qs
 
 
@@ -166,6 +190,45 @@ class SessionDetailView(DetailView):
         session = Session.objects.get(pk=pk)
         return session
 
+
+
+def generate_session_form(request):
+    
+    active_connection = Connection.objects.filter(status='connected')
+
+    z = []
+    for x in active_connection:
+        session_generated = Session.objects.create(connection=x)
+        session_generated_pk = str(session_generated.pk)
+        z.append("http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/")
+
+
+    context = {'z':z}
+
+    return render(request, 'session-form-link.html', context)
+
+class SessionUpdateView(UpdateView):
+
+    form_class = SessionModelForm
+    model = Session
+    template_name = 'submit-session-feedback.html'
+    success_url = reverse_lazy('profiles:session-submitted')
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        session = Session.objects.get(pk=pk)
+        return session
+
+    def form_valid(self, form):
+        self.object.submit_status = True
+        self.object = form.save()
+        return super().form_valid(form)
+
+
+
+def session_submitted(request):
+
+    return render(request, 'session-submitted.html')
 
 
 def tutor_profile_form(request):
@@ -221,7 +284,7 @@ def dashboard(request):
 
     todays_date = timezone.now()
     thirty_days_ago = todays_date-timedelta(days=30)
-    thirty_days_session = Session.objects.filter(created__gte=thirty_days_ago, created__lte=todays_date)
+    thirty_days_session = Session.objects.filter(submit_status=True).filter(created__gte=thirty_days_ago, created__lte=todays_date)
 
     num_session = thirty_days_session.count()
     hour_session = thirty_days_session.aggregate(Sum('length'))
@@ -229,8 +292,8 @@ def dashboard(request):
     num_math = thirty_days_session.filter(subjects__in=[1]).count()
     num_english = thirty_days_session.filter(subjects__in=[2]).count()
 
-    month = Session.objects.annotate(month=TruncMonth('created')).values('month').annotate(total=Count('connection'))
-    recent_session = Session.objects.all().order_by('-created')[:5]
+    month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('created')).values('month').annotate(total=Count('connection'))
+    recent_session = Session.objects.filter(submit_status=True).order_by('-created')[:5]
 
     z = []
     for session in Session.objects.filter():
@@ -251,3 +314,6 @@ def dashboard(request):
                 }
 
     return render(request, 'dashboard.html', context)
+
+
+

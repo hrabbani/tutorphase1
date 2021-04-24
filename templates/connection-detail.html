@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Connection{% endblock title %}
+
+
+{% block content %}
+
+<h3>Connection</h3>
+
+{% if connection.status == 'connected' %}
+<div><span class="badge badge-success">Connected</div>
+{% elif connection.status == 'disconnected' %}
+<div><span class="badge badge-danger">Disconnected</div>
+{% elif connection.status == 'inactive' %}
+<div><span class="badge badge-warning">Inactive</div>
+{% endif %}
+
+
+
+
+<div class="profile-page tx-13">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="profile-header">
+                <div class="header-links">
+                    <div class="container header">
+
+                        <div class="row">
+
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <img class="profile-pic" src="{{connection.student.avatar.url}}" alt="profile">
+                                    </div>
+                                    <div class="col">
+                                        <div style="font-size:25px; font-weight:bold" class="profile-name">
+                                            {{connection.student.role|title }}</div>
+                                        <div style="font-size:25px; font-weight:bold" class="profile-name">
+                                            {{connection.student.first_name}}
+                                            {{connection.student.last_name}}</div>
+                                        <div style="font-size:15px" class="profile-name">
+                                            {{connection.student.school}}</div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <img class="profile-pic" src="{{connection.tutor.avatar.url}}" alt="profile">
+                                    </div>
+                                    <div class="col">
+                                        <div style="font-size:25px; font-weight:bold" class="profile-name">
+                                            {{connection.tutor.role|title }}</div>
+                                        <div style="font-size:25px; font-weight:bold" class="profile-name">
+                                            {{connection.tutor.first_name}}
+                                            {{connection.tutor.last_name}}</div>
+                                        <div style="font-size:15px" class="profile-name">
+                                            {{connection.tutor.school}}</div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% if connection.status == 'connected' %}
+<form action="{% url 'profiles:remove-connect' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="student_pk" value={{connection.student.pk}}>
+    <input type="hidden" name="tutor_pk" value={{connection.tutor.pk}}>
+    <button type="submit" class="btn btn-danger">Disconnect</button>
+</form>
+
+{% elif connection.status == 'disconnected' %}
+<a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
+        class="btn btn-info">Connect
+        Tutor</button></a>
+
+{% elif connection.status == 'inactive' %}
+<a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
+        class="btn btn-info">Connect
+        Tutor</button></a>
+<form action="{% url 'profiles:remove-connect' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="student_pk" value={{connection.student.pk}}>
+    <input type="hidden" name="tutor_pk" value={{connection.tutor.pk}}>
+    <button type="submit" class="btn btn-danger">Disconnect</button>
+</form>
+{% endif %}
+
+<h3>Activity</h3>
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Student</th>
+                <th scope="col">Tutor</th>
+                <th scope="col">Length</th>
+                <th scope="col">Subjets</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in sessions %}
+            <tr>
+                <td>{{obj.created|date:"d M Y"}}</td>
+                <td><a href="{{obj.connection.student.get_absolute_url}}">{{obj.connection.student.first_name}}
+                        {{obj.connection.student.last_name}}</a></td>
+                <td><a href="{{obj.connection.tutor.get_absolute_url}}">{{obj.connection.tutor.first_name}}
+                        {{obj.connection.tutor.last_name}}</a></td>
+                <td>{{obj.length}} hr</td>
+                <td>
+                    {% for subject in obj.get_subjects %}
+                    <li>{{subject}}</li>
+                    {% endfor %}
+                </td>
+                <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                            Form</button></a></td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}

@@ -8,7 +8,9 @@
 <h3>Session Form Response</h3>
 </br>
 
-
+<h4>Tutor: {{session.connection.tutor.first_name}} {{session.connection.tutor.last_name}}</h4>
+<h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
+</br>
 
 
 
@@ -18,8 +20,8 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Student</h5>
-                <p class="card-text">{{session.connection.student.first_name}} {{session.connection.student.last_name}}
+                <h5 class="card-title">How many times did you meet this week?</h5>
+                <p class="card-text">{{session.meet}}
                 </p>
             </div>
         </div>
@@ -27,69 +29,93 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Feedback</h5>
+                <h5 class="card-title">How many total hours of tutoring did you do?</h5>
+                <p class="card-text">{{session.length}} hrs</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">What subjects did you cover?</h5>
+                {% for subject in session.get_subjects %}
+                <p class="card-text">{{subject}}</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">List one way you were helpful to your student.</h5>
                 <p class="card-text">{{session.feedback}}</p>
             </div>
         </div>
     </div>
 </div>
 
-
 <div class="row">
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Tutor</h5>
-                <p class="card-text">{{session.connection.tutor.first_name}} {{session.connection.tutor.last_name}}</p>
+                <h5 class="card-title">List one thing you would change to make your future sessions better.</h5>
+                <p class="card-text">{{session.change}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Challenges</h5>
-                <p class="card-text">{{session.challenge}}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Length</h5>
-                <p class="card-text">{{session.length}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Date</h5>
-                <p class="card-text">{{session.created}}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Subjects</h5>
-                {% for subject in session.get_subjects %}
-                <p>{{subject}}</p>
+                <h5 class="card-title">Can we support you with any of the following:</h5>
+                {% for support in session.get_supports %}
+                <p class="card-text">{{support}}</p>
                 {% endfor %}
             </div>
         </div>
     </div>
+</div>
+
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Other Notes</h5>
-                <p class="card-text">{{session.notes}}</p>
+                <h5 class="card-title">Other Support</h5>
+                <p class="card-text">{{session.othersupport}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us?</h5>
+                <p class="card-text">{{session.question}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Are you and this student going to continue working together?</h5>
+                <p class="card-text">{{session.cont}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+                <p class="card-text"></p>
             </div>
         </div>
     </div>

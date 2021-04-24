@@ -1,6 +1,6 @@
 from django import forms
-from .models import Profile, Subject
-# from allauth.account.forms import LoginForm
+from .models import Profile, Session
+from django.forms import TextInput
 
 class ProfileModelForm(forms.ModelForm):
 
@@ -15,6 +15,22 @@ class ProfileModelForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
+
+
+
+class SessionModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Session
+        fields = ('meet', 'length', 'subjects', 'feedback', 'change', 'support', 'othersupport', 'question', 'cont')
+
+    def __init__(self, *args, **kwargs):
+        super(SessionModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
 
 
 # class YourLoginForm(LoginForm):
