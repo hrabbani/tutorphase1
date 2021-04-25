@@ -32,8 +32,6 @@
 
 
 
-
-
 <div class="table-responsive-lg">
     <table id="myTable" class="table">
         <thead>
@@ -48,7 +46,7 @@
         </thead>
         <tbody>
 
-            {% for obj in object_list %}
+            {% for obj in qs %}
             <tr>
                 <td><a href="{{obj.get_absolute_url}}">{{obj.created|date:"d M Y"}}</a></td>
                 <td><a href="{{obj.student.get_absolute_url}}">{{obj.student.first_name}} {{obj.student.last_name}}</a>

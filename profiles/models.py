@@ -35,6 +35,8 @@ class Profile(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
+    flag = models.BooleanField(default=False)
+
 
     
     def __str__(self):
@@ -51,6 +53,7 @@ class Profile(models.Model):
 
     def get_subjects(self):
         return self.subjects.all()
+ 
 
     __initial_first_name = None
     __initial_last_name = None

@@ -317,3 +317,39 @@ def dashboard(request):
 
 
 
+
+
+def like_unlike_post(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        student_obj = Profile.objects.get(id=post_id)
+
+        if student_obj.flag == False:
+            student_obj.flag = True
+            student_obj.save()
+
+        else:
+            student_obj.flag = False
+            student_obj.save()
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')
+
+
+
+def search_connection(request):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        qs = Connection.objects.all().order_by('-created').filter(status=status)
+
+    context = {'qs':qs}
+
+    return render(request, 'connection-list-search.html', context)
+
+
+

@@ -21,6 +21,9 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
         tutor_.save()
 
 
+
+
+
 @receiver(post_save, sender=Session)
 def post_save_disconnect_connection(sender, instance, created, **kwargs):
     connection_ = instance.connection

@@ -10,6 +10,7 @@ from .views import (
     SessionListView,
     ProfileDetailView,
     SessionDetailView,
+    search_connection,
     tutor_profile_form,
     student_profile_form,
     dashboard,
@@ -17,6 +18,8 @@ from .views import (
     generate_session_form,
     session_submitted,
     ConnectionDetailView,
+    like_unlike_post,
+    search_connection,
     
     
 
@@ -42,7 +45,8 @@ urlpatterns = [
     path('generate-session-form/', generate_session_form, name='generate-session-form'),
     path('session-submitted/', session_submitted, name='session-submitted'),
     path('<pk>/connection-detail', ConnectionDetailView.as_view(), name='connection-detail-view'),
-
+    path('liked/', like_unlike_post, name='like-post-view'),
+    path('search-connection/', search_connection, name='search-connection'),
 
     
 ]
