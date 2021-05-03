@@ -1,0 +1,128 @@
+{% extends 'cbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Connection List{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-auto mr-auto">
+        <h3>Connections</h3>
+    </div>
+    {% comment %} <div class="col-auto">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <form action="{% url 'profiles:search-connection' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="status" value='connected'>
+                <button type="submit" class="btn btn-outline-dark">Connected</button>
+            </form>
+            <form action="{% url 'profiles:search-connection' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="status" value='disconnected'>
+                <button type="submit" class="btn btn-outline-dark">Disconnected</button>
+            </form>
+            <form action="{% url 'profiles:search-connection' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="status" value='inactive'>
+                <button type="submit" class="btn btn-outline-dark">Inactive</button>
+            </form>
+        </div>
+    </div> {% endcomment %}
+</div>
+
+
+
+
+
+<div class="table-responsive-lg">
+    <table id="myTable" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Connected On</th>
+                <th scope="col">Student</th>
+                <th scope="col">Mentor</th>
+                <th scope="col">Last Session</th>
+                <th scope="col">Progress</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+                <th scope="col">Flag</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in object_list %}
+            <tr>
+                <td><a href="{{obj.get_absolute_url}}">{{obj.created|date:"d M Y"}}</a></td>
+                <td><a href="{{obj.student.get_absolute_url}}">{{obj.student.first_name}} {{obj.student.last_name}}</a>
+                </td>
+                <td><a href="{{obj.mentor.get_absolute_url}}">{{obj.mentor.first_name}} {{obj.mentor.last_name}}</a>
+                </td>
+                <td>{% for session in obj.get_sessions %}{{session.updated|date:"d M Y"}}{% endfor %}</td>
+                <td>{% if obj.get_task%}
+                <a href="{% url 'cprofiles:task-form' obj.get_task %}">{{obj.get_task.progress}}
+                {% endif %}
+                </td>
+                <td>
+                    {% if obj.status == 'connected' %}
+                    <div><span class="badge badge-success">Connected</div>
+                    {% elif obj.status == 'disconnected' %}
+                    <div><span class="badge badge-danger">Disconnected</div>
+                    {% elif obj.status == 'inactive' %}
+                    <div><span class="badge badge-warning">Inactive</div>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if obj.status == 'connected' %}
+                    <form action="{% url 'cprofiles:remove-connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{obj.student.pk}}>
+                        <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
+                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                    </form>
+
+                    {% elif obj.status == 'disconnected' %}
+                    <a href="{% url 'cprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
+                            class="btn btn-info">Connect Mentor</button></a>
+
+                    {% elif obj.status == 'inactive' %}
+                    <a href="{% url 'cprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
+                            class="btn btn-info">Connect Mentor</button></a>
+                    <form action="{% url 'cprofiles:remove-connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{obj.student.pk}}>
+                        <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
+                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                    </form>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if obj.flag == False %}
+                    <i class="fa fa-flag" style="color:black"></i><p class="flag">false</p>
+                    {% else %}
+                    <i class="fa fa-flag" style="color:red"></i><p class="flag">true</p>
+                    {% endif %}
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+for (let element of document.getElementsByClassName("flag")){
+   element.style.display="none";
+}
+
+</script>
+{% endblock scripts %}

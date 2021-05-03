@@ -10,6 +10,8 @@ urlpatterns = [
     path('', home_view, name='home-view'),
     path('accounts/', include('allauth.urls')),
     path('profiles/', include('profiles.urls', namespace='profiles')),
+    path('cprofiles/', include('cprofiles.urls', namespace='cprofiles')),
+
 
 ]
 

@@ -160,6 +160,7 @@ $(document).ready(function () {
             labels: [{% for x in month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
             datasets: [{
                 label: 'Tutoring Session Per Month',
+                fill: false,
                 data: [{% for x in month %}{{x.total}},{% endfor %}],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',

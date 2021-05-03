@@ -1,0 +1,98 @@
+{% extends 'form-base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Task Form{% endblock title %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-9">
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+                    <div class="card-header">
+                        <h2>Task Form</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="column col-6">
+                                <div class="row">
+                                    <div class="form-group column col-6">
+                                        <label><h3>Task</h3></label>
+                                    </div>
+                                    <div class="form-group column col-6">
+                                        <label><h3>Deadline</h3></label>
+                                    </div>
+                                </div>
+                                {% for tasksubject in tasksubjects %}
+                                <div class="row">
+                                    <div class="form-group column col-6">
+                                        {{tasksubject.name}}
+                                    </div>
+                                    <div class="form-group column col-6">
+                                        <p>{{tasksubject.duedate}}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="column col-3">
+                                <div class="form-group">
+                                    <label><h3>Status</h3></label>
+                                </div>
+                                <div class="form-group">
+                                    {{form.task1status}}
+                                </div>
+
+                                <div class="form-group">
+                                    {{form.task2status}}
+                                </div>
+
+                                <div class="form-group">
+                                    {{form.task3status}}
+                                </div>
+                                <div class="form-group">
+                                    {{form.task4status}}
+                                </div>
+                                <div class="form-group">
+                                    {{form.task5status}}
+                                </div>
+
+                                <div class="form-group">
+                                    {{form.task6status}}
+                                </div>
+                                <div class="form-group">
+                                    {{form.task7status}}
+                                </div>
+                                <div class="form-group">
+                                    {{form.task8status}}
+                                </div>
+                                <div class="form-group">
+                                    {{form.task9status}}
+                                </div>
+                                <div class="form-group">
+                                    {{form.task10status}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-success" type="submit"> Submit</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+
+{% block scripts %}
+
+
+{% endblock scripts %}

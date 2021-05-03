@@ -1,0 +1,20 @@
+{% extends 'cbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/feed.css' %}{% endblock %}
+{% block title %}Feed{% endblock title %}
+
+
+{% block content %}
+
+
+{% for link in z %}
+<div>{{ link|safe }}</div>
+</br>
+{% endfor %}
+
+
+
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}

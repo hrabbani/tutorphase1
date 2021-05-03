@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top">
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,15 +11,15 @@
                 <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:dashboard' %}">Dashboard</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:tutor-profiles-view' %}">Tutors</a>
+                <a class="nav-link" style="font-weight: bold" href="{% url 'cprofiles:mentor-profiles-list' %}">Mentors</a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold"
-                    href="{% url 'profiles:student-profiles-view' %}">Students</a>
+                    href="{% url 'cprofiles:student-profiles-list' %}">Students</a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold"
-                    href="{% url 'profiles:connection-view' %}">Connections</a>
+                    href="{% url 'cprofiles:connection-list' %}">Connections</a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:session-view' %}">Sessions</a>
@@ -35,11 +35,11 @@
                     target="_blank">Student Form</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:generate-session-form' %}">Generate
+                <a class="nav-link" style="font-weight: bold" href="{% url 'cprofiles:generate-session-form' %}">Generate
                     Session Form</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" style="font-weight: bold" href="{% url 'cprofiles:cprofiles' %}">[Choice Program]</a>
+                <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:dashboard' %}">[Tutor Program]</a>
             </li>
         </ul>
     </div>

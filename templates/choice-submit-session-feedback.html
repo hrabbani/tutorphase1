@@ -1,0 +1,22 @@
+{% extends 'cbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/update.css' %}{% endblock %}
+{% block title %}Submit Session Feedback{% endblock title %}
+
+{% block content %}
+
+<h3>Submit Session Feedback</h3>
+</br>
+<h4>Tutor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
+<h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
+</br>
+
+    <div class=#>
+        <form action="" method="POST" class=# enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            </br>
+            <button type='submit' class="btn btn-success">Update</button>
+        </form>
+    </div>
+{% endblock content %}

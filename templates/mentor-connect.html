@@ -1,0 +1,72 @@
+{% extends 'cbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Connect{% endblock title %}
+
+
+{% block content %}
+
+<h3>Create Connection</h3>
+<div>Create a connection between a Student and Mentor</div>
+</br>
+<h3>Mentor: {{mentor.first_name}} {{mentor.last_name}}</h3>
+
+</br>
+
+<h3>Students</h3>
+
+
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Grade</th>
+                <th scope="col">School</th>
+                <th scope="col">Address</th>
+                <th scope="col">Tutor</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for student in students %}
+            <tr>
+                <td>{{student.first_name}}</td>
+                <td>{{student.grade}}</td>
+                <td>{{student.school}}</td>
+                <td>{{student.address}}</td>
+                <td>
+                    {% for friend in student.get_friends %}
+                    <li>{{friend.first_name}} {{friend.last_name}}</li>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for friend in student.get_friends %}
+                    <div><span class="badge badge-success">Connected</span></div>
+                    {% empty %}
+                    <div><span class="badge badge-danger">Not Connected</div>
+                    {% endfor %}
+                </td>
+                <td>
+                    <form action="{% url 'cprofiles:connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{student.pk}}>
+                        <input type="hidden" name="mentor_pk" value={{mentor.pk}}>
+                        <button type="submit" class="btn btn-success">Connect</button>
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock content %}
