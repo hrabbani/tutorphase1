@@ -18,7 +18,7 @@
                 <th scope="col">Tutor</th>
                 <th scope="col">Length</th>
                 <th scope="col">Subjets</th>
-                <th scope="col">Feedback</th>
+                <th scope="col">Supports</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -37,9 +37,20 @@
                     <li>{{subject}}</li>
                     {% endfor %}
                 </td>
-                <td>{{obj.feedback}}</td>
-                <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
-                            Form</button></a></td>
+                <td>
+                    {% for support in obj.get_supports %}
+                    <li>{{support}}</li>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if obj.flag == True %}
+                    <a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-danger">View Full
+                            Form</button></a>
+                    {% else %}
+                    <a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                            Form</button></a>
+                    {% endif %}
+                </td>
 
             </tr>
 
@@ -57,7 +68,5 @@
     $(document).ready(function () {
         $('#myTable').DataTable();
     });
-
-
 </script>
 {% endblock scripts %}

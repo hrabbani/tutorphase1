@@ -28,7 +28,8 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
     email = models.EmailField(max_length=200, blank=True)
-    age = models.IntegerField(null=True, blank=True)
+    grade = models.IntegerField(null=True, blank=True)
+    academic_advisor = models.CharField(max_length=200, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name='subjects')
     school = models.CharField(max_length=200, blank=True)
     friends = models.ManyToManyField("self", blank=True, related_name='testfriends')
@@ -120,6 +121,14 @@ class Support(models.Model):
         return self.name
 
 
+class Feedback(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Session(models.Model):
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
     meet = models.IntegerField(null=True, blank=True)
@@ -127,13 +136,17 @@ class Session(models.Model):
     subjects = models.ManyToManyField(Subject, blank=True, related_name='sessionsubjects')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-    feedback = models.TextField(null=True, blank=True, max_length=1000)
+    feedback = models.ManyToManyField(Feedback, blank=True, related_name='feedbacks')
+    elaborate = models.TextField(null=True, blank=True, max_length=1000)
     change = models.TextField(null=True, blank=True, max_length=1000)
     support = models.ManyToManyField(Support, blank=True, related_name='supports')
     othersupport = models.CharField(null=True, blank=True, max_length=200)
+    rate = models.IntegerField(null=True, blank=True)
     question = models.TextField(null=True, blank=True, max_length=1000)
-    cont = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
+    disconnect = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
     submit_status = models.BooleanField(default=False)
+    flag = models.BooleanField(default=False)
+
 
 
     def __str__(self):
@@ -147,6 +160,9 @@ class Session(models.Model):
 
     def get_supports(self):
         return self.support.all()
+
+    def get_feedbacks(self):
+        return self.feedback.all()
 
     def get_absolute_url(self):
         return reverse("profiles:session-detail-view", kwargs={"pk": self.pk})

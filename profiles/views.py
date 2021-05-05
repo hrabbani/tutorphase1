@@ -1,7 +1,7 @@
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Connection, Session, Subject
-from .forms import ProfileModelForm, SessionModelForm
+from .forms import SessionModelForm, TutorModelForm, StudentModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -11,7 +11,7 @@ from django.http.response import HttpResponse, JsonResponse
 import json
 from datetime import timedelta
 from datetime import date
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 from django.utils import timezone
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
@@ -233,10 +233,10 @@ def session_submitted(request):
 
 def tutor_profile_form(request):
 
-    form = ProfileModelForm()
+    form = TutorModelForm()
 
     if request.method == 'POST':
-        form = ProfileModelForm(request.POST or None, request.FILES or None)
+        form = TutorModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             new_role = form.save(commit=False)
             new_role.role = 'tutor'
@@ -252,10 +252,10 @@ def tutor_profile_form(request):
 
 def student_profile_form(request):
 
-    form = ProfileModelForm()
+    form = StudentModelForm()
 
     if request.method == 'POST':
-        form = ProfileModelForm(request.POST or None, request.FILES or None)
+        form = StudentModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             new_role = form.save(commit=False)
             new_role.role = 'student'
@@ -302,6 +302,18 @@ def dashboard(request):
     flat_list = [item for sublist in z for item in sublist]
     unique_counts = dict(collections.Counter(e['name'] for e in flat_list))
 
+
+    num_tutor = Profile.objects.filter(role='tutor').count()
+
+    avg_rate = Session.objects.filter(submit_status=True).aggregate(Avg('rate'))
+
+    inactive_conn = Connection.objects.filter(status='inactive').count()
+
+    connected_conn = Connection.objects.filter(status='connected').count()
+
+
+
+
     context = {'month':month,
                 'x':x,
                 'y':y,
@@ -311,6 +323,10 @@ def dashboard(request):
                 'num_english':num_english,
                 'recent_session':recent_session,
                 'unique_counts':unique_counts,
+                'num_tutor': num_tutor,
+                'avg_rate': avg_rate,
+                'inactive_conn': inactive_conn,
+                'connected_conn': connected_conn,
                 }
 
     return render(request, 'dashboard.html', context)

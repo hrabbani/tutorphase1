@@ -53,36 +53,46 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">List one way you were helpful to your student.</h5>
-                <p class="card-text">{{session.feedback}}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">List one thing you would change to make your future sessions better.</h5>
-                <p class="card-text">{{session.change}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Can we support you with any of the following:</h5>
-                {% for support in session.get_supports %}
-                <p class="card-text">{{support}}</p>
+                {% for feedback in session.get_feedbacks %}
+                <p class="card-text">{{feedback}}</p>
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
 
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Please eleborate your response.</h5>
+                <p class="card-text">{{session.elaborate}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Change:</h5>
+                <p class="card-text">{{session.change}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Support</h5>
+                {% for support in session.get_supports %}
+                <p class="card-text">{{support}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
@@ -91,14 +101,6 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Do you have any questions or comments for us?</h5>
-                <p class="card-text">{{session.question}}</p>
-            </div>
-        </div>
-    </div>
 </div>
 
 
@@ -106,18 +108,33 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Are you and this student going to continue working together?</h5>
-                <p class="card-text">{{session.cont}}</p>
+                <h5 class="card-title">On a scale of 1-5, how would you rate the student’s level of engagement (1 = Very
+                    unengaged, 5 = very engaged)</h5>
+                <p class="card-text">{{session.rate}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title"></h5>
-                <p class="card-text"></p>
+                <h5 class="card-title">Question:</h5>
+                <p class="card-text">{{session.question}}</p>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Would you like to disconnet from this student?</h5>
+                <p class="card-text">{{session.disconnect}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+
     </div>
 </div>
 

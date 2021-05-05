@@ -46,6 +46,40 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{num_tutor}}</h1>
+                <p class="card-text">Total Tutor</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{connected_conn}}</h1>
+                <p class="card-text">Active Connections</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{inactive_conn}}</h1>
+                <p class="card-text">Inactive Connections</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{avg_rate.rate__avg|floatformat:1}}</h1>
+                <p class="card-text">Average student engagement</p>
+            </div>
+        </div>
+    </div>
+</div>
 </br>
 
 <h3>Tutoring Breakdown</h3>
