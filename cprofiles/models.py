@@ -173,17 +173,16 @@ class Connection(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     flag = models.BooleanField(default=False)
-
-
+    progress = models.CharField(max_length=200, blank=True, null=True, choices=PROGRESS_CHOICES)
 
     def __str__(self):
         return f"{self.student}-{self.mentor}-{self.status}"
 
-    # def get_absolute_url(self):
-    #     return reverse("profiles:connection-detail-view", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse("cprofiles:connection-profile-detail", kwargs={"pk": self.pk})
 
-    # def get_sessions(self):
-    #     return self.session_set.filter(submit_status=True)[:1]
+    def get_sessions(self):
+        return self.session_set.filter(submit_status=True)[:1]
 
     def get_task(self):
         return self.task_set.all()
@@ -230,23 +229,25 @@ class Session(models.Model):
     question = models.TextField(null=True, blank=True, max_length=1000)
     cont = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
     submit_status = models.BooleanField(default=False)
+    step = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return f"{self.connection.student.first_name}-{self.connection.mentor.first_name}"
 
-    # def get_subjects(self):
-    #     return self.subjects.all()
+    def get_topics(self):
+        return self.topic.all()
 
     # def get_subjects_no(self):
     #     return self.subjects.all().count()
 
-    # def get_supports(self):
-    #     return self.support.all()
+    def get_supports(self):
+        return self.support.all()
 
-    # def get_absolute_url(self):
-    #     return reverse("profiles:session-detail-view", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse("cprofiles:session-detail", kwargs={"pk": self.pk})
 
-
+    def get_copytask(self):
+        return self.copytask_set.get()
 
 
 TASK_STATUS_CHOICES = (
@@ -282,4 +283,25 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.id}"
+
+
+
+class Copytask(models.Model):
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, blank=True)
+    tasksubject = models.ManyToManyField(Tasksubject, blank=True)
+    task1status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task2status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task3status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task4status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task5status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task6status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task7status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task8status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task9status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+    task10status = models.CharField(max_length=200, blank=True, null=True, choices=TASK_STATUS_CHOICES)
+
+    def __str__(self):
+        return f"{self.id}"
+
+
 

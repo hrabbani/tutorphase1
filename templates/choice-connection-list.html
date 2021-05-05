@@ -59,7 +59,7 @@
                 </td>
                 <td>{% for session in obj.get_sessions %}{{session.updated|date:"d M Y"}}{% endfor %}</td>
                 <td>{% if obj.get_task%}
-                <a href="{% url 'cprofiles:task-form' obj.get_task %}">{{obj.get_task.progress}}
+                <a href="{% url 'cprofiles:show-task-form' obj.get_task %}">{{obj.progress}}
                 {% endif %}
                 </td>
                 <td>

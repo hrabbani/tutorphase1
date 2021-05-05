@@ -1,0 +1,265 @@
+{% extends 'cbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Dashboard{% endblock title %}
+
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{high_student_count}}</h1>
+                <p class="card-text">High School Applicants</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{middle_student_count}}</h1>
+                <p class="card-text">Middle School Applicants</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{off_track_conn}}</h1>
+                <p class="card-text">Off-Track Connections</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{avg_rate.rate__avg|floatformat:1}}</h1>
+                <p class="card-text">Average Student Engagement</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{hour_session.length__sum}}</h1>
+                <p class="card-text">Hours of Mentoring</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{inactive_conn}}</h1>
+                <p class="card-text">Inactive Connections</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</br>
+
+<h3>Application Progress %</h3>
+<canvas id="progressChart" width="400" height="150"></canvas>
+
+</br>
+
+<h3>Mentoring Breakdown</h3>
+<canvas id="subjectChart" width="400" height="150"></canvas>
+
+</br>
+</br>
+<h3>Activity</h3>
+<canvas id="sessionChart" width="400" height="150"></canvas>
+
+
+</br>
+</br>
+
+<h3>Recent Sessions</h3>
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Student</th>
+                <th scope="col">Tutor</th>
+                <th scope="col">Length</th>
+                <th scope="col">Topics</th>
+                <th scope="col">Step Completed</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in recent_session %}
+            <tr>
+                <td>{{obj.created|date:"d M Y"}}</td>
+                <td><a href="{{obj.connection.student.get_absolute_url}}">{{obj.connection.student.first_name}}
+                        {{obj.connection.student.last_name}}</a></td>
+                <td><a href="{{obj.connection.tutor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
+                        {{obj.connection.mentor.last_name}}</a></td>
+                <td>{{obj.length}} hr</td>
+                <td>
+                    {% for topic in obj.get_topics %}
+                    <li>{{topic}}</li>
+                    {% endfor %}
+                </td>
+                <td>{{obj.step}}</td>
+                <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                            Form</button></a></td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+
+
+{% block scripts %}
+<script>
+
+$(document).ready(function () {
+    var ctx = document.getElementById('progressChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels:['On Track', 'Others'],
+            datasets: [{
+                label: '# of Votes',
+                data: [{{on_track_conn_percentage}}, {{other_conn_percentage}}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('subjectChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels:[{% for key, value in unique_counts.items %}'{{ key }}',{% endfor %}],
+            datasets: [{
+                label: '# of Votes',
+                data: [{% for key, value in unique_counts.items %}{{ value }},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('sessionChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for x in month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
+            datasets: [{
+                label: 'Activity Per Month',
+                fill: false,
+                data: [{% for x in month %}{{x.total}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+</script>
+{% endblock scripts %}

@@ -13,6 +13,13 @@ from .views import (
     TaskUpdateView,
     generate_session_form,
     update_session,
+    SessionListView,
+    ConnectionDetailView,
+    SessionDetailView,
+    mentor_profile_form,
+    student_profile_form,
+    dashboard,
+    show_task_form,
 
    
 )
@@ -34,6 +41,15 @@ urlpatterns = [
     path('<pk>/task-form/', TaskUpdateView.as_view(), name='task-form'),
     path('generate-session-form/', generate_session_form, name='generate-session-form'),
     path('<pk>/submit-feedback/', update_session, name="update_session"),
+    path('sessions/', SessionListView.as_view(), name='session-list'),
+    path('<pk>/connection-detail', ConnectionDetailView.as_view(), name='connection-profile-detail'),
+    path('<pk>/session/', SessionDetailView.as_view(), name='session-detail'),
+    path('remove-connect/', remove_connection, name='remove-connect'),
+    path('mentor-profile-input/', mentor_profile_form, name='mentor-profile-form'),
+    path('student-profile-input/', student_profile_form, name='student-profile-form'),
+    path('dashboard/', dashboard, name='dashboard'),
+    path('<pk>/show-task-form/', show_task_form, name='show-task-form'),
+
 
 
     

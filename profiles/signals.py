@@ -34,3 +34,12 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
 
 
 
+@receiver(post_save, sender=Session)
+def post_save_flag_session(sender, instance, created, **kwargs):
+
+    session_id = instance.id
+
+    support = list((instance.get_supports().values('name')))
+    support = list(map(lambda x: x['name'], support))
+
+    print(support)

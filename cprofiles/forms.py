@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task, Session
+from .models import Task, Session, Mentor, Student
 from django.forms import TextInput, widgets
 from django.forms import DateField
 
@@ -35,6 +35,8 @@ from django.forms import DateField
 
 
 
+
+
 class TaskModelForm(forms.ModelForm):
 
     class Meta:
@@ -64,6 +66,39 @@ class SessionModelForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control'
             })
+
+
+
+class MentorModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Mentor
+        fields = ('first_name', 'last_name', 'email', 'avatar', 'prefer_grade', 'prefer_gender', 'prefer_location', 'mentor_last_year', 'language', 'experience', 'familiar') 
+
+    def __init__(self, *args, **kwargs):
+        super(MentorModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class StudentModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Student
+        fields = ('first_name', 'last_name', 'avatar', 'gender', 'grade', 'school', 
+        'address', 'parent_first_name', 'parent_last_name', 'parent_language', 'parent_phone',
+         'parent_email', 'activity', 'reason', 'prompt', 'hobby', 'parent_response',
+         'interview_language')
+
+    def __init__(self, *args, **kwargs):
+        super(StudentModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
 
 
 

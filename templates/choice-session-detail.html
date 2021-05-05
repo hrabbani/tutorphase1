@@ -1,0 +1,184 @@
+{% extends 'cbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Session List{% endblock title %}
+
+{% block content %}
+
+<h3>Session Form Response</h3>
+</br>
+
+<h4>Mentor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
+<h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
+</br>
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">How many times have you and the student met in the past 2 weeks</h5>
+                <p class="card-text">{{session.meet}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">How many total hours of mentoring did you do?</h5>
+                <p class="card-text">{{session.length}} hrs</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">What topics have you covered?</h5>
+                {% for topic in session.get_topics %}
+                <p class="card-text">{{topic}}</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Please share how your sessions have been going with the student</h5>
+                <p class="card-text">{{session.feedback}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">What would you change to make your future sessions better?</h5>
+                <p class="card-text">{{session.change}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Can we support you with any of the following:</h5>
+                {% for support in session.get_supports %}
+                <p class="card-text">{{support}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">On a scale of 1-5, how would you rate the student’s level of engagement (1 = Very
+                    unengaged, 5 = very engaged)</h5>
+                <p class="card-text">{{session.rate}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us?</h5>
+                <p class="card-text">{{session.question}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="col-sm-9">
+    <div class="card-header">
+        <h2>Task Form</h2>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="column col-6">
+                    <div class="row">
+                        <div class="form-group column col-6">
+                            <label>
+                                <h3>Task</h3>
+                            </label>
+                        </div>
+                        <div class="form-group column col-6">
+                            <label>
+                                <h3>Deadline</h3>
+                            </label>
+                        </div>
+                    </div>
+                    {% for tasksubject in tasksubjects %}
+                    <div class="row">
+                        <div class="form-group column col-6">
+                            {{tasksubject.name}}
+                        </div>
+                        <div class="form-group column col-6">
+                            {{tasksubject.duedate}}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="column col-3">
+                    <div class="form-group">
+                        <label>
+                            <h3>Status</h3>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        {{session.get_copytask.task1status}}
+                    </div>
+                    <div class="form-group">
+                        {{session.get_copytask.task2status}}
+                    </div>
+                    <div class="form-group">
+                        {{session.get_copytask.task3status}}
+                    </div>
+
+                    <div class="form-group">
+                        {{session.get_copytask.task4status}}
+                    </div>
+
+                    <div class="form-group">
+                        {{session.get_copytask.task5status}}
+                    </div>
+
+                    <div class="form-group">
+                        {{session.get_copytask.task6status}}
+                    </div>
+                    <div class="form-group">
+                        {{session.get_copytask.task7status}}
+                    </div>
+                    <div class="form-group">
+                        {{session.get_copytask.task8status}}
+                    </div>
+                    <div class="form-group">
+                        {{session.get_copytask.task9status}}
+                    </div>
+                    <div class="form-group">
+                        {{session.get_copytask.task10status}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

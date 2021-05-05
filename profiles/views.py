@@ -292,12 +292,12 @@ def dashboard(request):
     num_math = thirty_days_session.filter(subjects__in=[1]).count()
     num_english = thirty_days_session.filter(subjects__in=[2]).count()
 
-    month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('created')).values('month').annotate(total=Count('connection'))
+    month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
     recent_session = Session.objects.filter(submit_status=True).order_by('-created')[:5]
 
     z = []
     for session in Session.objects.filter():
-        z.append(list(session.get_subjects().values('name')))
+        z.append(list(session.get_subjects().values('name')))   
 
     flat_list = [item for sublist in z for item in sublist]
     unique_counts = dict(collections.Counter(e['name'] for e in flat_list))

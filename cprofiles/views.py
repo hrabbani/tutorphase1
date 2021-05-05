@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Mentor, Student
-from .forms import TaskModelForm, SessionModelForm
+from .forms import TaskModelForm, SessionModelForm, MentorModelForm, StudentModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -15,7 +15,7 @@ from django.http.response import HttpResponse, JsonResponse
 import json
 from datetime import timedelta
 from datetime import date
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 from django.utils import timezone
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
@@ -59,16 +59,16 @@ class MentorDetailView(DetailView):
         mentor = Mentor.objects.get(slug=slug)
         return mentor
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     slug = self.kwargs.get('slug')
-    #     profile = Profile.objects.get(slug=slug)
-    #     sessions = Session.objects.filter(submit_status=True).filter(Q(connection__tutor=profile) | Q(connection__student=profile))
-    #     sessions_ = []
-    #     for item in sessions:
-    #         sessions_.append(item)
-    #     context["sessions"] = sessions_
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug = self.kwargs.get('slug')
+        mentor = Mentor.objects.get(slug=slug)
+        sessions = Session.objects.filter(submit_status=True).filter(connection__mentor=mentor)
+        sessions_ = []
+        for item in sessions:
+            sessions_.append(item)
+        context["sessions"] = sessions_
+        return context
 
 
 class StudentDetailView(DetailView):
@@ -80,16 +80,16 @@ class StudentDetailView(DetailView):
         mentor = Student.objects.get(slug=slug)
         return mentor
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     slug = self.kwargs.get('slug')
-    #     profile = Profile.objects.get(slug=slug)
-    #     sessions = Session.objects.filter(submit_status=True).filter(Q(connection__tutor=profile) | Q(connection__student=profile))
-    #     sessions_ = []
-    #     for item in sessions:
-    #         sessions_.append(item)
-    #     context["sessions"] = sessions_
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug = self.kwargs.get('slug')
+        student = Student.objects.get(slug=slug)
+        sessions = Session.objects.filter(submit_status=True).filter(connection__student=student)
+        sessions_ = []
+        for item in sessions:
+            sessions_.append(item)
+        context["sessions"] = sessions_
+        return context
 
 
 
@@ -164,110 +164,27 @@ class ConnectionListView(ListView):
         qs = Connection.objects.all().order_by('-created')
         return qs
 
+    
+
+
+class ConnectionDetailView(DetailView):
+    model = Connection
+    template_name = 'choice-connection-detail.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        connection = Connection.objects.get(pk=pk)
+        return connection
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today_date = datetime.date.today()
-        tasks = Task.objects.all()
-
-        for task in tasks:
-            task.progress = 'on track'
-            task.save()
-            task.connection.flag = False
-            task.connection.save()
-            if task.task1status == None:
-                task.progress = None
-                task.save()
-            if task.task1status == 'not completed':
-                try:
-                    if task.tasksubject.all()[0].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task2status == 'not completed':
-                try:
-                    if task.tasksubject.all()[1].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task3status == 'not completed':
-                try:
-                    if task.tasksubject.all()[2].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task4status == 'not completed':
-                try:
-                    if task.tasksubject.all()[3].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task5status == 'not completed':
-                try:
-                    if task.tasksubject.all()[4].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task6status == 'not completed':
-                try:
-                    if task.tasksubject.all()[5].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task7status == 'not completed':
-                try:
-                    if task.tasksubject.all()[6].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task8status == 'not completed':
-                try:
-                    if task.tasksubject.all()[7].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task9status == 'not completed':
-                try:
-                    if task.tasksubject.all()[8].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-            if task.task10status == 'not completed':
-                try:
-                    if task.tasksubject.all()[9].duedate < today_date:
-                        task.progress = 'off track'
-                        task.save()
-                        task.connection.flag = True
-                        task.connection.save()
-                except:
-                    pass
-
+        pk = self.kwargs.get('pk')
+        connection = Connection.objects.get(pk=pk)
+        sessions = Session.objects.filter(submit_status=True).filter(connection=connection)
+        sessions_ = []
+        for item in sessions:
+            sessions_.append(item)
+        context["sessions"] = sessions_
         return context
 
 
@@ -288,6 +205,25 @@ def remove_connection(request):
 
 
 
+
+def show_task_form(request, pk):
+
+    tasksubjects = Tasksubject.objects.all()
+
+    print(tasksubjects)
+
+    task = Task.objects.get(pk=pk)
+
+    print(task)
+
+    context = {'tasksubjects':tasksubjects,
+                'task': task
+                }
+
+    return render(request, 'show-task-form.html', context)
+
+
+
 class TaskUpdateView(UpdateView):
 
     form_class = TaskModelForm
@@ -303,86 +239,6 @@ class TaskUpdateView(UpdateView):
             tasksubjects_.append(item)
         context["tasksubjects"] = tasksubjects_
         return context
-
-
-# def task_form(request):
-
-#     form = TaskModelForm()
-
-#     if request.method == 'POST':
-#         form = ProfileModelForm(request.POST or None, request.FILES or None)
-#         if form.is_valid():
-#             new_role = form.save(commit=False)
-#             new_role.role = 'student'
-#             new_role.save()
-#             form.save_m2m()
-#             return HttpResponse('Student Profile Added')
-  
-#     context = {'form':form}
-
-#     return render(request, 'task-form.html', context)
-
-
-# class TaskUpdateView(UpdateView):
-
-#     form_class = TaskModelForm
-#     model = Task
-#     template_name = 'task-form.html'
-#     success_url = reverse_lazy('cprofiles:connection-list')
-
-#     def get_object(self):
-#         pk = self.kwargs.get('pk')
-#         session = Task.objects.get(pk=pk)
-#         return session
-
-
-# def deadline(request):
-
-#     todays_date = timezone.now()
-#     print(todays_date)
-#     a = Task.objects.filter(Q(task1date__lte=todays_date)|Q(task2date__lte=todays_date)).filter(Q(task1status='not completed')|Q(task2status='not completed'))
-
-#     print(a)
-
-#     return HttpResponse("hihi")
-
-
-
-
-# class ConnectionListView(ListView):
-#     model = Connection
-#     template_name = 'choice-connection-list.html'
-
-#     def get_queryset(self):
-#         qs = Connection.objects.all().order_by('-created')
-#         return qs
-
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         today_date = datetime.date.today()
-
-#         for task in Task.objects.all():
-#             if task.task1date:
-#                 if task.task1date < today_date:
-#                     if task.task1status == 'not completed':
-#                         task.progress = 'off track'
-#                         task.save()
-#                     else:
-#                         task.progress = 'on track'
-#                         task.save()
-#             if task.task2date:
-#                 if task.task2date < today_date:
-#                     if task.task2status == 'not completed':
-#                         task.progress = 'off track'
-#                         task.save()
-#                     else:
-#                         task.progress = 'on track'
-#                         task.save()  
-
-#         return context
-
-
 
 
 def generate_session_form(request):
@@ -412,14 +268,14 @@ def update_session(request, pk):
     connection = Connection.objects.get(session__pk=pk)
     task = Task.objects.get(connection=connection)
 
-    print(task)
-    print(connection)
-
     if request.method == 'POST':
 
         form = SessionModelForm(request.POST, instance=session)
         if form.is_valid():
-            form.save()
+            new_status = form.save(commit=False)
+            new_status.submit_status = True
+            new_status.save()
+            form.save_m2m()
             return redirect('cprofiles:task-form', task)
 
     context = {'form':form,
@@ -428,3 +284,119 @@ def update_session(request, pk):
                 }
     return render(request, 'choice-submit-session-feedback.html', context)
 
+
+
+class SessionListView(ListView):
+    model = Session
+    template_name = 'choice-session-list.html'
+
+    def get_queryset(self):
+        qs = Session.objects.filter(submit_status=True).order_by('-updated')
+        return qs
+
+
+
+class SessionDetailView(DetailView):
+    model = Session
+    template_name = 'choice-session-detail.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        session = Session.objects.get(pk=pk)
+        return session
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tasksubjects = Tasksubject.objects.all()
+        tasksubjects_ = []
+        for item in tasksubjects:
+            tasksubjects_.append(item)
+        context["tasksubjects"] = tasksubjects_
+        return context
+
+
+
+
+
+def mentor_profile_form(request):
+
+    form = MentorModelForm()
+
+    if request.method == 'POST':
+        form = MentorModelForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Mentor Profile Added')
+  
+    context = {'form':form}
+
+    return render(request, 'mentor-profile-form.html', context)
+
+
+
+def student_profile_form(request):
+
+    form = StudentModelForm()
+
+    if request.method == 'POST':
+        form = StudentModelForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Student Profile Added')
+  
+    context = {'form':form}
+
+    return render(request, 'choice-student-profile-form.html', context)
+
+
+def dashboard(request):
+
+    high_student_count = Student.objects.filter(grade='8').count()
+    
+    middle_student_count = Student.objects.filter(grade='5').count()
+
+    off_track_conn = Connection.objects.filter(progress='off track').count()
+
+    inactive_conn = Connection.objects.filter(status='inactive').count()
+
+    hour_session = Session.objects.filter(submit_status=True).aggregate(Sum('length'))
+
+    avg_rate = Session.objects.filter(submit_status=True).aggregate(Avg('rate'))
+
+    on_track_conn = Connection.objects.filter(progress='on track').count()
+
+    total_conn = Connection.objects.all().count()
+
+    on_track_conn_percentage = on_track_conn/total_conn * 100
+
+    other_conn_percentage = 100 - on_track_conn_percentage
+
+    print(on_track_conn)
+    
+    z = []
+    for session in Session.objects.filter():
+        z.append(list(session.get_topics().values('name')))   
+
+    flat_list = [item for sublist in z for item in sublist]
+    unique_counts = dict(collections.Counter(e['name'] for e in flat_list))
+
+    month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
+    recent_session = Session.objects.filter(submit_status=True).order_by('-created')[:5]
+
+ 
+    context = {'month':month,
+                'unique_counts':unique_counts,
+                'recent_session':recent_session,
+                'on_track_conn_percentage': on_track_conn_percentage,
+                'other_conn_percentage': other_conn_percentage,
+                'high_student_count': high_student_count,
+                'middle_student_count': middle_student_count,
+                'off_track_conn':  off_track_conn,
+                'avg_rate': avg_rate,
+                'hour_session': hour_session,
+                'inactive_conn': inactive_conn
+
+                }
+
+    return render(request, 'choice-dashboard.html', context)
