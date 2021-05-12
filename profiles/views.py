@@ -16,7 +16,8 @@ from django.utils import timezone
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
 import collections
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.core.mail import send_mail
 
 
 
@@ -82,6 +83,28 @@ class ProfileDetailView(DetailView):
         return context
 
 
+
+
+class TutorUpdateView(UpdateView):
+    form_class = TutorModelForm
+    model = Profile
+    template_name = 'update.html'
+
+    def get_success_url(self):
+        return reverse("profiles:profile-detail-view", kwargs={"slug": self.object.slug})
+
+
+
+class StudentUpdateView(UpdateView):
+    form_class = StudentModelForm
+    model = Profile
+    template_name = 'update.html'
+
+    def get_success_url(self):
+        return reverse("profiles:profile-detail-view", kwargs={"slug": self.object.slug})
+
+
+
 class TutorProfileListView(ListView):
     model = Profile
     template_name = 'tutor-profile-list.html'
@@ -89,6 +112,13 @@ class TutorProfileListView(ListView):
     def get_queryset(self):
         qs = Profile.objects.filter(role='tutor')
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        recipients = list(i for i in Profile.objects.filter(role='tutor').values_list('email', flat=True))
+        recipients = ("; ".join(recipients))
+        context["recipients"] = recipients
+        return context
 
 
 
@@ -206,6 +236,8 @@ def generate_session_form(request):
     context = {'z':z}
 
     return render(request, 'session-form-link.html', context)
+
+    
 
 class SessionUpdateView(UpdateView):
 
@@ -368,4 +400,30 @@ def search_connection(request):
     return render(request, 'connection-list-search.html', context)
 
 
+
+
+def send_email_to_tutors(request):
+
+
+    email = Profile.objects.get(id=6).email
+
+    content = "This is from " + email
+
+    print(content)
+
+    send_mail('cloudmotion',
+    content,
+    'Tutor-Mentor Program',
+    [email],
+    fail_silently=False
+    )
+
+
+    return render(request, 'email.html')
+
+
+
+def table(request):
+
+    return render(request, 'table.html')
 

@@ -11,12 +11,64 @@
 <h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
 </br>
 
-    <div class=#>
-        <form action="" method="POST" class=# enctype="multipart/form-data">
-            {% csrf_token %}
-            {{form}}
-            </br>
-            <button type='submit' class="btn btn-success">Update</button>
-        </form>
-    </div>
+<div class=#>
+    <form action="" method="POST" class=# enctype="multipart/form-data">
+        {% csrf_token %}
+
+
+        <label for="id_meet">Meet:</label>
+        {{form.meet}}
+
+        <label for="id_length">Length:</label>
+        {{form.length}}
+
+        <label for="id_subjects">Subjects:</label>
+        {{form.subjects}}
+
+        <label for="id_feedback">Feedback:</label>
+        {{form.feedback}}
+
+        <label for="id_elaborate">Elaborate:</label>
+        {{form.elaborate}}
+
+        <label for="id_change">Change:</label>
+        {{form.change}}
+
+        <label for="id_support">Support:</label>
+        {{form.support}}
+
+        <label for="id_othersupport">Othersupport:</label>
+        {{form.othersupport}}
+
+        <label for="id_rate">Rate:</label>
+        {{form.rate}}
+
+        <label for="id_question">Question:</label>
+        {{form.question}}
+
+        <label for="id_disconnect">Disconnect:</label>
+        {{form.disconnect}}
+
+        <label for="id_reason_disconnect">Reason disconnect:</label>
+        {{form.reason_disconnect}}
+
+        </br>
+        <button type='submit' class="btn btn-success">Update</button>
+    </form>
+</div>
 {% endblock content %}
+
+
+{% block scripts %}
+
+<script>
+    $('#id_disconnect').on('change', function () {
+        if (this.value == 'yes')
+            $('label[for=id_reason_disconnect], #id_reason_disconnect').show();
+        else
+            $('label[for=id_reason_disconnect], #id_reason_disconnect').hide();
+    }).trigger("change");
+</script>
+
+
+{% endblock scripts %}

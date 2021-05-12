@@ -80,4 +80,241 @@
 </div>
 
 
+<h3>All Info</h3>
+
+
+{% if profile.role == 'tutor' %}
+<a href="{% url 'profiles:tutor-update-profile' profile.slug %}"><button type="submit" class="btn btn-info">Edit</button></a>
+
+</br>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">First Name</h5>
+                <p class="card-text">{{profile.first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Last Name</h5>
+                <p class="card-text">{{profile.last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Grade</h5>
+                <p class="card-text">{{profile.grade}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Email</h5>
+                <p class="card-text">{{profile.email}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Subjets</h5>
+                {% for subject in profile.get_subjects %}
+                {{subject}}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">School</h5>
+                <p class="card-text">{{profile.school}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Language</h5>
+                <p class="card-text">{{profile.language}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Student Capacity</h5>
+                <p class="card-text">{{profile.student_capacity}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+
+{% if profile.role == 'student' %}
+
+<a href="{% url 'profiles:student-update-profile' profile.slug %}"><button type="submit" class="btn btn-info">Edit</button></a>
+
+</br>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">First Name</h5>
+                <p class="card-text">{{profile.first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Last Name</h5>
+                <p class="card-text">{{profile.last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Grade</h5>
+                <p class="card-text">{{profile.grade}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Academic Advisor</h5>
+                <p class="card-text">{{profile.academic_advisor}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Email</h5>
+                <p class="card-text">{{profile.email}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Subjets</h5>
+                {% for subject in profile.get_subjects %}
+                {{subject}}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 First Name</h5>
+                <p class="card-text">{{profile.parent1_first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 Last Name</h5>
+                <p class="card-text">{{profile.parent1_last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 Phone</h5>
+                <p class="card-text">{{profile.parent1_phone}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 Email</h5>
+                <p class="card-text">{{profile.parent1_email}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 First Name</h5>
+                <p class="card-text">{{profile.parent2_first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 Last Name</h5>
+                <p class="card-text">{{profile.parent2_last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 Phone</h5>
+                <p class="card-text">{{profile.parent2_phone}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 Email</h5>
+                <p class="card-text">{{profile.parent2_email}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+
+</br>
+</br>
+
 {% endblock content %}

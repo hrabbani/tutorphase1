@@ -79,4 +79,108 @@
 </div>
 
 
+
+<h3>All Info</h3>
+
+<a href="{% url 'cprofiles:mentor-update-profile' mentor.slug %}"><button type="submit" class="btn btn-info">Edit</button></a>
+
+</br>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">First Name</h5>
+                <p class="card-text">{{mentor.first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Last Name</h5>
+                <p class="card-text">{{mentor.last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Email</h5>
+                <p class="card-text">{{mentor.email}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Prefer Grade</h5>
+                <p class="card-text">{{mentor.prefer_grade}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Prefer Gender</h5>
+                <p class="card-text">{{mentor.prefer_gender}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Prefer Location</h5>
+                <p class="card-text">{{mentor.prefer_location}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Mentor Last Year</h5>
+                <p class="card-text">{{mentor.mentor_last_year}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Language</h5>
+                <p class="card-text">{{mentor.language}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Experience</h5>
+                <p class="card-text">{{mentor.experience}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Familiar</h5>
+                <p class="card-text">{{mentor.familiar}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock content %}

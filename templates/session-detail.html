@@ -133,11 +133,19 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
 
+    {% if session.disconnect == 'yes'%}
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Reason to Disconnect</h5>
+                <p class="card-text">{{session.reason_disconnect}}</p>
+            </div>
+        </div>
     </div>
+    {% endif %}
 </div>
 
-
+</br>
 
 {% endblock content %}

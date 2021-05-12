@@ -20,8 +20,11 @@ from .views import (
     ConnectionDetailView,
     like_unlike_post,
     search_connection,
-    
-    
+    send_email_to_tutors,
+    table,
+    TutorUpdateView,
+    StudentUpdateView,
+        
 
 )
 
@@ -47,6 +50,13 @@ urlpatterns = [
     path('<pk>/connection-detail', ConnectionDetailView.as_view(), name='connection-detail-view'),
     path('liked/', like_unlike_post, name='like-post-view'),
     path('search-connection/', search_connection, name='search-connection'),
+    path('send-email-to-tutors/', send_email_to_tutors, name='send-email-to-tutors'),
+    path('table/', table, name='table'),
+    path('<slug>/tutor-update-profile/', TutorUpdateView.as_view(), name='tutor-update-profile'),
+    path('<slug>/student-update-profile/', StudentUpdateView.as_view(), name='student-update-profile'),
+
+
+
 
     
 ]

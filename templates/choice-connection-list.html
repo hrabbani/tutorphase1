@@ -116,10 +116,15 @@
 
 {% block scripts %}
 <script>
-    $(document).ready(function () {
-        $('#myTable').DataTable();
-    });
+$(document).ready(function() {
+    $('#myTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'excel', 'pdf', 'print'
+        ]
 
+    } );
+} );
 for (let element of document.getElementsByClassName("flag")){
    element.style.display="none";
 }

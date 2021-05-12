@@ -78,5 +78,207 @@
     </table>
 </div>
 
+<h3>All Info</h3>
+
+<a href="{% url 'cprofiles:student-update-profile' student.slug %}"><button type="submit" class="btn btn-info">Edit</button></a>
+
+</br>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">First Name</h5>
+                <p class="card-text">{{student.first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Last Name</h5>
+                <p class="card-text">{{student.last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Gender</h5>
+                <p class="card-text">{{student.gender}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Grade</h5>
+                <p class="card-text">{{student.grade}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">School</h5>
+                <p class="card-text">{{student.school}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Address</h5>
+                <p class="card-text">{{student.address}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 First Name</h5>
+                <p class="card-text">{{student.parent1_first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 Last Name</h5>
+                <p class="card-text">{{student.parent1_last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 Phone</h5>
+                <p class="card-text">{{student.parent1_phone}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent1 Email</h5>
+                <p class="card-text">{{student.parent1_email}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 First Name</h5>
+                <p class="card-text">{{student.parent2_first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 Last Name</h5>
+                <p class="card-text">{{student.parent2_last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 Phone</h5>
+                <p class="card-text">{{student.parent2_phone}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent2 Email</h5>
+                <p class="card-text">{{student.parent2_email}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent Language</h5>
+                <p class="card-text">{{student.parent_language}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Activity</h5>
+                <p class="card-text">{{student.activity}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Reason</h5>
+                <p class="card-text">{{student.reason}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Prompt</h5>
+                <p class="card-text">{{student.prompt}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent Response</h5>
+                <p class="card-text">{{student.parent_response}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Interview Language</h5>
+                <p class="card-text">{{student.interview_language}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</br>
+</br>
 
 {% endblock content %}

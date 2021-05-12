@@ -21,6 +21,12 @@ ROLE_CHOICES_PROFILE = (
     ('tutor', 'tutor'),
     ('student', 'student')
 )
+
+
+LANGUAGE_CHOICES = (
+    ('English', 'English'),
+    ('Spanish', 'Spanish'),
+)
         
 class Profile(models.Model):
     role = models.CharField(max_length=200, choices=ROLE_CHOICES_PROFILE, null=True)
@@ -37,7 +43,16 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
     flag = models.BooleanField(default=False)
-
+    parent1_first_name = models.CharField(max_length=200, blank=True)
+    parent1_last_name = models.CharField(max_length=200, blank=True)
+    parent1_phone = models.CharField(max_length=200, blank=True)
+    parent1_email = models.EmailField(max_length=200, blank=True)
+    parent2_first_name = models.CharField(max_length=200, blank=True)
+    parent2_last_name = models.CharField(max_length=200, blank=True)
+    parent2_phone = models.CharField(max_length=200, blank=True)
+    parent2_email = models.EmailField(max_length=200, blank=True)
+    language = models.CharField(max_length=200, choices=LANGUAGE_CHOICES, null=True, blank=True)
+    student_capacity = models.IntegerField(null=True, blank=True)
 
     
     def __str__(self):
@@ -146,6 +161,7 @@ class Session(models.Model):
     disconnect = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
     submit_status = models.BooleanField(default=False)
     flag = models.BooleanField(default=False)
+    reason_disconnect= models.TextField(null=True, blank=True, max_length=1000)
 
 
 

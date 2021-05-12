@@ -88,8 +88,9 @@ class StudentModelForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ('first_name', 'last_name', 'avatar', 'gender', 'grade', 'school', 
-        'address', 'parent_first_name', 'parent_last_name', 'parent_language', 'parent_phone',
-         'parent_email', 'activity', 'reason', 'prompt', 'hobby', 'parent_response',
+        'address', 'parent1_first_name', 'parent1_last_name', 'parent1_phone',
+         'parent1_email', 'parent2_first_name', 'parent2_last_name', 'parent2_phone',
+         'parent2_email', 'parent_language',  'activity', 'reason', 'prompt', 'hobby', 'parent_response',
          'interview_language')
 
     def __init__(self, *args, **kwargs):

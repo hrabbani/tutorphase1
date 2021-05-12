@@ -20,7 +20,7 @@ from django.utils import timezone
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
 import collections
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 import datetime
 from itertools import chain
 
@@ -37,6 +37,13 @@ class MentorProfileListView(ListView):
     def get_queryset(self):
         qs = Mentor.objects.all()
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        recipients = list(i for i in Mentor.objects.values_list('email', flat=True))
+        recipients = ("; ".join(recipients))
+        context["recipients"] = recipients
+        return context
 
 
 
@@ -69,6 +76,26 @@ class MentorDetailView(DetailView):
             sessions_.append(item)
         context["sessions"] = sessions_
         return context
+
+
+
+class MentorUpdateView(UpdateView):
+    form_class = MentorModelForm
+    model = Mentor
+    template_name = 'update.html'
+
+    def get_success_url(self):
+        return reverse("cprofiles:mentor-profiles-detail", kwargs={"slug": self.object.slug})
+
+
+class StudentUpdateView(UpdateView):
+    form_class = StudentModelForm
+    model = Student
+    template_name = 'update.html'
+
+    def get_success_url(self):
+        return reverse("cprofiles:student-profiles-detail", kwargs={"slug": self.object.slug})
+
 
 
 class StudentDetailView(DetailView):

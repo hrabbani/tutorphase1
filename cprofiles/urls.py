@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import (
+    MentorUpdateView,
     home_view,
     MentorProfileListView,
     StudentProfileListView,
@@ -20,6 +21,8 @@ from .views import (
     student_profile_form,
     dashboard,
     show_task_form,
+    MentorUpdateView,
+    StudentUpdateView
 
    
 )
@@ -49,6 +52,9 @@ urlpatterns = [
     path('student-profile-input/', student_profile_form, name='student-profile-form'),
     path('dashboard/', dashboard, name='dashboard'),
     path('<pk>/show-task-form/', show_task_form, name='show-task-form'),
+    path('<slug>/mentor-update-profile', MentorUpdateView.as_view(), name='mentor-update-profile'),
+    path('<slug>/student-update-profile', StudentUpdateView.as_view(), name='student-update-profile'),
+
 
 
 

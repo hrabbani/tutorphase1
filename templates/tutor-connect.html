@@ -18,7 +18,7 @@
 
 
 <div class="table-responsive-lg">
-    <table class="table">
+    <table id="myTable" class="table">
         <thead>
             <tr>
                 <th scope="col">Name</th>
@@ -80,3 +80,18 @@
 
 
 {% endblock content %}
+
+
+
+{% block scripts %}
+<script>
+
+
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+
+
+</script>
+{% endblock scripts %}

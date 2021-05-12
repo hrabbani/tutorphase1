@@ -102,8 +102,14 @@
 
 {% block scripts %}
 <script>
-    $(document).ready(function () {
-        $('#myTable').DataTable();
-    });
+$(document).ready(function() {
+    $('#myTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'excel', 'pdf', 'print'
+        ]
+
+    } );
+} );
 </script>
 {% endblock scripts %}
