@@ -23,13 +23,13 @@ import collections
 from django.urls import reverse_lazy, reverse
 import datetime
 from itertools import chain
-
-def home_view(request):
-
-    return render(request, 'cprofiles.html') 
+from core.decorators import unauthenticated_user, allowed_users
+from django.utils.decorators import method_decorator
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class MentorProfileListView(ListView):
     model = Mentor
     template_name = 'mentor-profile-list.html'
@@ -46,7 +46,8 @@ class MentorProfileListView(ListView):
         return context
 
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class StudentProfileListView(ListView):
     model = Student
     template_name = 'choice-student-profile-list.html'
@@ -56,7 +57,8 @@ class StudentProfileListView(ListView):
         return qs
 
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class MentorDetailView(DetailView):
     model = Mentor
     template_name = 'mentor-detail.html'
@@ -78,7 +80,8 @@ class MentorDetailView(DetailView):
         return context
 
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class MentorUpdateView(UpdateView):
     form_class = MentorModelForm
     model = Mentor
@@ -88,6 +91,8 @@ class MentorUpdateView(UpdateView):
         return reverse("cprofiles:mentor-profiles-detail", kwargs={"slug": self.object.slug})
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class StudentUpdateView(UpdateView):
     form_class = StudentModelForm
     model = Student
@@ -97,7 +102,8 @@ class StudentUpdateView(UpdateView):
         return reverse("cprofiles:student-profiles-detail", kwargs={"slug": self.object.slug})
 
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class StudentDetailView(DetailView):
     model = Student
     template_name = 'student-detail.html'
@@ -120,7 +126,8 @@ class StudentDetailView(DetailView):
 
 
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class MentorProfileDetailView(DetailView):
     model = Mentor
     template_name = 'mentor-connect.html'
@@ -140,6 +147,9 @@ class MentorProfileDetailView(DetailView):
         return context
 
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class StudentProfileDetailView(DetailView):
     model = Student
     template_name = 'choice-student-connect.html'
@@ -160,7 +170,8 @@ class StudentProfileDetailView(DetailView):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def connect(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
@@ -182,7 +193,8 @@ def connect(request):
 
 
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class ConnectionListView(ListView):
     model = Connection
     template_name = 'choice-connection-list.html'
@@ -193,7 +205,8 @@ class ConnectionListView(ListView):
 
     
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class ConnectionDetailView(DetailView):
     model = Connection
     template_name = 'choice-connection-detail.html'
@@ -216,6 +229,8 @@ class ConnectionDetailView(DetailView):
 
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def remove_connection(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
@@ -233,6 +248,8 @@ def remove_connection(request):
 
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def show_task_form(request, pk):
 
     tasksubjects = Tasksubject.objects.all()
@@ -251,6 +268,8 @@ def show_task_form(request, pk):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class TaskUpdateView(UpdateView):
 
     form_class = TaskModelForm
@@ -268,6 +287,8 @@ class TaskUpdateView(UpdateView):
         return context
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def generate_session_form(request):
     
     active_connection = Connection.objects.filter(status='connected')
@@ -286,7 +307,8 @@ def generate_session_form(request):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def update_session(request, pk):
 
     session = Session.objects.get(pk=pk)
@@ -313,6 +335,8 @@ def update_session(request, pk):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class SessionListView(ListView):
     model = Session
     template_name = 'choice-session-list.html'
@@ -323,6 +347,8 @@ class SessionListView(ListView):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class SessionDetailView(DetailView):
     model = Session
     template_name = 'choice-session-detail.html'
@@ -345,7 +371,8 @@ class SessionDetailView(DetailView):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def mentor_profile_form(request):
 
     form = MentorModelForm()
@@ -361,7 +388,8 @@ def mentor_profile_form(request):
     return render(request, 'mentor-profile-form.html', context)
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def student_profile_form(request):
 
     form = StudentModelForm()
@@ -377,6 +405,9 @@ def student_profile_form(request):
     return render(request, 'choice-student-profile-form.html', context)
 
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
 def dashboard(request):
 
     high_student_count = Student.objects.filter(grade='8').count()

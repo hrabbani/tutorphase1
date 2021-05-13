@@ -1,7 +1,6 @@
 from django.urls import path
 from .views import (
     MentorUpdateView,
-    home_view,
     MentorProfileListView,
     StudentProfileListView,
     MentorDetailView,
@@ -31,7 +30,6 @@ from .views import (
 app_name = 'cprofiles'
 
 urlpatterns = [
-    path('cprofiles/', home_view, name='cprofiles'),
     path('mentors/', MentorProfileListView.as_view(), name='mentor-profiles-list'),
     path('students/', StudentProfileListView.as_view(), name='student-profiles-list'),
     path('<slug>/mentor-profile-detail', MentorDetailView.as_view(), name='mentor-profiles-detail'),

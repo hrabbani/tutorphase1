@@ -29,9 +29,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'profiles',
     'cprofiles',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
 ]
 
 SITE_ID = 1
@@ -82,11 +79,7 @@ TEMPLATES = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-    
-]
+
 
 WSGI_APPLICATION = 'core.wsgi.application'
 

@@ -18,11 +18,13 @@ from django.db.models.functions import TruncMonth
 import collections
 from django.urls import reverse_lazy, reverse
 from django.core.mail import send_mail
+from core.decorators import unauthenticated_user, allowed_users
+from django.utils.decorators import method_decorator
 
 
 
-
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class TutorProfileDetailView(DetailView):
     model = Profile
     template_name = 'tutor-connect.html'
@@ -42,6 +44,9 @@ class TutorProfileDetailView(DetailView):
         return context
 
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class StudentProfileDetailView(DetailView):
     model = Profile
     template_name = 'student-connect.html'
@@ -62,6 +67,8 @@ class StudentProfileDetailView(DetailView):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class ProfileDetailView(DetailView):
     model = Profile
     template_name = 'profile-detail.html'
@@ -84,7 +91,8 @@ class ProfileDetailView(DetailView):
 
 
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class TutorUpdateView(UpdateView):
     form_class = TutorModelForm
     model = Profile
@@ -95,6 +103,8 @@ class TutorUpdateView(UpdateView):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class StudentUpdateView(UpdateView):
     form_class = StudentModelForm
     model = Profile
@@ -105,6 +115,8 @@ class StudentUpdateView(UpdateView):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class TutorProfileListView(ListView):
     model = Profile
     template_name = 'tutor-profile-list.html'
@@ -122,6 +134,8 @@ class TutorProfileListView(ListView):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class StudentProfileListView(ListView):
     model = Profile
     template_name = 'student-profile-list.html'
@@ -131,6 +145,8 @@ class StudentProfileListView(ListView):
         return qs
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def connect(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
@@ -152,6 +168,10 @@ def connect(request):
 
 
 
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class ConnectionListView(ListView):
     model = Connection
     template_name = 'connection-list.html'
@@ -162,6 +182,9 @@ class ConnectionListView(ListView):
 
 
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class ConnectionDetailView(DetailView):
     model = Connection
     template_name = 'connection-detail.html'
@@ -184,7 +207,8 @@ class ConnectionDetailView(DetailView):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def remove_connection(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
@@ -201,6 +225,9 @@ def remove_connection(request):
 
 
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class SessionListView(ListView):
     model = Session
     template_name = 'session-list.html'
@@ -211,6 +238,9 @@ class SessionListView(ListView):
 
 
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class SessionDetailView(DetailView):
     model = Session
     template_name = 'session-detail.html'
@@ -221,7 +251,8 @@ class SessionDetailView(DetailView):
         return session
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def generate_session_form(request):
     
     active_connection = Connection.objects.filter(status='connected')
@@ -239,8 +270,10 @@ def generate_session_form(request):
 
     
 
-class SessionUpdateView(UpdateView):
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+class SessionUpdateView(UpdateView):
     form_class = SessionModelForm
     model = Session
     template_name = 'submit-session-feedback.html'
@@ -257,12 +290,16 @@ class SessionUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def session_submitted(request):
 
     return render(request, 'session-submitted.html')
 
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def tutor_profile_form(request):
 
     form = TutorModelForm()
@@ -281,7 +318,8 @@ def tutor_profile_form(request):
     return render(request, 'tutor-profile-form.html', context)
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def student_profile_form(request):
 
     form = StudentModelForm()
@@ -301,7 +339,8 @@ def student_profile_form(request):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def dashboard(request):
 
     x = 0
@@ -366,7 +405,8 @@ def dashboard(request):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def like_unlike_post(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -389,7 +429,8 @@ def like_unlike_post(request):
     return redirect('profiles:dashboard')
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def search_connection(request):
     if request.method == 'POST':
         status = request.POST.get('status')
@@ -401,7 +442,8 @@ def search_connection(request):
 
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def send_email_to_tutors(request):
 
 
@@ -422,7 +464,8 @@ def send_email_to_tutors(request):
     return render(request, 'email.html')
 
 
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
 def table(request):
 
     return render(request, 'table.html')

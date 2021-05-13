@@ -38,9 +38,18 @@
                 <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:generate-session-form' %}">Generate
                     Session Form</a>
             </li>
+
+            {% ifequal user.groups.all.0.name "admin" %}
             <li class="nav-item active">
-                <a class="nav-link" style="font-weight: bold" href="{% url 'cprofiles:dashboard' %}">[Choice Program]</a>
+                <a class="nav-link" style="font-weight: bold" href="{% url 'cprofiles:dashboard' %}">[Choice
+                    Program]</a>
             </li>
+            {% endifequal %}
+
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold" href="{% url 'logout' %}">Logout</a>
+            </li>
+
         </ul>
     </div>
 </nav>
