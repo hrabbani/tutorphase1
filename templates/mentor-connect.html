@@ -13,6 +13,28 @@
 
 </br>
 
+
+<div class="alert alert-success" role="alert">
+    <div class="row">
+
+        <div class="col-sm">
+            <p>Email:<p>
+                    <p>{{mentor.email}}</p>
+        </div>
+
+
+        <div class="col-sm">
+            <p>Prefer Grade:<p>
+                    <p>{{mentor.prefer_grade}}</p>
+        </div>
+
+        <div class="col-sm">
+            <p>Prefer Location:<p>
+                    <p>{{mentor.prefer_location}}</p>
+        </div>
+    </div>
+</div>
+
 <h3>Students</h3>
 
 
@@ -51,7 +73,7 @@
                     {% endfor %}
                 </td>
                 <td>
-                    <form action="{% url 'cprofiles:connect' %}" method="POST">
+                    <form action="{% url 'cprofiles:mentor-connect' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="student_pk" value={{student.pk}}>
                         <input type="hidden" name="mentor_pk" value={{mentor.pk}}>

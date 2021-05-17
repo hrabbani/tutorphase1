@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import ( 
-    connect,
+    tutor_connect,
+    student_connect,
     TutorProfileListView,
     TutorProfileDetailView,
     StudentProfileListView,
@@ -20,7 +21,7 @@ from .views import (
     ConnectionDetailView,
     like_unlike_post,
     search_connection,
-    send_email_to_tutors,
+    check_connection_status,
     table,
     TutorUpdateView,
     StudentUpdateView,
@@ -33,7 +34,8 @@ app_name = 'profiles'
 urlpatterns = [
     path('tutors/', TutorProfileListView.as_view(), name='tutor-profiles-view'),
     path('students/', StudentProfileListView.as_view(), name='student-profiles-view'),
-    path('send-connect/', connect, name='connect'),
+    path('tutor-connect/', tutor_connect, name='tutor-connect'),
+    path('student-connect/', student_connect, name='student-connect'),
     path('<slug>/connect/tutor/', TutorProfileDetailView.as_view(), name='tutor-detail-view'),
     path('<slug>/connect/student/', StudentProfileDetailView.as_view(), name='student-detail-view'),
     path('connections/', ConnectionListView.as_view(), name='connection-view'),
@@ -50,7 +52,7 @@ urlpatterns = [
     path('<pk>/connection-detail', ConnectionDetailView.as_view(), name='connection-detail-view'),
     path('liked/', like_unlike_post, name='like-post-view'),
     path('search-connection/', search_connection, name='search-connection'),
-    path('send-email-to-tutors/', send_email_to_tutors, name='send-email-to-tutors'),
+    path('check-connection-status/', check_connection_status, name='check-connection-status'),
     path('table/', table, name='table'),
     path('<slug>/tutor-update-profile/', TutorUpdateView.as_view(), name='tutor-update-profile'),
     path('<slug>/student-update-profile/', StudentUpdateView.as_view(), name='student-update-profile'),

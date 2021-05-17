@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from .utils import get_random_code
 from django.template.defaultfilters import slugify
 from django.db.models import Q
+from datetime import timedelta
+from django.utils import timezone
+
 
 
 class Subject(models.Model):
@@ -36,6 +39,7 @@ class Profile(models.Model):
     email = models.EmailField(max_length=200, blank=True)
     grade = models.IntegerField(null=True, blank=True)
     academic_advisor = models.CharField(max_length=200, blank=True)
+    academic_advisor_email = models.EmailField(max_length=200, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name='subjects')
     school = models.CharField(max_length=200, blank=True)
     friends = models.ManyToManyField("self", blank=True, related_name='testfriends')
@@ -119,7 +123,13 @@ class Connection(models.Model):
         return reverse("profiles:connection-detail-view", kwargs={"pk": self.pk})
 
     def get_sessions(self):
-        return self.session_set.filter(submit_status=True)[:1]
+        return self.session_set.filter(submit_status=True).order_by('-updated')[:1]
+
+    def get_all_sessions(self):
+        return self.session_set.filter(submit_status=True).order_by('-updated')
+
+    def get_all_sessions_three(self):
+        return self.session_set.filter(submit_status=True).order_by('-updated')[:3]
 
 
 CONT_STATUS_CHOICES = (
@@ -149,7 +159,7 @@ class Session(models.Model):
     meet = models.IntegerField(null=True, blank=True)
     length = models.FloatField(null=True, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name='sessionsubjects')
-    updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     feedback = models.ManyToManyField(Feedback, blank=True, related_name='feedbacks')
     elaborate = models.TextField(null=True, blank=True, max_length=1000)

@@ -20,6 +20,8 @@ from django.urls import reverse_lazy, reverse
 from django.core.mail import send_mail
 from core.decorators import unauthenticated_user, allowed_users
 from django.utils.decorators import method_decorator
+from django.contrib import messages
+
 
 
 
@@ -147,12 +149,16 @@ class StudentProfileListView(ListView):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['tutor', 'admin'])	
-def connect(request):
+def tutor_connect(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
         tutor_pk = request.POST.get('tutor_pk')
         student = Profile.objects.get(pk=student_pk)
         tutor = Profile.objects.get(pk=tutor_pk)
+
+        # subject_list = list(student.get_subjects().values('name'))
+        # subject_list = [d['name'] for d in subject_list]
+        # subject_list = ", ".join(subject_list)
 
         exist_connection = Connection.objects.filter(student=student).filter(tutor=tutor)
 
@@ -160,13 +166,109 @@ def connect(request):
             exist_connection = Connection.objects.get(Q(student=student), Q(tutor=tutor))
             exist_connection.status = 'connected'
             exist_connection.save()
+
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(tutor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Student-Tutor Program',
+            email_list,
+            fail_silently=False
+            )
+
+
         else:
             rel = Connection.objects.create(student=student, tutor=tutor, status='connected')
+
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(tutor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student" + student.first_name + student.last_name + "Tutor" + tutor.first_name + tutor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Student-Tutor Program',
+            email_list,
+            fail_silently=False
+            )
+
+
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('profiles:all-profiles-view')
 
 
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
+def student_connect(request):
+    if request.method=='POST':
+        student_pk = request.POST.get('student_pk')
+        tutor_pk = request.POST.get('tutor_pk')
+        student = Profile.objects.get(pk=student_pk)
+        tutor = Profile.objects.get(pk=tutor_pk)
+
+        # subject_list = list(tutor.get_subjects().values('name'))
+        # subject_list = [d['name'] for d in subject_list]
+        # subject_list = ", ".join(subject_list)
+
+        exist_connection = Connection.objects.filter(student=student).filter(tutor=tutor)
+
+        if exist_connection.exists():
+            exist_connection = Connection.objects.get(Q(student=student), Q(tutor=tutor))
+            exist_connection.status = 'connected'
+            exist_connection.save()
+
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(tutor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Student-Tutor Program',
+            email_list,
+            fail_silently=False
+            )
+
+
+        else:
+            rel = Connection.objects.create(student=student, tutor=tutor, status='connected')
+
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(tutor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Student-Tutor Program',
+            email_list,
+            fail_silently=False
+            )
+
+
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('profiles:all-profiles-view')
 
 
 
@@ -219,6 +321,26 @@ def remove_connection(request):
         rel = Connection.objects.get(Q(student=student), Q(tutor=tutor))
         rel.status = 'disconnected'
         rel.save()
+
+        email_list = []
+        email_list.append(student.email)
+        email_list.append(tutor.email)
+        email_list.append(student.parent1_email)
+        email_list.append(student.parent2_email)
+        email_list.append(student.academic_advisor_email)
+
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+
+        email_list.extend(program_manager_email_list)
+
+        content = "Connection is disconnected between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
+
+        send_mail('Connection Disconnected',
+        content,
+        'Student-Tutor Program',
+        email_list,
+        fail_silently=False
+        )
         
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('profiles:my-profile-view')
@@ -263,6 +385,16 @@ def generate_session_form(request):
         session_generated_pk = str(session_generated.pk)
         z.append("http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/")
 
+        email = x.tutor.email
+
+        content = "http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/"
+
+        send_mail('Please fill in the Session Feedback Form',
+        content,
+        'Student-Tutor Program',
+        [email],
+        fail_silently=False
+        )
 
     context = {'z':z}
 
@@ -382,9 +514,6 @@ def dashboard(request):
 
     connected_conn = Connection.objects.filter(status='connected').count()
 
-
-
-
     context = {'month':month,
                 'x':x,
                 'y':y,
@@ -444,24 +573,60 @@ def search_connection(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['tutor', 'admin'])	
-def send_email_to_tutors(request):
+def check_connection_status(request):
 
+    todays_date = timezone.now()
+    three_weeks_ago = todays_date-timedelta(days=21)
 
-    email = Profile.objects.get(id=6).email
+    active_connection = Connection.objects.filter(status='connected')
 
-    content = "This is from " + email
+    inactive_list = [0, 0, 0]
 
-    print(content)
+    for x in active_connection:
+        for y in x.get_all_sessions():
+            if y.updated >= three_weeks_ago:
+                break
+            else:
+                x.status = 'inactive'
+                x.save()
+                email_list = []
+                email_list.append(x.student.academic_advisor_email)
+                program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+                email_list.extend(program_manager_email_list)
 
-    send_mail('cloudmotion',
-    content,
-    'Tutor-Mentor Program',
-    [email],
-    fail_silently=False
-    )
+                content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Tutor" + " " + x.tutor.first_name + " " + x.tutor.last_name + " " + "because no session feedback form was submitted for three weeks straight"
 
+                send_mail('Connection Inactive',
+                content,
+                'Student-Tutor Program',
+                email_list,
+                fail_silently=False
+                )
 
-    return render(request, 'email.html')
+                break
+  
+        list_meet = []
+        for y in x.get_all_sessions_three():
+            list_meet.append(y.meet)
+
+        if list_meet == inactive_list:
+            x.status = 'inactive'
+            x.save()
+            email_list = []
+            email_list.append(x.student.academic_advisor_email)
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            email_list.extend(program_manager_email_list)
+
+            content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Tutor" + " " + x.tutor.first_name + " " + x.tutor.last_name + " " + "because 'Zero' Meets were submitted in Session Feedback form for three sessions straight."
+
+            send_mail('Connection Inactive',
+            content,
+            'Student-Tutor Program',
+            email_list,
+            fail_silently=False
+            )
+
+    return HttpResponse("Connection Status Checked")
 
 
 @login_required(login_url='login')

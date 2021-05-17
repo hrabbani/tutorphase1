@@ -13,6 +13,29 @@
 
 </br>
 
+<div class="alert alert-success" role="alert">
+    <div class="row">
+
+        <div class="col-sm">
+            <p>Parent Email:<p>
+                    <p>{{student.parent1_email}}</p>
+        </div>
+
+
+        <div class="col-sm">
+            <p>Grade:<p>
+                    <p>{{student.grade}}</p>
+        </div>
+
+
+        <div class="col-sm">
+            <p>School:<p>
+                    <p>{{student.school}}</p>
+        </div>
+
+    </div>
+</div>
+
 <h3>Mentors</h3>
 
 
@@ -56,7 +79,7 @@
                 </td>
 
                 <td>
-                    <form action="{% url 'cprofiles:connect' %}" method="POST">
+                    <form action="{% url 'cprofiles:student-connect' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="student_pk" value={{student.pk}}>
                         <input type="hidden" name="mentor_pk" value={{mentor.pk}}>

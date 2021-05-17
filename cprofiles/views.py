@@ -25,6 +25,8 @@ import datetime
 from itertools import chain
 from core.decorators import unauthenticated_user, allowed_users
 from django.utils.decorators import method_decorator
+from django.contrib import messages
+
 
 
 
@@ -172,7 +174,7 @@ class StudentProfileDetailView(DetailView):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['choice', 'admin'])
-def connect(request):
+def mentor_connect(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
         mentor_pk = request.POST.get('mentor_pk')
@@ -185,13 +187,38 @@ def connect(request):
             exist_connection = Connection.objects.get(Q(student=student), Q(mentor=mentor))
             exist_connection.status = 'connected'
             exist_connection.save()
+    
+
+        else:
+            rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
+ 
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('cprofiles:mentor-profiles-list')
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
+def student_connect(request):
+    if request.method=='POST':
+        student_pk = request.POST.get('student_pk')
+        mentor_pk = request.POST.get('mentor_pk')
+        student = Student.objects.get(pk=student_pk)
+        mentor = Mentor.objects.get(pk=mentor_pk)
+
+        exist_connection = Connection.objects.filter(student=student).filter(mentor=mentor)
+
+        if exist_connection.exists():
+            exist_connection = Connection.objects.get(Q(student=student), Q(mentor=mentor))
+            exist_connection.status = 'connected'
+            exist_connection.save()
+            
         else:
             rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
-
-
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')

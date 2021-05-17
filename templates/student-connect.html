@@ -13,6 +13,40 @@
 
 </br>
 
+<div class="alert alert-success" role="alert">
+    <div class="row">
+
+        <div class="col-sm">
+            <p>Email:<p>
+                    <p>{{profile.email}}</p>
+        </div>
+
+
+        <div class="col-sm">
+            <p>Grade:<p>
+                    <p>{{profile.grade}}</p>
+        </div>
+
+
+        <div class="col-sm">
+            <p>Subjects:<p>
+                    {% for subject in profile.get_subjects %}
+                    <li>{{subject}}</li>
+                    {% endfor %}
+        </div>
+
+
+        <div class="col-sm">
+            <p>School:<p>
+                    <p>{{profile.school}}</p>
+        </div>
+        <div class="col-sm">
+            <p>Academic Advisor:<p>
+                    <p>{{profile.academic_advisor}}</p>
+        </div>
+    </div>
+</div>
+
 <h3>Tutors</h3>
 
 
@@ -66,7 +100,7 @@
                 {% if tutor.student_capacity > tutor.get_friends_no or tutor.student_capacity == None %}
 
                 <td>
-                    <form action="{% url 'profiles:connect' %}" method="POST">
+                    <form action="{% url 'profiles:student-connect' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="student_pk" value={{profile.pk}}>
                         <input type="hidden" name="tutor_pk" value={{tutor.pk}}>
@@ -94,13 +128,8 @@
 
 {% block scripts %}
 <script>
-
-
     $(document).ready(function () {
         $('#myTable').DataTable();
     });
-
-
-
 </script>
 {% endblock scripts %}
