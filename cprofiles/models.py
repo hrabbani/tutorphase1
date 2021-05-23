@@ -30,6 +30,7 @@ class Student(models.Model):
     avatar = models.ImageField(default='avatar.png', upload_to='avatars/')
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
+    email = models.EmailField(max_length=200, blank=True)
     gender = models.CharField(max_length=200, choices=GENDER_CHOICES)
     grade = models.CharField(max_length=200, choices=GRADE_CHOICES)
     school = models.CharField(max_length=200, blank=True)
@@ -42,6 +43,8 @@ class Student(models.Model):
     parent2_last_name = models.CharField(max_length=200, blank=True)
     parent2_phone = models.CharField(max_length=200, blank=True)
     parent2_email = models.EmailField(max_length=200, blank=True)
+    academic_advisor = models.CharField(max_length=200, blank=True)
+    academic_advisor_email = models.EmailField(max_length=200, blank=True)
     parent_language = models.CharField(max_length=200, choices=LANGUAGE_CHOICES)
     activity = models.TextField(null=True, blank=True, max_length=1000)
     reason = models.TextField(null=True, blank=True, max_length=1000)
@@ -159,7 +162,8 @@ class Mentor(models.Model):
 STATUS_CHOICES = (
     ('inactive', 'inactive'),
     ('connected', 'connected'),
-    ('disconnected', 'disconnected')
+    ('disconnected', 'disconnected'),
+    ('off track', 'off track'),
 )
 
 
@@ -193,6 +197,12 @@ class Connection(models.Model):
 
     def get_task(self):
         return self.task_set.get()
+
+    def get_all_sessions(self):
+        return self.session_set.filter(submit_status=True).order_by('-updated')
+
+    def get_all_sessions_four(self):
+        return self.session_set.filter(submit_status=True).order_by('-updated')[:4]
 
 
 CONT_STATUS_CHOICES = (

@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Connection, Session, Task, Tasksubject, Copytask
 import datetime
+from django.core.mail import send_mail
+
 
 
 
@@ -17,6 +19,23 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
     if instance.status == 'disconnected':
         mentor_.friends.remove(student_)
         mentor_.save()
+    if instance.status == 'off track':
+        email_list = []
+        email_list.append(student_.academic_advisor_email)
+        email_list.append(mentor_.email)
+
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
+        email_list.extend(program_manager_email_list)
+
+        content = "Connection is 'Off Track' between Student " + student_.first_name + " " + student_.last_name + " " + "Mentor" + " " + mentor_.first_name + " " + mentor_.last_name
+       
+        send_mail('Connection Off Track',
+        content,
+        'Choice Program',
+        email_list,
+        fail_silently=False
+        )  
+
 
 
 @receiver(post_save, sender=Connection)
@@ -120,51 +139,61 @@ def post_save_update_connection(sender, instance, created, **kwargs):
             if instance.tasksubject.all()[0].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task2status == 'not completed':
             if instance.tasksubject.all()[1].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task3status == 'not completed':
             if instance.tasksubject.all()[2].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task4status == 'not completed':
             if instance.tasksubject.all()[3].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task5status == 'not completed':
             if instance.tasksubject.all()[4].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task6status == 'not completed':
             if instance.tasksubject.all()[5].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task7status == 'not completed':
             if instance.tasksubject.all()[6].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task8status == 'not completed':
             if instance.tasksubject.all()[7].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task9status == 'not completed':
             if instance.tasksubject.all()[8].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
         if instance.task10status == 'not completed':
             if instance.tasksubject.all()[9].duedate < today_date:
                 instance.connection.flag = True
                 instance.connection.progress = 'off track'
+                instance.connection.status = 'off track'
                 instance.connection.save()
 
 

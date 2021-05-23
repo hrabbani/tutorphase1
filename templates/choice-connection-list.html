@@ -69,6 +69,8 @@
                     <div><span class="badge badge-danger">Disconnected</div>
                     {% elif obj.status == 'inactive' %}
                     <div><span class="badge badge-warning">Inactive</div>
+                    {% elif obj.status == 'off track' %}
+                    <div><span class="badge badge-secondary">Off Track</div>
                     {% endif %}
                 </td>
                 <td>
@@ -85,6 +87,15 @@
                             class="btn btn-info">Connect Mentor</button></a>
 
                     {% elif obj.status == 'inactive' %}
+                    <a href="{% url 'cprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
+                            class="btn btn-info">Connect Mentor</button></a>
+                    <form action="{% url 'cprofiles:remove-connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{obj.student.pk}}>
+                        <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
+                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                    </form>
+                    {% elif obj.status == 'off track' %}
                     <a href="{% url 'cprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
                             class="btn btn-info">Connect Mentor</button></a>
                     <form action="{% url 'cprofiles:remove-connect' %}" method="POST">

@@ -26,6 +26,8 @@ from itertools import chain
 from core.decorators import unauthenticated_user, allowed_users
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.core.mail import send_mail
+
 
 
 
@@ -187,10 +189,42 @@ def mentor_connect(request):
             exist_connection = Connection.objects.get(Q(student=student), Q(mentor=mentor))
             exist_connection.status = 'connected'
             exist_connection.save()
+
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(mentor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Choice Program',
+            email_list,
+            fail_silently=False
+            )
     
 
         else:
             rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
+
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(mentor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Choice Program',
+            email_list,
+            fail_silently=False
+            )
  
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -213,12 +247,47 @@ def student_connect(request):
             exist_connection = Connection.objects.get(Q(student=student), Q(mentor=mentor))
             exist_connection.status = 'connected'
             exist_connection.save()
+
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(mentor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Choice Program',
+            email_list,
+            fail_silently=False
+            )
             
         else:
             rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
 
+            email_list = []
+            email_list.append(student.email)
+            email_list.append(mentor.email)
+            email_list.append(student.parent1_email)
+            email_list.append(student.parent2_email)
+            email_list.append(student.academic_advisor_email)
+
+            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
+
+            send_mail('Connection Established',
+            content,
+            'Choice Program',
+            email_list,
+            fail_silently=False
+            )
+
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
+
+
+
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
@@ -268,6 +337,26 @@ def remove_connection(request):
         rel = Connection.objects.get(Q(student=student), Q(mentor=mentor))
         rel.status = 'disconnected'
         rel.save()
+
+        email_list = []
+        email_list.append(student.email)
+        email_list.append(mentor.email)
+        email_list.append(student.parent1_email)
+        email_list.append(student.parent2_email)
+        email_list.append(student.academic_advisor_email)
+
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
+
+        email_list.extend(program_manager_email_list)
+
+        content = "Connection is disconnected between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
+
+        send_mail('Connection Disconnected',
+        content,
+        'Choice Program',
+        email_list,
+        fail_silently=False
+        )
         
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -326,6 +415,17 @@ def generate_session_form(request):
         session_generated_pk = str(session_generated.pk)
         z.append("http://127.0.0.1:8000/cprofiles/" + session_generated_pk + "/submit-feedback/")
 
+        email = x.mentor.email
+        print(email)
+
+        content = "http://127.0.0.1:8000/cprofiles/" + session_generated_pk + "/submit-feedback/"
+
+        send_mail('Please fill in the Session Feedback Form',
+        content,
+        'Choice Program',
+        [email],
+        fail_silently=False
+        )
 
     context = {'z':z}
 
@@ -485,3 +585,63 @@ def dashboard(request):
                 }
 
     return render(request, 'choice-dashboard.html', context)
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def check_connection_status(request):
+
+    todays_date = timezone.now()
+    four_weeks_ago = todays_date-timedelta(days=28)
+
+    active_connection = Connection.objects.filter(status='connected')
+
+    inactive_list = [0, 0, 0, 0]
+
+    for x in active_connection:
+        for y in x.get_all_sessions():
+            if y.updated >= four_weeks_ago:
+                break
+            else:
+                x.status = 'inactive'
+                x.save()
+                email_list = []
+                email_list.append(x.student.academic_advisor_email)
+                program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
+                email_list.extend(program_manager_email_list)
+
+                content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Mentor" + " " + x.mentor.first_name + " " + x.mentor.last_name + " " + "because no session feedback form was submitted for fours weeks straight"
+
+                send_mail('Connection Inactive',
+                content,
+                'Choice Program',
+                email_list,
+                fail_silently=False
+                )
+
+                break
+  
+        list_meet = []
+        for y in x.get_all_sessions_four():
+            list_meet.append(y.meet)
+
+        if list_meet == inactive_list:
+            x.status = 'inactive'
+            x.save()
+            email_list = []
+            email_list.append(x.student.academic_advisor_email)
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
+            email_list.extend(program_manager_email_list)
+
+            content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Mentor" + " " + x.mentor.first_name + " " + x.mentor.last_name + " " + "because 'Zero' Meets were submitted in Session Feedback form for four sessions straight."
+
+            send_mail('Connection Inactive',
+            content,
+            'Choice Program',
+            email_list,
+            fail_silently=False
+            )
+
+    return HttpResponse("Connection Status Checked")
