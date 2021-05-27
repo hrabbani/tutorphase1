@@ -24,7 +24,9 @@ def login_page(request):
                 if request.user.groups.all()[0].name == 'choice':
                     return redirect('cprofiles:dashboard') 
                 if request.user.groups.all()[0].name == 'admin':
-                    return redirect('profiles:dashboard') 
+                    return redirect('profiles:dashboard')
+                if request.user.groups.all()[0].name == 'mentor':
+                    return redirect('mprofiles:dashboard') 
             else:
                 messages.info(request, 'Username or password is incorrect')
 
@@ -50,6 +52,8 @@ def home_view(request):
         return redirect('cprofiles:dashboard') 
     if request.user.groups.all()[0].name == 'admin':
         return redirect('profiles:dashboard') 
+    if request.user.groups.all()[0].name == 'mentor':
+        return redirect('mprofiles:dashboard') 
 
 
 

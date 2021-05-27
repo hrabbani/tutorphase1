@@ -1,0 +1,118 @@
+{% extends 'mbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Session Detail{% endblock title %}
+
+{% block content %}
+
+<h3>Session Form Response</h3>
+</br>
+
+<h4>Tutor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
+<h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
+</br>
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">How many times have you met this month?</h5>
+                <p class="card-text">{{session.meet}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">- How many total hours of mentoring did you do?</h5>
+                <p class="card-text">{{session.length}} hrs</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Please write a summary of what you did with your mentee.</h5>
+                <p class="card-text">{{session.summary}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">- List one way you were helpful to your mentee.</h5>
+                <p class="card-text">{{session.help}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">List one thing you would change to make your future sessions better.</h5>
+                <p class="card-text">{{session.change}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Please rank your student’s engagement on a scale of 1-5.</h5>
+                <p class="card-text">{{session.rate}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Can we support you with any of the following:</h5>
+                {% for support in session.get_supports %}
+                <p class="card-text">{{support}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us?</h5>
+                <p class="card-text">{{session.question}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Are you going to continue mentoring this student?</h5>
+                <p class="card-text">{{session.cont}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+    </div>
+</div>
+
+
+</br>
+
+{% endblock content %}

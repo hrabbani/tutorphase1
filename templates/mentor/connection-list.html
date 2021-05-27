@@ -1,0 +1,149 @@
+{% extends 'mbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Connection List{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-auto mr-auto">
+        <h3>Connections</h3>
+    </div>
+</div>
+
+
+
+
+
+<div class="table-responsive-lg">
+    <table id="myTable" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Connected On</th>
+                <th scope="col">Student</th>
+                <th scope="col">Mentor</th>
+                <th scope="col">Last Session</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+                <th scope="col">Flag</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in object_list %}
+            <tr>
+                <td><a href="{{obj.get_absolute_url}}">{{obj.created|date:"d M Y"}}</a></td>
+                <td><a href="{{obj.student.get_absolute_url}}">{{obj.student.first_name}} {{obj.student.last_name}}</a>
+                </td>
+                <td><a href="{{obj.mentor.get_absolute_url}}">{{obj.mentor.first_name}} {{obj.mentor.last_name}}</a>
+                </td>
+                <td>{% for session in obj.get_sessions %}{{session.updated|date:"d M Y"}}{% endfor %}</td>
+                <td>
+                    {% if obj.status == 'connected' %}
+                    <div><span class="badge badge-success">Connected</div>
+                    {% elif obj.status == 'disconnected' %}
+                    <div><span class="badge badge-danger">Disconnected</div>
+                    {% elif obj.status == 'inactive' %}
+                    <div><span class="badge badge-warning">Inactive</div>
+                    {% elif obj.status == 'off track' %}
+                    <div><span class="badge badge-secondary">Off Track</div>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if obj.status == 'connected' %}
+                    <form action="{% url 'mprofiles:remove-connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{obj.student.pk}}>
+                        <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
+                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                    </form>
+
+                    {% elif obj.status == 'disconnected' %}
+                    <a href="{% url 'mprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
+                            class="btn btn-info">Connect Mentor</button></a>
+
+                    {% elif obj.status == 'inactive' %}
+                    <a href="{% url 'mprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
+                            class="btn btn-info">Connect Mentor</button></a>
+                    <form action="{% url 'mprofiles:remove-connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{obj.student.pk}}>
+                        <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
+                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                    </form>
+                    {% endif %}
+                </td>
+                <td>
+                    <form action="{% url 'mprofiles:flag-connection' %}" method="POST" class='like-form' id='{{obj.id}}'>
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value={{obj.id}}>
+                        <button type="submit" class="like_btn btn btn-light like-btn{{obj.id}}">
+                            {% if obj.flag == False %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:black"></i>
+                            <p class="flag">false</p>
+                            {% else %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:red"></i>
+                            <p class="flag">true</p>
+                            {% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('#myTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'excel', 'pdf', 'print'
+        ]
+
+    } );
+} );
+for (let element of document.getElementsByClassName("flag")){
+   element.style.display="none";
+}
+
+$('.like-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        const thumbcolor = $(`.thumb${post_id}`).css('color')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+
+                if (thumbcolor === 'rgb(0, 0, 0)') {
+                    $(`.thumb${post_id}`).css('color', 'red');
+                } else {
+                    $(`.thumb${post_id}`).css('color', 'black');
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
+</script>
+{% endblock scripts %}

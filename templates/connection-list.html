@@ -44,6 +44,7 @@
                 <th scope="col">Last Session</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
+                <th scope="col">Flag</th>
             </tr>
         </thead>
         <tbody>
@@ -88,6 +89,21 @@
                     </form>
                     {% endif %}
                 </td>
+                <td>
+                    <form action="{% url 'profiles:flag-connection' %}" method="POST" class='like-form' id='{{obj.id}}'>
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value={{obj.id}}>
+                        <button type="submit" class="like_btn btn btn-light like-btn{{obj.id}}">
+                            {% if obj.flag == False %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:black"></i>
+                            <p class="flag">false</p>
+                            {% else %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:red"></i>
+                            <p class="flag">true</p>
+                            {% endif %}
+                        </button>
+                    </form>
+                </td>
             </tr>
 
             {% endfor %}
@@ -102,14 +118,50 @@
 
 {% block scripts %}
 <script>
-$(document).ready(function() {
-    $('#myTable').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            'excel', 'pdf', 'print'
-        ]
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'excel', 'pdf', 'print'
+            ]
 
-    } );
-} );
+        });
+    });
+
+
+    for (let element of document.getElementsByClassName("flag")) {
+        element.style.display = "none";
+    }
+
+
+    $('.like-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        const thumbcolor = $(`.thumb${post_id}`).css('color')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+
+                if (thumbcolor === 'rgb(0, 0, 0)') {
+                    $(`.thumb${post_id}`).css('color', 'red');
+                } else {
+                    $(`.thumb${post_id}`).css('color', 'black');
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
 </script>
 {% endblock scripts %}

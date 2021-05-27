@@ -10,6 +10,7 @@ urlpatterns = [
     path('', home_view, name='home-view'),
     path('profiles/', include('profiles.urls', namespace='profiles')),
     path('cprofiles/', include('cprofiles.urls', namespace='cprofiles')),
+    path('mprofiles/', include('mprofiles.urls', namespace='mprofiles')),
     path('accounts/login/', login_page, name="login"),
     path('account/logout/', logout_user, name="logout"),
 

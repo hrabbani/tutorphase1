@@ -115,6 +115,8 @@ class Connection(models.Model):
     tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='tutor')
     status = models.CharField(max_length=200, choices=STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
+    flag = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.student}-{self.tutor}-{self.status}"

@@ -369,12 +369,7 @@ def remove_connection(request):
 def show_task_form(request, pk):
 
     tasksubjects = Tasksubject.objects.all()
-
-    print(tasksubjects)
-
     task = Task.objects.get(pk=pk)
-
-    print(task)
 
     context = {'tasksubjects':tasksubjects,
                 'task': task
@@ -416,7 +411,6 @@ def generate_session_form(request):
         z.append("http://127.0.0.1:8000/cprofiles/" + session_generated_pk + "/submit-feedback/")
 
         email = x.mentor.email
-        print(email)
 
         content = "http://127.0.0.1:8000/cprofiles/" + session_generated_pk + "/submit-feedback/"
 
@@ -606,6 +600,7 @@ def check_connection_status(request):
                 break
             else:
                 x.status = 'inactive'
+                x.flag = True
                 x.save()
                 email_list = []
                 email_list.append(x.student.academic_advisor_email)
@@ -629,6 +624,7 @@ def check_connection_status(request):
 
         if list_meet == inactive_list:
             x.status = 'inactive'
+            x.flag = True
             x.save()
             email_list = []
             email_list.append(x.student.academic_advisor_email)
@@ -645,3 +641,30 @@ def check_connection_status(request):
             )
 
     return HttpResponse("Connection Status Checked")
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def flag_unflag_connection(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        connection_obj = Connection.objects.get(id=post_id)
+
+        if connection_obj.flag == False:
+            connection_obj.flag = True
+            connection_obj.save()
+
+        else:
+            connection_obj.flag = False
+            connection_obj.save()
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')
+

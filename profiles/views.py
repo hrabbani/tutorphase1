@@ -558,6 +558,34 @@ def like_unlike_post(request):
     return redirect('profiles:dashboard')
 
 
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
+def flag_unflag_connection(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        connection_obj = Connection.objects.get(id=post_id)
+
+        if connection_obj.flag == False:
+            connection_obj.flag = True
+            connection_obj.save()
+
+        else:
+            connection_obj.flag = False
+            connection_obj.save()
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')
+
+
+
+
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['tutor', 'admin'])	
 def search_connection(request):
@@ -588,6 +616,7 @@ def check_connection_status(request):
                 break
             else:
                 x.status = 'inactive'
+                x.flag = True
                 x.save()
                 email_list = []
                 email_list.append(x.student.academic_advisor_email)
@@ -611,6 +640,7 @@ def check_connection_status(request):
 
         if list_meet == inactive_list:
             x.status = 'inactive'
+            x.flag = True
             x.save()
             email_list = []
             email_list.append(x.student.academic_advisor_email)

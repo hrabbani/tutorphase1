@@ -1,0 +1,61 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold" href="{% url 'mprofiles:dashboard' %}">Dashboard</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold"
+                    href="{% url 'mprofiles:mentor-profiles-list' %}">Mentors</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold"
+                    href="{% url 'mprofiles:student-profiles-list' %}">Students</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold"
+                    href="{% url 'mprofiles:connection-list' %}">Connections</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold" href="{% url 'mprofiles:session-list' %}">Sessions</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold" href="{% url 'mprofiles:mentor-profile-form' %}"
+                    target="_blank">Mentor Form</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold" href="{% url 'mprofiles:student-profile-form' %}"
+                    target="_blank">Student Form</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold"
+                    href="{% url 'mprofiles:generate-session-form' %}">Generate
+                    Session Form</a>
+            </li>
+            {% ifequal user.groups.all.0.name "admin" %}
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Programs
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'profiles:dashboard' %}">Tutor Program</a>
+                    <a class="dropdown-item" href="{% url 'cprofiles:dashboard' %}">Choice Program</a>
+                    <a class="dropdown-item" href="{% url 'mprofiles:dashboard' %}">Mentor Program</a>
+                </div>
+            </div>
+            {% endifequal %}
+            <li class="nav-item active">
+                <a class="nav-link" style="font-weight: bold" href="{% url 'logout' %}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>

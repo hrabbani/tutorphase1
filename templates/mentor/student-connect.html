@@ -1,0 +1,110 @@
+{% extends 'mbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Create Connection{% endblock title %}
+
+
+{% block content %}
+
+<h3>Create Connection</h3>
+<div>Create a connection between a Student and Tutor</div>
+</br>
+<h3>Student: {{student.first_name}} {{student.last_name}}</h3>
+
+</br>
+
+<div class="alert alert-success" role="alert">
+    <div class="row">
+
+        <div class="col-sm">
+            <p>Email:<p>
+                    <p>{{student.email}}</p>
+        </div>
+
+
+        <div class="col-sm">
+            <p>Grade:<p>
+                    <p>{{student.grade}}</p>
+        </div>
+
+
+        <div class="col-sm">
+            <p>School:<p>
+                    <p>{{student.school}}</p>
+        </div>
+
+    </div>
+</div>
+
+<h3>Mentors</h3>
+
+
+
+<div class="table-responsive-lg">
+    <table id="myTable" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Pref Gender</th>
+                <th scope="col">Pref Location</th>
+                <th scope="col">Student</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for mentor in mentors %}
+            <tr>
+                <td>{{mentor.first_name}} {{mentor.last_name}}</td>
+                <td>{{mentor.email}}</td>
+                <td>{{mentor.prefer_sex}}</td>
+                <td>{{mentor.geographical}}</td>
+                <td>
+                    {% for friend in mentor.get_friends %}
+                    <li>{{friend.first_name}} {{friend.last_name}}</li>
+                    {% endfor %}
+                </td>
+                <td>
+
+                    {% for friend in mentor.get_friends %}
+                    <div><span class="badge badge-success">Connected</span></div>
+                    {% empty %}
+                    <div><span class="badge badge-danger">Not Connected</div>
+                    {% endfor %}
+
+                </td>
+
+                <td>
+                    <form action="{% url 'mprofiles:student-connect' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="student_pk" value={{student.pk}}>
+                        <input type="hidden" name="mentor_pk" value={{mentor.pk}}>
+                        <button type="submit" class="btn btn-success">Connect</button>
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+{% block scripts %}
+<script>
+
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+</script>
+{% endblock scripts %}

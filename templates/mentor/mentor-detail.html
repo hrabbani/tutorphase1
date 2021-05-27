@@ -1,0 +1,316 @@
+{% extends 'mbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Mentor Profile{% endblock title %}
+
+
+{% block content %}
+
+
+<div class="profile-page tx-13">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="profile-header">
+                <div class="header-links">
+                    <div class="container header">
+                        <div class="row">
+                            <div class="col-3 name-btn">
+                                <img class="profile-pic" src="{{mentor.avatar.url}}" alt="profile">
+                            </div>
+                            <div class="col-3">
+                                <div style="font-size:25px; font-weight:bold" class="profile-name">
+                                    Mentor</div>
+                                <div style="font-size:25px; font-weight:bold" class="profile-name">
+                                    {{mentor.first_name}}
+                                    {{mentor.last_name}}</div>
+                                <div style="font-size:15px" class="profile-name">
+                                    Preferred Location: {{mentor.geographical}}</div>
+                            </div>
+                            <div class="col-6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<h3>Activity</h3>
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Student</th>
+                <th scope="col">Mentor</th>
+                <th scope="col">Length</th>
+                <th scope="col">Supports</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for session in sessions %}
+            <tr>
+                <td>{{session.created|date:"d M Y"}}</td>
+                <td><a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}}
+                        {{session.connection.student.last_name}}</a></td>
+                <td><a href="{{session.connection.mentor.get_absolute_url}}">{{session.connection.mentor.first_name}}
+                        {{session.connection.mentor.last_name}}</a></td>
+                <td>{{session.length}} hr</td>
+                <td>
+                    {% for support in session.get_supports %}
+                    <li>{{support}}</li>
+                    {% endfor %}
+                </td>
+                <td><a href="{{session.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                            Form</button></a></td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+
+<h3>All Info</h3>
+
+<a href="{% url 'mprofiles:mentor-update-profile' mentor.slug %}"><button type="submit" class="btn btn-info">Edit</button></a>
+
+</br>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">First Name</h5>
+                <p class="card-text">{{mentor.first_name}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Last Name</h5>
+                <p class="card-text">{{mentor.last_name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Email</h5>
+                <p class="card-text">{{mentor.email}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Phone</h5>
+                <p class="card-text">{{mentor.phone}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Address</h5>
+                <p class="card-text">{{mentor.address}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you speak any languages other than English? If so, which languages?</h5>
+                <p class="card-text">{{mentor.language}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Emergency Contact: Name, Phone, Relationship to Applicant</h5>
+                <p class="card-text">{{mentor.emergency_contact}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Employment Status</h5>
+                <p class="card-text">{{mentor.employment_status}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Employer Info: Company, Address</h5>
+                <p class="card-text">{{mentor.employer_info}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any previous experience volunteering or working with youth? If so, please
+specify</h5>
+                <p class="card-text">{{mentor.experience}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Why do you want to become a mentor?</h5>
+                <p class="card-text">{{mentor.reason}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">In which ways do you feel comfortable providing support?</h5>
+                <p class="card-text">{{mentor.support}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">I prefer my mentee to be:</h5>
+                <p class="card-text">{{mentor.prefer_sex}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">My geographical preference is:</h5>
+                <p class="card-text">{{mentor.geographical}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Can you commit to participating in the Peninsula Bridge's mentoring program for a
+minimum of one year from the time you are matched with a mentee?</h5>
+                <p class="card-text">{{mentor.commit}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Are you available to meet with your mentee (in-person or virtually) once a month along
+with phone/email contact every two weeks?</h5>
+                <p class="card-text">{{mentor.available}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Can you commit to a one-time (one hour) training seminar to better understand the
+program and how to maximize the quality of your relationship with your mentee?
+</h5>
+                <p class="card-text">{{mentor.seminar}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">I agree to adhere to the above ground rules to help keep my mentee safe and respected.
+</h5>
+                <p class="card-text">{{mentor.signature}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Opportunities called "volunteer grants" exist in many corporations. Companies pay
+$10-25/hour to a nonprofit where employees volunteer. Would you be able to inquire
+about this at your corporation?
+</h5>
+                <p class="card-text">{{mentor.grant}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">I have completed a background check for another Peninsula Bridge program in the past.
+
+</h5>
+                <p class="card-text">{{mentor.check_bridge}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">If you would like to continue mentoring the student you had mentored last year in
+Peninsula Bridge's Choice Program, please mention his/her name.
+</h5>
+                <p class="card-text">{{mentor.cont_student_bridge}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+    </div>
+</div>
+
+{% endblock content %}

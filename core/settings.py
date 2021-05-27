@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'profiles',
     'cprofiles',
+    'mprofiles',
 ]
 
 SITE_ID = 1

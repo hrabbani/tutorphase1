@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import ( 
+    flag_unflag_connection,
     tutor_connect,
     student_connect,
     TutorProfileListView,
@@ -25,6 +26,7 @@ from .views import (
     table,
     TutorUpdateView,
     StudentUpdateView,
+    flag_unflag_connection
         
 
 )
@@ -56,6 +58,8 @@ urlpatterns = [
     path('table/', table, name='table'),
     path('<slug>/tutor-update-profile/', TutorUpdateView.as_view(), name='tutor-update-profile'),
     path('<slug>/student-update-profile/', StudentUpdateView.as_view(), name='student-update-profile'),
+    path('flag-connection/', flag_unflag_connection, name='flag-connection'),
+
 
 
 

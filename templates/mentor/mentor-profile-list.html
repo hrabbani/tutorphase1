@@ -1,0 +1,82 @@
+{% extends 'mbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Mentor Profile List{% endblock title %}
+
+{% block content %}
+
+<h3>Mentors</h3>
+<p><a href="mailto:{{recipients}}">Click here to email All Mentors</a>
+
+    </br>
+
+
+
+    <div class="table-responsive-lg">
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Emp Status</th>
+                    <th scope="col">Pref Gender</th>
+                    <th scope="col">Pref Location</th>
+                    <th scope="col">Student</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for obj in object_list %}
+                <tr>
+                    <td><a href="{{obj.get_absolute_url}}">{{obj.first_name}} {{obj.last_name}}</a></td>
+                    <td>{{obj.email}}</td>
+                    <td>{{obj.employment_status}}</td>
+                    <td>{{obj.prefer_sex}}</td>
+                    <td>{{obj.geographical}}</td>
+                    <td>
+                        {% for friend in obj.get_friends %}
+                        <li>{{friend.first_name}} {{friend.last_name}}</li>
+                        {% endfor %}
+
+                    </td>
+                    <td>
+
+
+                        {% for friend in obj.get_friends %}
+                        <div><span class="badge badge-success">Connected</span></div>
+                        {% empty %}
+                        <div><span class="badge badge-danger">Not Connected</div>
+                        {% endfor %}
+
+                    </td>
+
+                    <td><a href="{% url 'mprofiles:mentor-connect-detail' obj.slug %}"><button type="submit"
+                                class="btn btn-info">Connect Student</button></a></td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+
+    {% endblock content %}
+
+
+    {% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf', 'print'
+                ]
+
+            });
+        });
+    </script>
+    {% endblock scripts %}
