@@ -6,6 +6,7 @@ from .views import (
     StudentDetailView,
     MentorProfileDetailView,
     StudentProfileDetailView,
+    flag_unflag_student,
     mentor_connect,
     student_connect,
     ConnectionListView,
@@ -22,6 +23,9 @@ from .views import (
     StudentUpdateView,
     dashboard,
     check_connection_status,
+    flag_unflag_mentor,
+    flag_unflag_student,
+    flag_unflag_session,
 
    
 )
@@ -52,11 +56,9 @@ urlpatterns = [
     path('<slug>/student-update-profile', StudentUpdateView.as_view(), name='student-update-profile'),
     path('dashboard/', dashboard, name='dashboard'),
     path('check-connection-status/', check_connection_status, name='check-connection-status'),
-
-
-
-
-
+    path('flag-mentor', flag_unflag_mentor, name='flag-mentor'),
+    path('flag-student', flag_unflag_student, name='flag-student'),
+    path('flag-session', flag_unflag_session, name='flag-session'),
 
     
 ]

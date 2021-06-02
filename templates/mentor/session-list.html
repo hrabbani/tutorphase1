@@ -19,8 +19,22 @@
                 <th scope="col">Length</th>
                 <th scope="col">Supports</th>
                 <th scope="col">Action</th>
+                <th scope="col">Flag</th>
             </tr>
         </thead>
+
+        <tfoot>
+            <tr>
+                <th>Date</th>
+                <th>Student</th>
+                <th>Mentor</th>
+                <th>Length</th>
+                <th>Supports</th>
+                <th>Action</th>
+                <th>Flag</th>
+            </tr>
+        </tfoot>
+
         <tbody>
 
             {% for obj in object_list %}
@@ -31,11 +45,7 @@
                 <td><a href="{{obj.connection.mentor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
                         {{obj.connection.mentor.last_name}}</a></td>
                 <td>{{obj.length}} hr</td>
-                <td>
-                    {% for support in obj.get_supports %}
-                    <li>{{support}}</li>
-                    {% endfor %}
-                </td>
+                <td>{% for support in obj.get_supports %}<li>{{support}} </li>{% endfor %}</td>
                 <td>
                     {% if obj.flag == True %}
                     <a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-danger">View Full
@@ -45,7 +55,21 @@
                             Form</button></a>
                     {% endif %}
                 </td>
-
+                <td>
+                    <form action="{% url 'mprofiles:flag-session' %}" method="POST" class='like-form' id='{{obj.id}}'>
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value={{obj.id}}>
+                        <button type="submit" class="like_btn btn btn-light like-btn{{obj.id}}">
+                            {% if obj.flag == False %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:black"></i>
+                            <p class="flag">false</p>
+                            {% else %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:red"></i>
+                            <p class="flag">true</p>
+                            {% endif %}
+                        </button>
+                    </form>
+                </td>
             </tr>
 
             {% endfor %}
@@ -60,13 +84,113 @@
 {% block scripts %}
 <script>
     $(document).ready(function () {
-        $('#myTable').DataTable({
+
+        var table = $('#myTable').DataTable({
             dom: 'Bfrtip',
             buttons: [
                 'excel', 'pdf', 'print'
-            ]
+            ],
+            "pageLength": 10,
 
+            initComplete: function () {
+                count = 0;
+                this.api().columns().every(function () {
+                    var title = this.header();
+                    //replace spaces with dashes
+                    title = $(title).html().replace(/[\W]/g, '-');
+                    var column = this;
+                    var select = $('<select id="' + title +
+                            '" class="select2" ></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            //Get the "text" property from each selected data 
+                            //regex escape the value and store in array
+                            var data = $.map($(this).select2('data'), function (
+                                value,
+                                key) {
+                                return value.text ? '^' + $.fn.dataTable
+                                    .util
+                                    .escapeRegex(value.text) + '$' : null;
+                            });
+
+                            //if no data selected use ""
+                            if (data.length === 0) {
+                                data = [""];
+                            }
+
+                            //join array into string with regex or (|)
+                            var val = data.join('|');
+
+                            //search for the option(s) selected
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d +
+                            '</option>');
+                    });
+
+                    //use column title as selector and placeholder
+                    $('#' + title).select2({
+                        multiple: true,
+                        closeOnSelect: false,
+                        placeholder: "Select a " + title
+                    });
+
+                    //initially clear select otherwise first option is selected
+                    $('.select2').val(null).trigger('change');
+                });
+            }
         });
     });
+
+    $(document).ready(function () {
+
+      document.getElementById("Student").parentElement.innerHTML = ""
+      document.getElementById("Mentor").parentElement.innerHTML = ""
+      document.getElementById("Action").parentElement.innerHTML = ""
+      document.getElementById("Flag").parentElement.innerHTML = ""
+    });
+
+
+
+
+    $('.like-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        const thumbcolor = $(`.thumb${post_id}`).css('color')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+
+                if (thumbcolor === 'rgb(0, 0, 0)') {
+                    $(`.thumb${post_id}`).css('color', 'red');
+                } else {
+                    $(`.thumb${post_id}`).css('color', 'black');
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
+
+    for (let element of document.getElementsByClassName("flag")){
+    element.style.display="none";
+    }
+
 </script>
 {% endblock scripts %}

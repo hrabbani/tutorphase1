@@ -55,6 +55,8 @@ class Student(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
+    flag = models.BooleanField(default=False)
+
 
     
     def __str__(self):
@@ -118,6 +120,8 @@ class Mentor(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
+    flag = models.BooleanField(default=False)
+
     
     def __str__(self):
         return f"{self.first_name}"
@@ -244,6 +248,8 @@ class Session(models.Model):
     cont = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
     submit_status = models.BooleanField(default=False)
     step = models.CharField(max_length=200, blank=True)
+    flag = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.connection.student.first_name}-{self.connection.mentor.first_name}"

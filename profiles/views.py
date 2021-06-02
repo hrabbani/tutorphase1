@@ -542,12 +542,10 @@ def like_unlike_post(request):
         student_obj = Profile.objects.get(id=post_id)
 
         if student_obj.flag == False:
-            student_obj.flag = True
-            student_obj.save()
+            Profile.objects.filter(id=post_id).update(flag=True)
 
         else:
-            student_obj.flag = False
-            student_obj.save()
+            Profile.objects.filter(id=post_id).update(flag=False)
 
         data = {
             # 'value': like.value,
@@ -568,12 +566,11 @@ def flag_unflag_connection(request):
         connection_obj = Connection.objects.get(id=post_id)
 
         if connection_obj.flag == False:
-            connection_obj.flag = True
-            connection_obj.save()
+            Connection.objects.filter(id=post_id).update(flag=True)
 
         else:
-            connection_obj.flag = False
-            connection_obj.save()
+            Connection.objects.filter(id=post_id).update(flag=False)
+
 
         data = {
             # 'value': like.value,
@@ -584,6 +581,51 @@ def flag_unflag_connection(request):
     return redirect('profiles:dashboard')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
+def flag_unflag_tutor(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        tutor_obj = Profile.objects.get(id=post_id)
+
+        if tutor_obj.flag == False:
+            Profile.objects.filter(id=post_id).update(flag=True)
+
+        else:
+            Profile.objects.filter(id=post_id).update(flag=False)
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
+def flag_unflag_session(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        session_obj = Session.objects.get(id=post_id)
+
+        if session_obj.flag == False:
+            Session.objects.filter(id=post_id).update(flag=True)
+
+        else:
+            Session.objects.filter(id=post_id).update(flag=False)
+
+        
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')
 
 
 @login_required(login_url='login')
@@ -664,4 +706,7 @@ def check_connection_status(request):
 def table(request):
 
     return render(request, 'table.html')
+
+
+
 

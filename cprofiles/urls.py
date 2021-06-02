@@ -25,6 +25,9 @@ from .views import (
     StudentUpdateView,
     check_connection_status,
     flag_unflag_connection,
+    flag_unflag_student,
+    flag_unflag_mentor,
+    flag_unflag_session,
 
    
 )
@@ -58,7 +61,9 @@ urlpatterns = [
     path('<slug>/student-update-profile', StudentUpdateView.as_view(), name='student-update-profile'),
     path('check-connection-status/', check_connection_status, name='check-connection-status'),
     path('flag-connection/', flag_unflag_connection, name='flag-connection'),
-
+    path('flag-student/', flag_unflag_student, name='flag-student'),
+    path('flag-mentor/', flag_unflag_mentor, name='flag-mentor'),
+    path('flag-session/', flag_unflag_session, name='flag-session'),
 
 
     

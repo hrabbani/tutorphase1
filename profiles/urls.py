@@ -26,7 +26,9 @@ from .views import (
     table,
     TutorUpdateView,
     StudentUpdateView,
-    flag_unflag_connection
+    flag_unflag_connection,
+    flag_unflag_tutor,
+    flag_unflag_session,
         
 
 )
@@ -55,12 +57,12 @@ urlpatterns = [
     path('liked/', like_unlike_post, name='like-post-view'),
     path('search-connection/', search_connection, name='search-connection'),
     path('check-connection-status/', check_connection_status, name='check-connection-status'),
-    path('table/', table, name='table'),
+    path('table/', TutorProfileListView.as_view(), name='table'),
     path('<slug>/tutor-update-profile/', TutorUpdateView.as_view(), name='tutor-update-profile'),
     path('<slug>/student-update-profile/', StudentUpdateView.as_view(), name='student-update-profile'),
     path('flag-connection/', flag_unflag_connection, name='flag-connection'),
-
-
+    path('flag-tutor/', flag_unflag_tutor, name='flag-tutor'),
+    path('flag-session/', flag_unflag_session, name='flag-session'),
 
 
 

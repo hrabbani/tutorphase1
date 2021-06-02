@@ -14,7 +14,6 @@
         <thead>
             <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Email</th>
                 <th scope="col">Grade</th>
                 <th scope="col">Subjects</th>
                 <th scope="col">School</th>
@@ -24,35 +23,34 @@
                 <th scope="col">Flag</th>
             </tr>
         </thead>
+
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>Subjects</th>
+                <th>School</th>
+                <th>Tutor</th>
+                <th>Status</th>
+                <th>Action</th>
+                <th>Flag</th>
+            </tr>
+        </tfoot>
         <tbody>
 
             {% for obj in object_list %}
             <tr>
                 <td><a href="{{obj.get_absolute_url}}">{{obj.first_name}} {{obj.last_name}}</a></td>
-                <td>{{obj.email}}</td>
                 <td>{{obj.grade}}</td>
-
-                <td>
-                    {% for subject in obj.get_subjects %}
-                    <li>{{subject}}</li>
-                    {% endfor %}
-                </td>
+                <td>{% for subject in obj.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
                 <td>{{obj.school}}</td>
+                <td>{% for friend in obj.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
-                    {% for friend in obj.get_friends %}
-                    <li>{{friend.first_name}} {{friend.last_name}}</li>
-                    {% endfor %}
-
-                </td>
-                <td>
-
-
                     {% for friend in obj.get_friends %}
                     <div><span class="badge badge-success">Connected</span></div>
                     {% empty %}
                     <div><span class="badge badge-danger">Not Connected</div>
                     {% endfor %}
-
                 </td>
 
                 <td><a href="{% url 'profiles:student-detail-view' obj.slug %}"><button type="submit"
@@ -85,15 +83,79 @@
 
 {% block scripts %}
 <script>
-$(document).ready(function() {
-    $('#myTable').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            'excel', 'pdf', 'print'
-        ]
+        $(document).ready(function () {
 
-    } );
-} );
+            var table = $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf', 'print'
+                ],
+                "pageLength": 10,
+
+                initComplete: function () {
+                    count = 0;
+                    this.api().columns().every(function () {
+                        var title = this.header();
+                        //replace spaces with dashes
+                        title = $(title).html().replace(/[\W]/g, '-');
+                        var column = this;
+                        var select = $('<select id="' + title +
+                                '" class="select2" ></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                //Get the "text" property from each selected data 
+                                //regex escape the value and store in array
+                                var data = $.map($(this).select2('data'), function (
+                                    value,
+                                    key) {
+                                    return value.text ? '^' + $.fn.dataTable
+                                        .util
+                                        .escapeRegex(value.text) + '$' : null;
+                                });
+
+                                //if no data selected use ""
+                                if (data.length === 0) {
+                                    data = [""];
+                                }
+
+                                //join array into string with regex or (|)
+                                var val = data.join('|');
+
+                                //search for the option(s) selected
+                                column
+                                    .search(val ? val : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d +
+                                '</option>');
+                        });
+
+                        //use column title as selector and placeholder
+                        $('#' + title).select2({
+                            multiple: true,
+                            closeOnSelect: false,
+                            placeholder: "Select a " + title
+                        });
+
+                        //initially clear select otherwise first option is selected
+                        $('.select2').val(null).trigger('change');
+                    });
+                }
+            });
+        });
+
+
+
+    $(document).ready(function () {
+
+      document.getElementById("Status").parentElement.innerHTML = ""
+      document.getElementById("Name").parentElement.innerHTML = ""
+      document.getElementById("Action").parentElement.innerHTML = ""
+      document.getElementById("Flag").parentElement.innerHTML = ""
+
+    });
 
 
     $('.like-form').submit(function (e) {

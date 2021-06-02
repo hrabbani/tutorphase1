@@ -73,6 +73,8 @@ class Student(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
+    flag = models.BooleanField(default=False)
+
 
     
     def __str__(self):
@@ -176,7 +178,9 @@ class Mentor(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
-    
+    flag = models.BooleanField(default=False)
+
+
     def __str__(self):
         return f"{self.first_name}"
 
