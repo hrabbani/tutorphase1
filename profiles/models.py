@@ -18,6 +18,20 @@ class Subject(models.Model):
         return self.name
 
 
+class Language(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Parentlanguage(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 ROLE_CHOICES_PROFILE = (
@@ -51,12 +65,18 @@ class Profile(models.Model):
     parent1_last_name = models.CharField(max_length=200, blank=True)
     parent1_phone = models.CharField(max_length=200, blank=True)
     parent1_email = models.EmailField(max_length=200, blank=True)
-    parent2_first_name = models.CharField(max_length=200, blank=True)
-    parent2_last_name = models.CharField(max_length=200, blank=True)
-    parent2_phone = models.CharField(max_length=200, blank=True)
-    parent2_email = models.EmailField(max_length=200, blank=True)
-    language = models.CharField(max_length=200, choices=LANGUAGE_CHOICES, null=True, blank=True)
     student_capacity = models.IntegerField(null=True, blank=True)
+    phone = models.CharField(max_length=200, blank=True)
+    eighteen_older = models.BooleanField(default=False)
+    not_grade_school = models.BooleanField(default=False)
+    question = models.TextField(null=True, blank=True, max_length=1000)
+    languages = models.ManyToManyField(Language, blank=True, related_name='subjects')
+    comfortable_share_phone = models.BooleanField(default=False)
+    permission_share_grade = models.BooleanField(default=False)
+    optional_school_loop_profile_link = models.TextField(null=True, blank=True, max_length=500)
+    optional_school_loop_username = models.TextField(null=True, blank=True, max_length=500)
+    optional_school_loop_password = models.TextField(null=True, blank=True, max_length=500)
+    parent_languages = models.ManyToManyField(Parentlanguage, blank=True, related_name='subjects')
 
     
     def __str__(self):

@@ -39,7 +39,6 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
         email_list.append(student.email)
         email_list.append(tutor.email)
         email_list.append(student.parent1_email)
-        email_list.append(student.parent2_email)
         email_list.append(student.academic_advisor_email)
 
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))

@@ -275,7 +275,11 @@ img {
 }
 
 
-
+input[type=checkbox] {
+  transform: scale(1.0);
+	width: 15px;
+  box-shadow: none;
+}
 
   
 

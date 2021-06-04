@@ -171,7 +171,6 @@ def tutor_connect(request):
             email_list.append(student.email)
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
@@ -191,7 +190,6 @@ def tutor_connect(request):
             email_list.append(student.email)
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student" + student.first_name + student.last_name + "Tutor" + tutor.first_name + tutor.last_name
@@ -234,7 +232,6 @@ def student_connect(request):
             email_list.append(student.email)
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
@@ -254,7 +251,6 @@ def student_connect(request):
             email_list.append(student.email)
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
@@ -326,7 +322,6 @@ def remove_connection(request):
         email_list.append(student.email)
         email_list.append(tutor.email)
         email_list.append(student.parent1_email)
-        email_list.append(student.parent2_email)
         email_list.append(student.academic_advisor_email)
 
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))

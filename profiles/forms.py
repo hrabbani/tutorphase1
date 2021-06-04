@@ -8,7 +8,7 @@ class TutorModelForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'grade', 'avatar', 'email', 'subjects', 'school', 'language', 'student_capacity')
+        fields = ('first_name', 'last_name', 'phone', 'eighteen_older', 'not_grade_school', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question')
 
 
     def __init__(self, *args, **kwargs):
@@ -23,9 +23,8 @@ class StudentModelForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'grade', 'academic_advisor', 'avatar', 'email', 'subjects', 'school', 'parent1_first_name', 'parent1_last_name', 'parent1_phone',
-         'parent1_email', 'parent2_first_name', 'parent2_last_name', 'parent2_phone',
-         'parent2_email')
+        fields = ('first_name', 'last_name', 'grade', 'academic_advisor', 'email', 'subjects', 'school', 'parent1_first_name', 'parent1_last_name', 'parent1_phone',
+         'parent1_email', 'parent_languages', 'comfortable_share_phone', 'permission_share_grade', 'optional_school_loop_profile_link', 'optional_school_loop_username', 'optional_school_loop_password')
 
 
     def __init__(self, *args, **kwargs):
