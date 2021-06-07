@@ -183,12 +183,11 @@ class Session(models.Model):
     subjects = models.ManyToManyField(Subject, blank=True, related_name='sessionsubjects')
     updated = models.DateTimeField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    feedback = models.ManyToManyField(Feedback, blank=True, related_name='feedbacks')
-    elaborate = models.TextField(null=True, blank=True, max_length=1000)
     change = models.TextField(null=True, blank=True, max_length=1000)
     support = models.ManyToManyField(Support, blank=True, related_name='supports')
     othersupport = models.CharField(null=True, blank=True, max_length=200)
     rate = models.IntegerField(null=True, blank=True)
+    productivity = models.IntegerField(null=True, blank=True)
     question = models.TextField(null=True, blank=True, max_length=1000)
     disconnect = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
     submit_status = models.BooleanField(default=False)
@@ -214,3 +213,14 @@ class Session(models.Model):
 
     def get_absolute_url(self):
         return reverse("profiles:session-detail-view", kwargs={"pk": self.pk})
+
+
+
+class Subjectcalculation(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+    updated = models.DateField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.name

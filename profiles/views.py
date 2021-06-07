@@ -1,6 +1,7 @@
+from functools import total_ordering
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Profile, Connection, Session, Subject
+from .models import Profile, Connection, Session, Subject, Subjectcalculation
 from .forms import SessionModelForm, TutorModelForm, StudentModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
@@ -21,6 +22,10 @@ from django.core.mail import send_mail
 from core.decorators import unauthenticated_user, allowed_users
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from collections import defaultdict
+from datetime import datetime
+from django.utils.timezone import now
+
 
 
 
@@ -470,6 +475,15 @@ def student_profile_form(request):
 @allowed_users(allowed_roles=['tutor', 'admin'])	
 def dashboard(request):
 
+    todays_date = timezone.now()
+    thirty_days_ago = todays_date-timedelta(days=30)
+    thirty_days_session = Session.objects.filter(submit_status=True).filter(updated__gte=thirty_days_ago, updated__lte=todays_date)
+
+
+    # First Row
+    num_session = thirty_days_session.count()
+    hour_session = thirty_days_session.aggregate(Sum('length'))
+
     x = 0
     for tutor in Profile.objects.filter(role='tutor'):
         if tutor.get_friends_no() == 0:
@@ -480,48 +494,206 @@ def dashboard(request):
         if student.get_friends_no() == 0:
             y = y + 1
 
-    todays_date = timezone.now()
-    thirty_days_ago = todays_date-timedelta(days=30)
-    thirty_days_session = Session.objects.filter(submit_status=True).filter(created__gte=thirty_days_ago, created__lte=todays_date)
+    # Second Row
+    num_tutor = Profile.objects.filter(role='tutor').count()
+    inactive_conn = Connection.objects.filter(status='inactive').count()
+    connected_conn = Connection.objects.filter(status='connected').count()
+    thirty_days_discon_connection = Connection.objects.filter(status='disconnected').filter(updated__gte=thirty_days_ago, updated__lte=todays_date).count()
 
-    num_session = thirty_days_session.count()
-    hour_session = thirty_days_session.aggregate(Sum('length'))
-  
-    num_math = thirty_days_session.filter(subjects__in=[1]).count()
-    num_english = thirty_days_session.filter(subjects__in=[2]).count()
 
-    month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
-    recent_session = Session.objects.filter(submit_status=True).order_by('-created')[:5]
+    # Third Row
 
     z = []
-    for session in Session.objects.filter():
+    for session in thirty_days_session:
         z.append(list(session.get_subjects().values('name')))   
 
     flat_list = [item for sublist in z for item in sublist]
     unique_counts = dict(collections.Counter(e['name'] for e in flat_list))
 
+    month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
+    
+    
+    # Fourth Row  
 
-    num_tutor = Profile.objects.filter(role='tutor').count()
+    tutor_list = []
+    for session in Session.objects.filter(submit_status=True):
+        tutor_list.append(session.connection.tutor.first_name) 
 
-    avg_rate = Session.objects.filter(submit_status=True).aggregate(Avg('rate'))
+    hour_list = []
+    for session in Session.objects.filter(submit_status=True):
+        hour_list.append(session.length) 
 
-    inactive_conn = Connection.objects.filter(status='inactive').count()
+    my_dict = defaultdict(list)
+    for k, v in zip(tutor_list, hour_list):
+        my_dict[k].append(v)
 
-    connected_conn = Connection.objects.filter(status='connected').count()
+    top_tutor = {k: sum(v) for (k, v) in my_dict.items()}
+    top_tutor = dict(sorted(top_tutor.items(), key=lambda item: item[1], reverse=False))
+    top_tutor = list(top_tutor.items())[:25]
+    top_tutor = dict(top_tutor)
+
+
+    tutor_month = Profile.objects.filter(role='tutor').annotate(month=TruncMonth('created')).values('month').annotate(total=Count('first_name'))
+    student_month = Profile.objects.filter(role='student').annotate(month=TruncMonth('created')).values('month').annotate(total=Count('first_name'))
+    tutor_student_month = Profile.objects.all().annotate(month=TruncMonth('created')).values('month').annotate(total=Count('first_name'))
+
+
+    # Fifth Row  
+
+    avg_eng_prod_month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(rate=Avg('rate')).annotate(prod=Avg('productivity'))
+    this_year = datetime.now().year
+
+    #ELA
+    ela = Subjectcalculation.objects.filter(updated__year=this_year).filter(name='English Language Arts (ELA)').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    ela_list = []
+    for l in ela:
+        for c, m in l.items():
+            ela_list.append(m)
+
+    ela_dict = dict(zip(ela_list[::2], ela_list[1::2]))
+
+    ela_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in ela_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            ela_dict.setdefault(mmyyyy, 0)
+
+    ela_dict = dict(sorted(ela_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    ela_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in ela_dict.items()}
+
+    #Science
+    science = Subjectcalculation.objects.filter(updated__year=this_year).filter(name='Science').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    sc_list = []
+    for l in science:
+        for c, m in l.items():
+            sc_list.append(m)
+
+    sc_dict = dict(zip(sc_list[::2], sc_list[1::2]))
+
+    sc_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in sc_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            sc_dict.setdefault(mmyyyy, 0)
+
+    sc_dict = dict(sorted(sc_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    sc_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in sc_dict.items()}
+
+    #Math
+    math = Subjectcalculation.objects.filter(updated__year=this_year).filter(name='Math').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    math_list = []
+    for l in math:
+        for c, m in l.items():
+            math_list.append(m)
+
+    math_dict = dict(zip(math_list[::2], math_list[1::2]))
+
+    math_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in math_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            math_dict.setdefault(mmyyyy, 0)
+
+    math_dict = dict(sorted(math_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    math_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in math_dict.items()}
+
+
+
+    #Homework Completion
+    hc = Subjectcalculation.objects.filter(updated__year=this_year).filter(name='Homework Completion').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    hc_list = []
+    for l in hc:
+        for c, m in l.items():
+            hc_list.append(m)
+
+    hc_dict = dict(zip(hc_list[::2], hc_list[1::2]))
+
+    hc_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in hc_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            hc_dict.setdefault(mmyyyy, 0)
+
+    hc_dict = dict(sorted(hc_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    hc_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in hc_dict.items()}
+
+
+    #History/Social Studies
+    his = Subjectcalculation.objects.filter(updated__year=this_year).filter(name='History/Social Studies').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    his_list = []
+    for l in his:
+        for c, m in l.items():
+            his_list.append(m)
+
+    his_dict = dict(zip(his_list[::2], his_list[1::2]))
+
+    his_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in his_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            his_dict.setdefault(mmyyyy, 0)
+
+    his_dict = dict(sorted(his_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    his_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in his_dict.items()}
+
+
+    #Writing
+    wr = Subjectcalculation.objects.filter(updated__year=this_year).filter(name='Writing').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    wr_list = []
+    for l in wr:
+        for c, m in l.items():
+            wr_list.append(m)
+
+    wr_dict = dict(zip(wr_list[::2], wr_list[1::2]))
+
+    wr_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in wr_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            wr_dict.setdefault(mmyyyy, 0)
+
+    wr_dict = dict(sorted(wr_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    wr_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in wr_dict.items()}
+
+    # Sixth Row  
+
+    recent_session = Session.objects.filter(submit_status=True).order_by('-updated')[:5]
+
 
     context = {'month':month,
                 'x':x,
                 'y':y,
                 'num_session':num_session,
                 'hour_session':hour_session,
-                'num_math':num_math,
-                'num_english':num_english,
                 'recent_session':recent_session,
                 'unique_counts':unique_counts,
                 'num_tutor': num_tutor,
-                'avg_rate': avg_rate,
                 'inactive_conn': inactive_conn,
                 'connected_conn': connected_conn,
+                'thirty_days_discon_connection': thirty_days_discon_connection,
+                'top_tutor': top_tutor,
+                'tutor_month': tutor_month,
+                'student_month': student_month,
+                'tutor_student_month': tutor_student_month,
+                'avg_eng_prod_month': avg_eng_prod_month,
+                'ela_dict': ela_dict,
+                'sc_dict': sc_dict,
+                'math_dict': math_dict,
+                'hc_dict': hc_dict,
+                'his_dict': his_dict,
+                'wr_dict': wr_dict,
                 }
 
     return render(request, 'dashboard.html', context)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Connection, Subject, Session, Support, Feedback, Language, Parentlanguage
+from .models import Profile, Connection, Subject, Session, Support, Feedback, Language, Parentlanguage, Subjectcalculation
 
 
 admin.site.register(Profile)
@@ -10,9 +10,7 @@ admin.site.register(Support)
 admin.site.register(Feedback)
 admin.site.register(Language)
 admin.site.register(Parentlanguage)
-
-
-
+admin.site.register(Subjectcalculation)
 
 
 

@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{num_session}}</h1>
-                <p class="card-text">Tutoring Sessions</p>
+                <p class="card-text">Tutoring Sessions in 30 Days</p>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
                     {{ value }}
                     {% endfor %}
                 </h1>
-                <p class="card-text">Hours of Tutoring</p>
+                <p class="card-text">Hours of Tutoring in 30 Days</p>
             </div>
         </div>
     </div>
@@ -74,25 +74,121 @@
     <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
-                <h1 class="card-title">{{avg_rate.rate__avg|floatformat:1}}</h1>
-                <p class="card-text">Average student engagement</p>
+                <h1 class="card-title">{{thirty_days_discon_connection}}</h1>
+                <p class="card-text">Recent Disconnections</p>
             </div>
         </div>
     </div>
 </div>
-</br>
 
-<h3>Tutoring Breakdown</h3>
-<canvas id="subjectChart" width="400" height="150"></canvas>
-
-</br>
-</br>
-<h3>Tutoring Sessions</h3>
-<canvas id="sessionChart" width="400" height="150"></canvas>
 
 
 </br>
 </br>
+
+
+
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Tutoring Breakdown - 30 days</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Tutoring Sessions</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="sessionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Top Tutors</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="toptutorChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">New Students & Tutors</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="signupChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Engagement and Productivity</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="eng_prod_Chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Tutoring Breakdown - Year</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="tutor_breakdown_yearChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 <h3>Recent Sessions</h3>
 
@@ -112,7 +208,7 @@
 
             {% for obj in recent_session %}
             <tr>
-                <td>{{obj.created|date:"d M Y"}}</td>
+                <td>{{obj.updated|date:"d M Y"}}</td>
                 <td><a href="{{obj.connection.student.get_absolute_url}}">{{obj.connection.student.first_name}}
                         {{obj.connection.student.last_name}}</a></td>
                 <td><a href="{{obj.connection.tutor.get_absolute_url}}">{{obj.connection.tutor.first_name}}
@@ -140,9 +236,8 @@
 
 
 
-
-
 {% block scripts %}
+
 <script>
 $(document).ready(function () {
     var ctx = document.getElementById('subjectChart').getContext('2d');
@@ -229,5 +324,198 @@ $(document).ready(function () {
 });
 
 
+
+$(document).ready(function () {
+    var ctx = document.getElementById('toptutorChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for key, value in top_tutor.items %}'{{ key }}',{% endfor %}],
+            datasets: [{
+                label: 'Top Tutors',
+                fill: false,
+                data: [{% for key, value in top_tutor.items %}{{ value }},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend: {
+                display: false
+            },
+        }
+    });
+
+});
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('signupChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for x in tutor_student_month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
+            datasets: [{
+                label: 'Number of Tutors Added Each Month',
+                fill: false,
+                data: [{% for x in tutor_month %}{{x.total}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                  ],
+                borderWidth: 1
+            },
+            
+            {
+                label: 'Number of Students Added Each Month',
+                fill: false,
+                data: [{% for x in student_month %}{{x.total}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('eng_prod_Chart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for x in avg_eng_prod_month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
+            datasets: [{
+                label: 'Average Engagement by Month',
+                fill: false,
+                data: [{% for x in avg_eng_prod_month %}{{x.rate}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                  ],
+                borderWidth: 1
+            },
+            
+            {
+                label: 'Average Productivity by Month',
+                fill: false,
+                data: [{% for x in avg_eng_prod_month %}{{x.prod}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('tutor_breakdown_yearChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for key, value in ela_dict.items %}'{{ key }}',{% endfor %}],
+            datasets: [
+            {
+                label: 'English Language Arts (ELA)',
+                data: [{% for key, value in ela_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'blue',
+
+            },
+            {
+                label: 'Science',
+                data: [{% for key, value in sc_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'red',
+            },
+            {
+                label: 'Math',
+                data: [{% for key, value in math_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'purple',
+            },
+            {
+                label: 'Homework Completion',
+                data: [{% for key, value in hc_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'yellow',
+            },
+            {
+                label: 'History/Social Studies',
+                data: [{% for key, value in his_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'orange',
+            },
+            {
+                label: 'Writing',
+                data: [{% for key, value in wr_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'green',
+            },
+            
+]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
 </script>
 {% endblock scripts %}

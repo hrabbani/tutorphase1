@@ -40,7 +40,7 @@ class SessionModelForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ('meet', 'length', 'subjects', 'feedback', 'elaborate', 'change', 'support', 'othersupport', 'rate', 'question', 'disconnect', 'reason_disconnect')
+        fields = ('meet', 'length', 'subjects', 'change', 'support', 'othersupport', 'rate', 'productivity', 'question', 'disconnect', 'reason_disconnect')
 
     def __init__(self, *args, **kwargs):
         super(SessionModelForm, self).__init__(*args, **kwargs)
