@@ -40,47 +40,75 @@
 
 <h3>Activity</h3>
 
-<div class="table-responsive-lg">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Student</th>
-                <th scope="col">Mentor</th>
-                <th scope="col">Length</th>
-                <th scope="col">Supports</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="row">
 
-            {% for session in sessions %}
-            <tr>
-                <td>{{session.created|date:"d M Y"}}</td>
-                <td><a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}}
-                        {{session.connection.student.last_name}}</a></td>
-                <td><a href="{{session.connection.mentor.get_absolute_url}}">{{session.connection.mentor.first_name}}
-                        {{session.connection.mentor.last_name}}</a></td>
-                <td>{{session.length}} hr</td>
-                <td>
-                    {% for support in session.get_supports %}
-                    <li>{{support}}</li>
-                    {% endfor %}
-                </td>
-                <td><a href="{{session.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
-                            Form</button></a></td>
+    <div class="col-8 table-responsive-lg">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Student</th>
+                    <th scope="col">Mentor</th>
+                    <th scope="col">Length</th>
+                    <th scope="col">Supports</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
 
-            </tr>
+                {% for session in sessions %}
+                <tr>
+                    <td>{{session.created|date:"d M Y"}}</td>
+                    <td><a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}}
+                            {{session.connection.student.last_name}}</a></td>
+                    <td><a href="{{session.connection.mentor.get_absolute_url}}">{{session.connection.mentor.first_name}}
+                            {{session.connection.mentor.last_name}}</a></td>
+                    <td>{{session.length}} hr</td>
+                    <td>
+                        {% for support in session.get_supports %}
+                        <li>{{support}}</li>
+                        {% endfor %}
+                    </td>
+                    <td><a href="{{session.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                                Form</button></a></td>
 
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-4">
+        <div class="card-body">
+            <h5>Connections</h5>
+            {% for connection in student.get_student_connections %}
+            <div class="row">
+                <div class="col"><a href="{{connection.mentor.get_absolute_url}}">{{connection.mentor.first_name}}
+                        {{connection.mentor.last_name}}</a></div>
+                {% if connection.status == 'connected' %}
+                <div class="col"><span class="badge badge-success">Connected</div>
+                {% elif connection.status == 'disconnected' %}
+                <div class="col"><span class="badge badge-danger">Disconnected</div>
+                {% elif connection.status == 'inactive' %}
+                <div class="col"><span class="badge badge-warning">Inactive</div>
+                {% endif %}
+                <div class="col" style="text-align: right;"><a href="{{connection.get_absolute_url}}"><i
+                            class="fa fa-info-circle" style="color:black"></i></a></div>
+            </div>
+            </br>
             {% endfor %}
+        </div>
+    </div>
 
-        </tbody>
-    </table>
+
 </div>
 
 <h3>All Info</h3>
 
-<a href="{% url 'mprofiles:student-update-profile' student.slug %}"><button type="submit" class="btn btn-info">Edit</button></a>
+<a href="{% url 'mprofiles:student-update-profile' student.slug %}"><button type="submit"
+        class="btn btn-info">Edit</button></a>
 
 </br>
 
@@ -174,9 +202,9 @@
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">Why do you want a mentor?</h5>
-                    {% for reason in student.get_reasons %}
-                    <li>{{reason}}</li>
-                    {% endfor %}
+                {% for reason in student.get_reasons %}
+                <li>{{reason}}</li>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -233,8 +261,9 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">- Can you commit to participating in the mentoring program for a minimum of one year
-from the time you are matched with a mentor?</h5>
+                <h5 class="card-title">- Can you commit to participating in the mentoring program for a minimum of one
+                    year
+                    from the time you are matched with a mentor?</h5>
                 <p class="card-text">{{student.commit}}</p>
             </div>
         </div>
@@ -245,8 +274,9 @@ from the time you are matched with a mentor?</h5>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">- Are you available to meet with your mentor (in-person or virtually) once a month along
-with phone/email contact every two weeks?</h5>
+                <h5 class="card-title">- Are you available to meet with your mentor (in-person or virtually) once a
+                    month along
+                    with phone/email contact every two weeks?</h5>
                 <p class="card-text">{{student.available}}</p>
             </div>
         </div>
@@ -255,8 +285,8 @@ with phone/email contact every two weeks?</h5>
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">Can you and a parent/guardian commit to a one-time training seminar to better
-understand the program and how to maximize the quality of your relationship with your
-mentor?</h5>
+                    understand the program and how to maximize the quality of your relationship with your
+                    mentor?</h5>
                 <p class="card-text">{{student.seminar}}</p>
             </div>
         </div>
@@ -269,7 +299,7 @@ mentor?</h5>
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">I agree to adhere to the above ground rules to help keep me safe and respected.
-</h5>
+                </h5>
                 <p class="card-text">{{student.signature}}</p>
             </div>
         </div>

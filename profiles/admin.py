@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Connection, Subject, Session, Support, Feedback, Language, Parentlanguage, Subjectcalculation
+from .models import Profile, Connection, Subject, Session, Support, Feedback, Language, Parentlanguage, Subjectcalculation, Question, Academicadvisor
 
 
 admin.site.register(Profile)
@@ -11,6 +11,6 @@ admin.site.register(Feedback)
 admin.site.register(Language)
 admin.site.register(Parentlanguage)
 admin.site.register(Subjectcalculation)
-
-
+admin.site.register(Question)
+admin.site.register(Academicadvisor)
 

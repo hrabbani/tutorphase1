@@ -74,8 +74,8 @@
     <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
-                <h1 class="card-title">{{thirty_days_discon_connection}}</h1>
-                <p class="card-text">Recent Disconnections</p>
+                <h1 class="card-title">{{unanswered_question_num}}</h1>
+                <p class="card-text"><a href="{% url 'profiles:question-list-view' %}">Unanswered Questions</a></p>
             </div>
         </div>
     </div>
@@ -358,7 +358,8 @@ $(document).ready(function () {
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        stepSize: 1 
                     }
                 }]
             },
@@ -407,7 +408,8 @@ $(document).ready(function () {
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        stepSize: 1 
                     }
                 }]
             }
@@ -467,7 +469,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     var ctx = document.getElementById('tutor_breakdown_yearChart').getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: [{% for key, value in ela_dict.items %}'{{ key }}',{% endfor %}],
             datasets: [
@@ -475,32 +477,50 @@ $(document).ready(function () {
                 label: 'English Language Arts (ELA)',
                 data: [{% for key, value in ela_dict.items %}{{ value }},{% endfor %}],
                 backgroundColor: 'blue',
+                borderColor: 'blue',
+                borderWidth: 0.5,
+                fill: false,
 
             },
             {
                 label: 'Science',
                 data: [{% for key, value in sc_dict.items %}{{ value }},{% endfor %}],
                 backgroundColor: 'red',
+                borderColor: 'red',
+                borderWidth: 0.5,
+                fill: false,
             },
             {
                 label: 'Math',
                 data: [{% for key, value in math_dict.items %}{{ value }},{% endfor %}],
                 backgroundColor: 'purple',
+                borderColor: 'purple',
+                borderWidth: 0.5,
+                fill: false,
             },
             {
                 label: 'Homework Completion',
                 data: [{% for key, value in hc_dict.items %}{{ value }},{% endfor %}],
                 backgroundColor: 'yellow',
+                borderColor: 'yellow',
+                borderWidth: 0.5,
+                fill: false,
             },
             {
                 label: 'History/Social Studies',
                 data: [{% for key, value in his_dict.items %}{{ value }},{% endfor %}],
                 backgroundColor: 'orange',
+                borderColor: 'orange',
+                borderWidth: 0.5,
+                fill: false,
             },
             {
                 label: 'Writing',
                 data: [{% for key, value in wr_dict.items %}{{ value }},{% endfor %}],
                 backgroundColor: 'green',
+                borderColor: 'green',
+                borderWidth: 0.5,
+                fill: false,    
             },
             
 ]

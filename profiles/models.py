@@ -10,6 +10,15 @@ from django.utils import timezone
 
 
 
+class Academicadvisor(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+    email = models.EmailField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Subject(models.Model):
 
     name = models.CharField(max_length=200, blank=True)
@@ -44,6 +53,27 @@ LANGUAGE_CHOICES = (
     ('English', 'English'),
     ('Spanish', 'Spanish'),
 )
+
+STUDENT_GRADE_CHOICES = (
+    ('5', '5'),
+    ('6', '6'),
+    ('7', '7'),
+    ('8', '8'),
+    ('9', '9'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12'),
+)
+
+
+GRADE_CHOICES = (
+    ('9', '9'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12'),
+    ('Not in grade school', 'Not in grade school'),
+)
+
         
 class Profile(models.Model):
     role = models.CharField(max_length=200, choices=ROLE_CHOICES_PROFILE, null=True)
@@ -51,8 +81,9 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
     email = models.EmailField(max_length=200, blank=True)
-    grade = models.IntegerField(null=True, blank=True)
-    academic_advisor = models.CharField(max_length=200, blank=True)
+    student_grade = models.CharField(null=True, blank=True, max_length=200, choices=STUDENT_GRADE_CHOICES)
+    grade = models.CharField(null=True, blank=True, max_length=200, choices=GRADE_CHOICES)
+    academic_advisor = models.ForeignKey(Academicadvisor, null=True, blank=True, on_delete=models.CASCADE, related_name='academic_advisor')
     academic_advisor_email = models.EmailField(max_length=200, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name='subjects')
     school = models.CharField(max_length=200, blank=True)
@@ -67,8 +98,6 @@ class Profile(models.Model):
     parent1_email = models.EmailField(max_length=200, blank=True)
     student_capacity = models.IntegerField(null=True, blank=True)
     phone = models.CharField(max_length=200, blank=True)
-    eighteen_older = models.BooleanField(default=False)
-    not_grade_school = models.BooleanField(default=False)
     question = models.TextField(null=True, blank=True, max_length=1000)
     languages = models.ManyToManyField(Language, blank=True, related_name='subjects')
     comfortable_share_phone = models.BooleanField(default=False)
@@ -77,6 +106,8 @@ class Profile(models.Model):
     optional_school_loop_username = models.TextField(null=True, blank=True, max_length=500)
     optional_school_loop_password = models.TextField(null=True, blank=True, max_length=500)
     parent_languages = models.ManyToManyField(Parentlanguage, blank=True, related_name='subjects')
+    age = models.IntegerField(null=True, blank=True)
+
 
     
     def __str__(self):
@@ -93,7 +124,12 @@ class Profile(models.Model):
 
     def get_subjects(self):
         return self.subjects.all()
+
+    def get_tutor_connections(self):
+        return self.tutor.filter()
  
+    def get_student_connections(self):
+        return self.student.filter()
 
     __initial_first_name = None
     __initial_last_name = None
@@ -183,7 +219,7 @@ class Session(models.Model):
     subjects = models.ManyToManyField(Subject, blank=True, related_name='sessionsubjects')
     updated = models.DateTimeField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    change = models.TextField(null=True, blank=True, max_length=1000)
+    help = models.TextField(null=True, blank=True, max_length=1000)
     support = models.ManyToManyField(Support, blank=True, related_name='supports')
     othersupport = models.CharField(null=True, blank=True, max_length=200)
     rate = models.IntegerField(null=True, blank=True)
@@ -207,9 +243,10 @@ class Session(models.Model):
 
     def get_supports(self):
         return self.support.all()
+    
+    def get_questions(self):
+        return self.question
 
-    def get_feedbacks(self):
-        return self.feedback.all()
 
     def get_absolute_url(self):
         return reverse("profiles:session-detail-view", kwargs={"pk": self.pk})
@@ -224,3 +261,23 @@ class Subjectcalculation(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+
+QUESTION_STATUS_CHOICES = (
+    ('UNANSWERED', 'UNANSWERED'),
+    ('ADDRESSED', 'ADDRESSED'),
+
+)
+
+class Question(models.Model):
+    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='tutor_question')
+    question = models.TextField(null=True, blank=True, max_length=1000)
+    action = models.BooleanField(default=False)
+    status = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_STATUS_CHOICES)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.question

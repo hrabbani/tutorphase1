@@ -1,7 +1,7 @@
 from functools import total_ordering
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Profile, Connection, Session, Subject, Subjectcalculation
+from .models import Profile, Connection, Session, Subject, Subjectcalculation, Question
 from .forms import SessionModelForm, TutorModelForm, StudentModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
@@ -25,6 +25,9 @@ from django.contrib import messages
 from collections import defaultdict
 from datetime import datetime
 from django.utils.timezone import now
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 
@@ -34,7 +37,7 @@ from django.utils.timezone import now
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class TutorProfileDetailView(DetailView):
     model = Profile
-    template_name = 'tutor-connect.html'
+    template_name = 'tutor/tutor-connect.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -56,7 +59,7 @@ class TutorProfileDetailView(DetailView):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class StudentProfileDetailView(DetailView):
     model = Profile
-    template_name = 'student-connect.html'
+    template_name = 'tutor/student-connect.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -78,7 +81,7 @@ class StudentProfileDetailView(DetailView):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class ProfileDetailView(DetailView):
     model = Profile
-    template_name = 'profile-detail.html'
+    template_name = 'tutor/profile-detail.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -126,7 +129,7 @@ class StudentUpdateView(UpdateView):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class TutorProfileListView(ListView):
     model = Profile
-    template_name = 'tutor-profile-list.html'
+    template_name = 'tutor/tutor-profile-list.html'
 
     def get_queryset(self):
         qs = Profile.objects.filter(role='tutor')
@@ -145,7 +148,7 @@ class TutorProfileListView(ListView):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class StudentProfileListView(ListView):
     model = Profile
-    template_name = 'student-profile-list.html'
+    template_name = 'tutor/student-profile-list.html'
 
     def get_queryset(self):
         qs = Profile.objects.filter(role='student')
@@ -178,15 +181,17 @@ def tutor_connect(request):
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Student-Tutor Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Connection Established",
+                text_context,
+                'Student-Tutor Program',
+                email_list,
             )
 
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
         else:
             rel = Connection.objects.create(student=student, tutor=tutor, status='connected')
@@ -197,16 +202,17 @@ def tutor_connect(request):
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student" + student.first_name + student.last_name + "Tutor" + tutor.first_name + tutor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Student-Tutor Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Connection Established",
+                text_context,
+                'Student-Tutor Program',
+                email_list,
             )
 
-
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('profiles:all-profiles-view')
@@ -239,14 +245,17 @@ def student_connect(request):
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Student-Tutor Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Connection Established",
+                text_context,
+                'Student-Tutor Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
 
         else:
@@ -258,14 +267,17 @@ def student_connect(request):
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Student-Tutor Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Connection Established",
+                text_context,
+                'Student-Tutor Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
 
         return redirect(request.META.get('HTTP_REFERER'))
@@ -277,7 +289,7 @@ def student_connect(request):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class ConnectionListView(ListView):
     model = Connection
-    template_name = 'connection-list.html'
+    template_name = 'tutor/connection-list.html'
 
     def get_queryset(self):
         qs = Connection.objects.all().order_by('-created')
@@ -290,7 +302,7 @@ class ConnectionListView(ListView):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class ConnectionDetailView(DetailView):
     model = Connection
-    template_name = 'connection-detail.html'
+    template_name = 'tutor/connection-detail.html'
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -333,14 +345,17 @@ def remove_connection(request):
 
         email_list.extend(program_manager_email_list)
 
-        content = "Connection is disconnected between Student " + student.first_name + " " + student.last_name + " " + "Tutor" + " " + tutor.first_name + " " + tutor.last_name
-
-        send_mail('Connection Disconnected',
-        content,
-        'Student-Tutor Program',
-        email_list,
-        fail_silently=False
+        html_content = render_to_string("tutor/disconnection-email.html", {'student': student, 'tutor': tutor })
+        text_context = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Disconnection Email",
+            text_context,
+            'Student-Tutor Program',
+            email_list,
         )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
         
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('profiles:my-profile-view')
@@ -352,7 +367,7 @@ def remove_connection(request):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class SessionListView(ListView):
     model = Session
-    template_name = 'session-list.html'
+    template_name = 'tutor/session-list.html'
 
     def get_queryset(self):
         qs = Session.objects.filter(submit_status=True).order_by('-created')
@@ -365,7 +380,7 @@ class SessionListView(ListView):
 @method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
 class SessionDetailView(DetailView):
     model = Session
-    template_name = 'session-detail.html'
+    template_name = 'tutor/session-detail.html'
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -385,20 +400,26 @@ def generate_session_form(request):
         session_generated_pk = str(session_generated.pk)
         z.append("http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/")
 
+        tutor = x.tutor
         email = x.tutor.email
 
-        content = "http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/"
+        form_link = "http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/"
 
-        send_mail('Please fill in the Session Feedback Form',
-        content,
-        'Student-Tutor Program',
-        [email],
-        fail_silently=False
+        html_content = render_to_string("tutor/weekly-feedback-email.html", {'tutor': tutor, 'form_link': form_link })
+        text_context = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Weekly feedback Form",
+            text_context,
+            'Student-Tutor Program',
+            [email],
         )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
     context = {'z':z}
 
-    return render(request, 'session-form-link.html', context)
+    return render(request, 'tutor/session-form-link.html', context)
 
     
 
@@ -408,7 +429,7 @@ def generate_session_form(request):
 class SessionUpdateView(UpdateView):
     form_class = SessionModelForm
     model = Session
-    template_name = 'submit-session-feedback.html'
+    template_name = 'tutor/submit-session-feedback.html'
     success_url = reverse_lazy('profiles:session-submitted')
 
     def get_object(self):
@@ -426,7 +447,7 @@ class SessionUpdateView(UpdateView):
 @allowed_users(allowed_roles=['tutor', 'admin'])	
 def session_submitted(request):
 
-    return render(request, 'session-submitted.html')
+    return render(request, 'tutor/session-submitted.html')
 
 
 
@@ -447,7 +468,7 @@ def tutor_profile_form(request):
   
     context = {'form':form}
 
-    return render(request, 'tutor-profile-form.html', context)
+    return render(request, 'tutor/tutor-profile-form.html', context)
 
 
 @login_required(login_url='login')
@@ -467,7 +488,7 @@ def student_profile_form(request):
   
     context = {'form':form}
 
-    return render(request, 'student-profile-form.html', context)
+    return render(request, 'tutor/student-profile-form.html', context)
 
 
 
@@ -500,6 +521,7 @@ def dashboard(request):
     connected_conn = Connection.objects.filter(status='connected').count()
     thirty_days_discon_connection = Connection.objects.filter(status='disconnected').filter(updated__gte=thirty_days_ago, updated__lte=todays_date).count()
 
+    unanswered_question_num = Question.objects.filter(status="UNANSWERED").count()
 
     # Third Row
 
@@ -694,9 +716,11 @@ def dashboard(request):
                 'hc_dict': hc_dict,
                 'his_dict': his_dict,
                 'wr_dict': wr_dict,
+                'unanswered_question_num': unanswered_question_num,
+
                 }
 
-    return render(request, 'dashboard.html', context)
+    return render(request, 'tutor/dashboard.html', context)
 
 
 
@@ -804,7 +828,7 @@ def search_connection(request):
 
     context = {'qs':qs}
 
-    return render(request, 'connection-list-search.html', context)
+    return render(request, 'tutor/connection-list-search.html', context)
 
 
 
@@ -831,15 +855,20 @@ def check_connection_status(request):
                 email_list.append(x.student.academic_advisor_email)
                 program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
                 email_list.extend(program_manager_email_list)
-
-                content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Tutor" + " " + x.tutor.first_name + " " + x.tutor.last_name + " " + "because no session feedback form was submitted for three weeks straight"
-
-                send_mail('Connection Inactive',
-                content,
-                'Student-Tutor Program',
-                email_list,
-                fail_silently=False
+                student = x.student
+                tutor = x.tutor
+               
+                html_content = render_to_string("tutor/connection-inactive-email.html", {'student': student, 'tutor': tutor })
+                text_context = strip_tags(html_content)
+                email = EmailMultiAlternatives(
+                    "Connection Becomes Inactive",
+                    text_context,
+                    'Student-Tutor Program',
+                    email_list,
                 )
+
+                email.attach_alternative(html_content, "text/html")
+                email.send()
 
                 break
   
@@ -856,24 +885,55 @@ def check_connection_status(request):
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
-            content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Tutor" + " " + x.tutor.first_name + " " + x.tutor.last_name + " " + "because 'Zero' Meets were submitted in Session Feedback form for three sessions straight."
-
-            send_mail('Connection Inactive',
-            content,
-            'Student-Tutor Program',
-            email_list,
-            fail_silently=False
+            student = x.student
+            tutor = x.tutor
+            
+            html_content = render_to_string("tutor/connection-inactive-email.html", {'student': student, 'tutor': tutor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Connection Becomes Inactive",
+                text_context,
+                'Student-Tutor Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
     return HttpResponse("Connection Status Checked")
 
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+class QuestionListView(ListView):
+    model = Question
+    template_name = 'tutor/question-list.html'
+
+    def get_queryset(self):
+        qs = Question.objects.all().order_by('status').reverse()
+        return qs
+
+
+
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['tutor', 'admin'])	
-def table(request):
+def action_question(request):
+    if request.method == 'POST':
 
-    return render(request, 'table.html')
+        post_id = request.POST.get('post_id')
+        question_obj = Question.objects.get(id=post_id)
+
+        if question_obj.action == False:
+            Question.objects.filter(id=post_id).update(action=True, status='ADDRESSED')
+
+        else:
+            Question.objects.filter(id=post_id).update(action=False, status='UNANSWERED')
 
 
+        data = {
 
+        }
 
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')

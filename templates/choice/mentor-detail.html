@@ -40,49 +40,75 @@
 
 <h3>Activity</h3>
 
-<div class="table-responsive-lg">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Student</th>
-                <th scope="col">Tutor</th>
-                <th scope="col">Length</th>
-                <th scope="col">Subjets</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="row">
 
-            {% for session in sessions %}
-            <tr>
-                <td>{{session.created|date:"d M Y"}}</td>
-                <td><a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}}
-                        {{session.connection.student.last_name}}</a></td>
-                <td><a href="{{session.connection.mentor.get_absolute_url}}">{{session.connection.mentor.first_name}}
-                        {{session.connection.mentor.last_name}}</a></td>
-                <td>{{session.length}} hr</td>
-                <td>
-                    {% for topic in session.get_topics %}
-                    <li>{{topic}}</li>
-                    {% endfor %}
-                </td>
-                <td><a href="{{session.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
-                            Form</button></a></td>
+    <div class="col-8 table-responsive-lg">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Student</th>
+                    <th scope="col">Tutor</th>
+                    <th scope="col">Length</th>
+                    <th scope="col">Subjets</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
 
-            </tr>
+                {% for session in sessions %}
+                <tr>
+                    <td>{{session.created|date:"d M Y"}}</td>
+                    <td><a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}}
+                            {{session.connection.student.last_name}}</a></td>
+                    <td><a href="{{session.connection.mentor.get_absolute_url}}">{{session.connection.mentor.first_name}}
+                            {{session.connection.mentor.last_name}}</a></td>
+                    <td>{{session.length}} hr</td>
+                    <td>
+                        {% for topic in session.get_topics %}
+                        <li>{{topic}}</li>
+                        {% endfor %}
+                    </td>
+                    <td><a href="{{session.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                                Form</button></a></td>
 
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="col-4">
+        <div class="card-body">
+            <h5>Connections</h5>
+            {% for connection in mentor.get_mentor_connections %}
+            <div class="row">
+                <div class="col"><a href="{{connection.student.get_absolute_url}}">{{connection.student.first_name}}
+                        {{connection.student.last_name}}</a></div>
+                {% if connection.status == 'connected' %}
+                <div class="col"><span class="badge badge-success">Connected</div>
+                {% elif connection.status == 'disconnected' %}
+                <div class="col"><span class="badge badge-danger">Disconnected</div>
+                {% elif connection.status == 'inactive' %}
+                <div class="col"><span class="badge badge-warning">Inactive</div>
+                {% endif %}
+                <div class="col" style="text-align: right;"><a href="{{connection.get_absolute_url}}"><i
+                            class="fa fa-info-circle" style="color:black"></i></a></div>
+            </div>
+            </br>
             {% endfor %}
-
-        </tbody>
-    </table>
+        </div>
+    </div>
 </div>
-
 
 
 <h3>All Info</h3>
 
-<a href="{% url 'cprofiles:mentor-update-profile' mentor.slug %}"><button type="submit" class="btn btn-info">Edit</button></a>
+<a href="{% url 'cprofiles:mentor-update-profile' mentor.slug %}"><button type="submit"
+        class="btn btn-info">Edit</button></a>
 
 </br>
 

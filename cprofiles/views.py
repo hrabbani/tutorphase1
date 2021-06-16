@@ -36,7 +36,7 @@ from django.core.mail import send_mail
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class MentorProfileListView(ListView):
     model = Mentor
-    template_name = 'mentor-profile-list.html'
+    template_name = 'choice/mentor-profile-list.html'
 
     def get_queryset(self):
         qs = Mentor.objects.all()
@@ -54,7 +54,7 @@ class MentorProfileListView(ListView):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class StudentProfileListView(ListView):
     model = Student
-    template_name = 'choice-student-profile-list.html'
+    template_name = 'choice/choice-student-profile-list.html'
 
     def get_queryset(self):
         qs = Student.objects.all()
@@ -65,7 +65,7 @@ class StudentProfileListView(ListView):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class MentorDetailView(DetailView):
     model = Mentor
-    template_name = 'mentor-detail.html'
+    template_name = 'choice/mentor-detail.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -110,7 +110,7 @@ class StudentUpdateView(UpdateView):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class StudentDetailView(DetailView):
     model = Student
-    template_name = 'student-detail.html'
+    template_name = 'choice/student-detail.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -134,7 +134,7 @@ class StudentDetailView(DetailView):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class MentorProfileDetailView(DetailView):
     model = Mentor
-    template_name = 'mentor-connect.html'
+    template_name = 'choice/mentor-connect.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -156,7 +156,7 @@ class MentorProfileDetailView(DetailView):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class StudentProfileDetailView(DetailView):
     model = Student
-    template_name = 'choice-student-connect.html'
+    template_name = 'choice/choice-student-connect.html'
 
     def get_object(self):
         slug = self.kwargs.get('slug')
@@ -293,7 +293,7 @@ def student_connect(request):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class ConnectionListView(ListView):
     model = Connection
-    template_name = 'choice-connection-list.html'
+    template_name = 'choice/choice-connection-list.html'
 
     def get_queryset(self):
         qs = Connection.objects.all().order_by('-created')
@@ -305,7 +305,7 @@ class ConnectionListView(ListView):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class ConnectionDetailView(DetailView):
     model = Connection
-    template_name = 'choice-connection-detail.html'
+    template_name = 'choice/choice-connection-detail.html'
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -375,7 +375,7 @@ def show_task_form(request, pk):
                 'task': task
                 }
 
-    return render(request, 'show-task-form.html', context)
+    return render(request, 'choice/show-task-form.html', context)
 
 
 
@@ -385,7 +385,7 @@ class TaskUpdateView(UpdateView):
 
     form_class = TaskModelForm
     model = Task
-    template_name = 'task-form.html'
+    template_name = 'choice/task-form.html'
     success_url = reverse_lazy('profiles:session-submitted')
 
     def get_context_data(self, **kwargs):
@@ -423,7 +423,7 @@ def generate_session_form(request):
 
     context = {'z':z}
 
-    return render(request, 'choice-session-form-link.html', context)
+    return render(request, 'choice/choice-session-form-link.html', context)
 
 
 
@@ -452,7 +452,7 @@ def update_session(request, pk):
                 'session': session,
 
                 }
-    return render(request, 'choice-submit-session-feedback.html', context)
+    return render(request, 'choice/choice-submit-session-feedback.html', context)
 
 
 
@@ -460,7 +460,7 @@ def update_session(request, pk):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class SessionListView(ListView):
     model = Session
-    template_name = 'choice-session-list.html'
+    template_name = 'choice/choice-session-list.html'
 
     def get_queryset(self):
         qs = Session.objects.filter(submit_status=True).order_by('-updated')
@@ -472,7 +472,7 @@ class SessionListView(ListView):
 @method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class SessionDetailView(DetailView):
     model = Session
-    template_name = 'choice-session-detail.html'
+    template_name = 'choice/choice-session-detail.html'
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -506,7 +506,7 @@ def mentor_profile_form(request):
   
     context = {'form':form}
 
-    return render(request, 'mentor-profile-form.html', context)
+    return render(request, 'choice/mentor-profile-form.html', context)
 
 
 @login_required(login_url='login')
@@ -523,7 +523,7 @@ def student_profile_form(request):
   
     context = {'form':form}
 
-    return render(request, 'choice-student-profile-form.html', context)
+    return render(request, 'choice/choice-student-profile-form.html', context)
 
 
 
@@ -550,8 +550,6 @@ def dashboard(request):
     on_track_conn_percentage = on_track_conn/total_conn * 100
 
     other_conn_percentage = 100 - on_track_conn_percentage
-
-    print(on_track_conn)
     
     z = []
     for session in Session.objects.filter():
@@ -578,7 +576,7 @@ def dashboard(request):
 
                 }
 
-    return render(request, 'choice-dashboard.html', context)
+    return render(request, 'choice/choice-dashboard.html', context)
 
 
 

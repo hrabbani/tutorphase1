@@ -1,0 +1,106 @@
+{% extends 'form-base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Student Submission Form{% endblock title %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-6">
+
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+                    <div class="card-header">
+                        <h2>Student Submission Form</h2>
+                    </div>
+
+                    <label for="id_first_name">First name:</label>
+                    {{form.first_name}}
+
+                    <label for="id_last_name">Last name:</label>
+                    {{form.last_name}}
+
+                    <label for="id_email">Email:</label>
+                    {{form.email}}
+
+                    <label for="id_student_grade">Grade:</label>
+                    {{form.student_grade}}
+
+                    <label for="id_academic_advisor">Academic advisor:</label>
+                    {{form.academic_advisor}}
+
+                    <label for="id_subjects">What subjects would you like tutoring in? (Hold the “Control” or
+                        “Command” key to select multiple subjects.) (this is “Subjects:” field)</label>
+                    {{form.subjects}}
+
+                    <label for="id_school">School:</label>
+                    {{form.school}}
+
+                    <label for="id_parent1_first_name">Parent/Guardian First Name:</label>
+                    {{form.parent1_first_name}}
+
+                    <label for="id_parent1_last_name">Parent/Guardian Last Name:</label>
+                    {{form.parent1_last_name}}
+
+                    <label for="id_parent1_email">Parent/Guardian Email:</label>
+                    {{form.parent1_email}}
+
+                    <label for="id_parent1_phone">Parent/Guardian Phone Number:</label>
+                    {{form.parent1_phone}}
+
+                    <label for="id_parent_languages">Parent Language Preferences:</label>
+                    {{form.parent_languages}}
+
+                    <label for="id_comfortable_share_phone">Are you comfortable with us sharing your phone number or
+                        your student's
+                        phone number with the tutor?</label>
+                    {{form.comfortable_share_phone}}
+
+                    <label for="id_permission_share_grade">Do you give permission for us to share your student's grades
+                        with their
+                        tutor?</label>
+                    {{form.permission_share_grade}}
+
+                    <label for="id_optional_school_loop_profile_link">(Optional) School Loop/Schoology Profile
+                        Link:</label>
+                    {{form.optional_school_loop_profile_link}}
+
+                    <label for="id_optional_school_loop_username">(Optional) School Loop/Schoology Username:</label>
+                    {{form.optional_school_loop_username}}
+
+                    <label for="id_optional_school_loop_password">(Optional) School Loop/Schoology Password:</label>
+                    {{form.optional_school_loop_password}}
+
+
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-success" type="submit"> Submit</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script>
+
+    var grade_list = ["9", "10", "11", "12"];
+    $('#id_student_grade').on('change', function () {
+        if(jQuery.inArray(this.value, grade_list) !== -1)
+            $('label[for=id_academic_advisor], #id_academic_advisor').show('normal');
+        else
+            $('label[for=id_academic_advisor], #id_academic_advisor').hide('normal');
+    }).trigger("change");
+</script>
+
+
+{% endblock scripts %}

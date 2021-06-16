@@ -72,6 +72,10 @@ class Student(models.Model):
         return self.mentors.all().count()
 
 
+    def get_student_connections(self):
+        return self.student.filter()
+
+
     __initial_first_name = None
     __initial_last_name = None
 
@@ -134,6 +138,9 @@ class Mentor(models.Model):
 
     def get_friends_no(self):
         return self.friends.all().count()
+
+    def get_mentor_connections(self):
+        return self.mentor.filter()
 
 
     __initial_first_name = None

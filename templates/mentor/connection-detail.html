@@ -11,7 +11,7 @@
 {% if connection.status == 'connected' %}
 <div><span class="badge badge-success">Connected</div>
 {% elif connection.status == 'disconnected' %}
-<div><span class="badge badge-danger">Disconnected</div>
+<div><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'inactive' %}
 <div><span class="badge badge-warning">Inactive</div>
 {% endif %}

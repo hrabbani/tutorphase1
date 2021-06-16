@@ -8,7 +8,7 @@ class TutorModelForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'phone', 'eighteen_older', 'not_grade_school', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question')
+        fields = ('first_name', 'last_name', 'phone', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question', 'age')
 
 
     def __init__(self, *args, **kwargs):
@@ -23,7 +23,7 @@ class StudentModelForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'grade', 'academic_advisor', 'email', 'subjects', 'school', 'parent1_first_name', 'parent1_last_name', 'parent1_phone',
+        fields = ('first_name', 'last_name', 'student_grade', 'academic_advisor', 'email', 'subjects', 'school', 'parent1_first_name', 'parent1_last_name', 'parent1_phone',
          'parent1_email', 'parent_languages', 'comfortable_share_phone', 'permission_share_grade', 'optional_school_loop_profile_link', 'optional_school_loop_username', 'optional_school_loop_password')
 
 
@@ -40,7 +40,7 @@ class SessionModelForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ('meet', 'length', 'subjects', 'change', 'support', 'othersupport', 'rate', 'productivity', 'question', 'disconnect', 'reason_disconnect')
+        fields = ('meet', 'length', 'subjects', 'help', 'support', 'othersupport', 'rate', 'productivity', 'question', 'disconnect', 'reason_disconnect')
 
     def __init__(self, *args, **kwargs):
         super(SessionModelForm, self).__init__(*args, **kwargs)

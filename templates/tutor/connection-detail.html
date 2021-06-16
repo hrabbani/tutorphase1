@@ -1,4 +1,4 @@
-{% extends 'cbase.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
 {% block title %}Connection{% endblock title %}
@@ -11,7 +11,7 @@
 {% if connection.status == 'connected' %}
 <div><span class="badge badge-success">Connected</div>
 {% elif connection.status == 'disconnected' %}
-<div><span class="badge badge-danger">Disconnected</div>
+<div><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'inactive' %}
 <div><span class="badge badge-warning">Inactive</div>
 {% endif %}
@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="col">
                                         <div style="font-size:25px; font-weight:bold" class="profile-name">
-                                            Student</div>
+                                            {{connection.student.role|title }}</div>
                                         <div style="font-size:25px; font-weight:bold" class="profile-name">
                                             {{connection.student.first_name}}
                                             {{connection.student.last_name}}</div>
@@ -47,19 +47,20 @@
                             </div>
 
 
+
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="profile-pic" src="{{connection.mentor.avatar.url}}" alt="profile">
+                                        <img class="profile-pic" src="{{connection.tutor.avatar.url}}" alt="profile">
                                     </div>
                                     <div class="col">
                                         <div style="font-size:25px; font-weight:bold" class="profile-name">
-                                            Mentor</div>
+                                            {{connection.tutor.role|title }}</div>
                                         <div style="font-size:25px; font-weight:bold" class="profile-name">
-                                            {{connection.mentor.first_name}}
-                                            {{connection.mentor.last_name}}</div>
+                                            {{connection.tutor.first_name}}
+                                            {{connection.tutor.last_name}}</div>
                                         <div style="font-size:15px" class="profile-name">
-                                            {{connection.mentor.prefer_location}}</div>
+                                            {{connection.tutor.school}}</div>
 
                                     </div>
                                 </div>
@@ -107,10 +108,9 @@
             <tr>
                 <th scope="col">Date</th>
                 <th scope="col">Student</th>
-                <th scope="col">Mentor</th>
+                <th scope="col">Tutor</th>
                 <th scope="col">Length</th>
                 <th scope="col">Subjets</th>
-                <th scope="col">Step Completed</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -121,15 +121,14 @@
                 <td>{{obj.created|date:"d M Y"}}</td>
                 <td><a href="{{obj.connection.student.get_absolute_url}}">{{obj.connection.student.first_name}}
                         {{obj.connection.student.last_name}}</a></td>
-                <td><a href="{{obj.connection.mentor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
-                        {{obj.connection.mentor.last_name}}</a></td>
+                <td><a href="{{obj.connection.tutor.get_absolute_url}}">{{obj.connection.tutor.first_name}}
+                        {{obj.connection.tutor.last_name}}</a></td>
                 <td>{{obj.length}} hr</td>
                 <td>
-                    {% for topic in obj.get_topics %}
-                    <li>{{topic}}</li>
+                    {% for subject in obj.get_subjects %}
+                    <li>{{subject}}</li>
                     {% endfor %}
                 </td>
-                <td>{{obj.step}}</td>
                 <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
                             Form</button></a></td>
 
