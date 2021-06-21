@@ -10,19 +10,120 @@
     <div class="fade-in">
         <div class="row justify-content-md-center">
             <div class="col-sm-6">
-                
-                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data"
-                        autocomplete="off">
-                        <div class="card-header">
-                            <h2>Mentor Submission Form</h2>
-                        </div>
-                        {{form.as_p}}
-                        <div class="card-footer">
-                            <button class="btn btn-sm btn-success" type="submit"> Submit</button>
-                        </div>
-                        {% csrf_token %}
-                    </form>
-                
+
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+                    <div class="card-header">
+                        <h2>Mentor Submission Form</h2>
+                    </div>
+
+                    <label for="id_first_name">First name:</label>
+                    {{form.first_name}}
+
+                    <label for="id_last_name">Last name:</label>
+                    {{form.last_name}}
+
+                    <label for="id_email">Email:</label>
+                    {{form.email}}
+
+                    <label for="id_phone">Phone Number:</label>
+                    {{form.phone}}
+
+                    <label for="id_address">Address:</label>
+                    {{form.address}}
+
+                    <label for="id_avatar">Photo of yourself</label>
+                    {{form.avatar}}
+
+                    <label for="id_spanish">Do you speak Spanish and if so, what is your level of fluency?</label>
+                    {{form.spanish}}
+
+                    <label for="id_emergency_contact">Emergency Contact: Name, Phone, Relationship to Applicant</label>
+                    {{form.emergency_contact}}
+
+                    <label for="id_employment_status">Employment Status</label>
+                    {{form.employment_status}}
+
+                    <label for="id_employer_info">Employer Info: Company, Address</label>
+                    {{form.employer_info}}
+
+                    <label for="id_partner">Is your employer a current corporate PB partner?</label>
+                    {{form.partner}}
+
+                    <label for="id_hear">How did you hear about this program?</label>
+                    {{form.hear}}
+
+                    <label for="id_experience">Do you have any previous experience volunteering or working with
+                        youth? If so, please specify.</label>
+                    {{form.experience}}
+
+                    <label for="id_reason">Why do you want to become a mentor?</label>
+                    {{form.reason}}
+
+                    <label for="id_know">What would you like your future mentee to know about you?
+                        (hobbies, interests, background, etc)</label>
+                    {{form.know}}
+
+
+                    <p>Please choose a writing prompt to answer.</p>
+
+                    {{form.question1}}
+                    <p>Answer</p>
+                    {{form.answer1}}
+
+                    <p>Please choose a writing prompt to answer.</p>
+                    {{form.question2}}
+                    <p>Answer</p>
+                    {{form.answer2}}
+
+                    <label for="id_prefer_sex">I prefer my mentee to be:</label>
+                    {{form.prefer_sex}}
+
+                    <label for="id_geographical">My geographical preference is:</label>
+                    {{form.geographical}}
+
+                    <label for="id_commit">Can you commit to participating in the mentoring program for a minimum of one year from the time you are matched with a mentor?</label>
+                    {{form.commit}}
+
+                    <label for="id_available">Are you available to meet with your mentee (in-person or virtually)
+                        once a month along with phone/email contact every two weeks?</label>
+                    {{form.available}}
+
+                    <label for="id_seminar">Can you commit to a one-time (one hour) training seminar to
+                        better understand the program and how to maximize the quality of
+                        your relationship with your mentee?</label>
+                    {{form.seminar}}
+
+                    <label for="id_signature">I agree to adhere to the above ground rules to help keep my
+                        mentee safe and respected. (Please type your full name below.)</label>
+                    {{form.signature}}
+
+
+                    <label for="id_grant">Opportunities called "volunteer grants" exist in many corporations.
+                        Companies pay $10-25/hour to a nonprofit where employees
+                        volunteer. Would you be able to inquire about this at your
+                        corporation?</label>
+                    {{form.grant}}
+
+                    <label for="id_cont_student_bridge">If you would like to continue mentoring the student you had
+                        mentored last year in the Choice Program, please mention his/her
+                        name.</label>
+                    {{form.cont_student_bridge}}
+
+                    <label for="id_check">I have completed a background check for another PB program in
+                        the past.</label>
+                    {{form.check}}
+
+                    <label for="id_question">Do you have any questions or comments for us? (If not, please
+                        leave blank)</label>
+                    {{form.question}}
+
+
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-success" type="submit"> Submit</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+
             </div>
         </div>
     </div>

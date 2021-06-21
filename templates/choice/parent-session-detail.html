@@ -1,0 +1,83 @@
+{% extends 'cbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Parent Session Detail{% endblock title %}
+
+{% block content %}
+
+<h3>Parent Session Form Response</h3>
+</br>
+
+<h4>Mentor: {{parentsession.connection.mentor.first_name}} {{parentsession.connection.mentor.last_name}}</h4>
+<h4>Parent: {{parentsession.connection.student.parent1_first_name}} {{parentsession.connection.student.parent1_last_name}}</h4>
+</br>
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">How many times have you and the mentor met in the past 2 weeks?</h5>
+                <p class="card-text">{{parentsession.meet}}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">How many total hours of mentoring did you do?</h5>
+                <p class="card-text">{{parentsession.length}} hrs</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">What topics have you covered?</h5>
+                {% for topic in parentsession.get_topics %}
+                <p class="card-text">{{topic}}</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Share how your sessions have been going with the student.</h5>
+                <p class="card-text">{{parentsession.share}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">What would you change to make your future sessions better?</h5>
+                <p class="card-text">{{parentsession.change}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Can we support you with anything?</h5>
+                <p class="card-text">{{parentsession.question}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</br>
+
+{% endblock content %}

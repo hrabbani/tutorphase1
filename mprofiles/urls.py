@@ -26,7 +26,11 @@ from .views import (
     flag_unflag_mentor,
     flag_unflag_student,
     flag_unflag_session,
-
+    QuestionListView,
+    action_question,
+    MentorNoteUpdateView,
+    StudentNoteUpdateView,
+    ConnectionNoteUpdateView,
    
 )
 
@@ -59,6 +63,12 @@ urlpatterns = [
     path('flag-mentor', flag_unflag_mentor, name='flag-mentor'),
     path('flag-student', flag_unflag_student, name='flag-student'),
     path('flag-session', flag_unflag_session, name='flag-session'),
+    path('questions/', QuestionListView.as_view(), name='question-list-view'),
+    path('action-question/', action_question, name='action-question'),
+    path('<slug>/mentor-note-update-profile', MentorNoteUpdateView.as_view(), name='mentor-note-update-profile'),
+    path('<slug>/student-note-update-profile', StudentNoteUpdateView.as_view(), name='student-note-update-profile'),
+    path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
+
 
     
 ]

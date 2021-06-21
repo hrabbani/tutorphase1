@@ -17,14 +17,24 @@
     <div class="row">
 
         <div class="col-sm">
-            <p>Parent Email:<p>
-                    <p>{{student.parent1_email}}</p>
+            <p>Gender:<p>
+                    <p>{{student.gender}}</p>
         </div>
 
 
         <div class="col-sm">
             <p>Grade:<p>
                     <p>{{student.grade}}</p>
+        </div>
+
+                <div class="col-sm">
+            <p>Hobbies:<p>
+                    <p>{{student.hobby}}</p>
+        </div>
+
+                        <div class="col-sm">
+            <p>Language preference:<p>
+                    <p>{{student.language_preference}}</p>
         </div>
 
 
@@ -47,7 +57,8 @@
                 <th scope="col">Name</th>
                 <th scope="col">Pref Grade</th>
                 <th scope="col">Pref Gender</th>
-                <th scope="col">Pref Location</th>
+                <th scope="col">Languages spoken</th>
+                <th scope="col">Hobbies</th>               
                 <th scope="col">Student</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -59,7 +70,8 @@
                 <th>Name</th>
                 <th>Pref Grade</th>
                 <th>Pref Gender</th>
-                <th>Pref Location</th>
+                <th>Languages spoken</th>
+                <th>Hobbies</th>  
                 <th>Student</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -71,10 +83,11 @@
 
             {% for mentor in mentors %}
             <tr>
-                <td>{{mentor.first_name}}</td>
+                <td>{{mentor.first_name}} {{mentor.last_name}}</td>
                 <td>{{mentor.prefer_grade}}</td>
                 <td>{{mentor.prefer_gender}}</td>
-                <td>{{mentor.prefer_location}}</td>
+                <td>{% for language in mentor.get_languages %}<li>{{language}}</li>{% endfor %}</td>
+                <td>{{mentor.hobby}}</td>
                 <td>{% for friend in mentor.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
                     {% for friend in mentor.get_friends %}

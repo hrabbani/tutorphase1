@@ -6,11 +6,20 @@
 
 {% block content %}
 
-
+<h1>Session Form</h1>
 {% for link in z %}
 <div>{{ link|safe }}</div>
 </br>
 {% endfor %}
+
+
+<h1>Parent Session Form</h1>
+{% for link in g %}
+<div>{{ link|safe }}</div>
+</br>
+{% endfor %}
+
+
 
 
 

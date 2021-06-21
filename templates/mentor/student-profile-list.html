@@ -14,8 +14,11 @@
         <thead>
             <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Grade</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Address</th>
                 <th scope="col">School</th>
+                <th scope="col">Academic Advisor</th>
                 <th scope="col">Mentor</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -26,8 +29,11 @@
         <tfoot>
             <tr>
                 <th>Name</th>
-                <th>Grade</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
                 <th>School</th>
+                <th>Academic Advisor</th>
                 <th>Mentor</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -40,8 +46,11 @@
             {% for obj in object_list %}
             <tr>
                 <td><a href="{{obj.get_absolute_url}}">{{obj.first_name}} {{obj.last_name}}</a></td>
-                <td>{{obj.grade}}</td>
+                <td>{{obj.email}}</td>
+                <td>{{obj.phone}}</td>
+                <td>{{obj.address}}</td>
                 <td>{{obj.school}}</td>
+                <td>{{obj.academic_advisor}}</td>
                 <td>{% for friend in obj.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
                     {% for friend in obj.get_friends %}
@@ -83,68 +92,69 @@
 
 {% block scripts %}
 <script>
-        $(document).ready(function () {
 
-            var table = $('#myTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'excel', 'pdf', 'print'
-                ],
-                "pageLength": 10,
+    $(document).ready(function () {
 
-                initComplete: function () {
-                    count = 0;
-                    this.api().columns().every(function () {
-                        var title = this.header();
-                        //replace spaces with dashes
-                        title = $(title).html().replace(/[\W]/g, '-');
-                        var column = this;
-                        var select = $('<select id="' + title +
-                                '" class="select2" ></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                //Get the "text" property from each selected data 
-                                //regex escape the value and store in array
-                                var data = $.map($(this).select2('data'), function (
-                                    value,
-                                    key) {
-                                    return value.text ? '^' + $.fn.dataTable
-                                        .util
-                                        .escapeRegex(value.text) + '$' : null;
-                                });
+        var table = $('#myTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'excel', 'pdf', 'print'
+            ],
+            "pageLength": 10,
 
-                                //if no data selected use ""
-                                if (data.length === 0) {
-                                    data = [""];
-                                }
-
-                                //join array into string with regex or (|)
-                                var val = data.join('|');
-
-                                //search for the option(s) selected
-                                column
-                                    .search(val ? val : '', true, false)
-                                    .draw();
+            initComplete: function () {
+                count = 0;
+                this.api().columns().every(function () {
+                    var title = this.header();
+                    //replace spaces with dashes
+                    title = $(title).html().replace(/[\W]/g, '-');
+                    var column = this;
+                    var select = $('<select id="' + title +
+                            '" class="select2" ></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            //Get the "text" property from each selected data 
+                            //regex escape the value and store in array
+                            var data = $.map($(this).select2('data'), function (
+                                value,
+                                key) {
+                                return value.text ? '^' + $.fn.dataTable
+                                    .util
+                                    .escapeRegex(value.text) + '$' : null;
                             });
 
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d +
-                                '</option>');
+                            //if no data selected use ""
+                            if (data.length === 0) {
+                                data = [""];
+                            }
+
+                            //join array into string with regex or (|)
+                            var val = data.join('|');
+
+                            //search for the option(s) selected
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
                         });
 
-                        //use column title as selector and placeholder
-                        $('#' + title).select2({
-                            multiple: true,
-                            closeOnSelect: false,
-                            placeholder: "Select a " + title
-                        });
-
-                        //initially clear select otherwise first option is selected
-                        $('.select2').val(null).trigger('change');
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d +
+                            '</option>');
                     });
-                }
-            });
+
+                    //use column title as selector and placeholder
+                    $('#' + title).select2({
+                        multiple: true,
+                        closeOnSelect: false,
+                        placeholder: "Select a " + title
+                    });
+
+                    //initially clear select otherwise first option is selected
+                    $('.select2').val(null).trigger('change');
+                });
+            }
         });
+    });
 
 
     $(document).ready(function () {

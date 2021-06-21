@@ -10,19 +10,68 @@
     <div class="fade-in">
         <div class="row justify-content-md-center">
             <div class="col-sm-6">
-                
-                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data"
-                        autocomplete="off">
-                        <div class="card-header">
-                            <h2>Mentor Submission Form</h2>
-                        </div>
-                        {{form.as_p}}
-                        <div class="card-footer">
-                            <button class="btn btn-sm btn-success" type="submit"> Submit</button>
-                        </div>
-                        {% csrf_token %}
-                    </form>
-                
+
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+                    <div class="card-header">
+                        <h2>Mentor Submission Form</h2>
+                    </div>
+
+                    <label for="id_first_name">First name:</label>
+                    {{form.first_name}}
+
+                    <label for="id_last_name">Last name:</label>
+                    {{form.last_name}}
+
+                    <label for="id_email">Email:</label>
+                    {{form.email}}
+
+                    <label for="id_phone">Phone:</label>
+                    {{form.phone}}
+
+                    <label for="id_address">Mailing Address:</label>
+                    {{form.address}}
+
+                    <label for="id_prefer_grade">Preferred Grade Level:</label>
+                    {{form.prefer_grade}}
+
+                    <label for="id_prefer_gender">Preferred Gender:</label>
+                    {{form.prefer_gender}}
+
+                    <label for="id_prefer_location">Preferred Location: (Hold the Control or Command key to select
+                        multiple
+                        options)</label>
+                    {{form.prefer_location}}
+
+                    <label for="id_mentor_last_year">Were you a mentor last year?</label>
+                    {{form.mentor_last_year}}
+
+                    <label for="id_language">Languages spoken: (Hold the Control or Command key to select multiple
+                        options)</label>
+                    {{form.language}}
+
+                    <label for="id_experience">Do you have any previous experience mentoring?</label>
+                    {{form.experience}}
+
+                    <label for="id_familiar">Are you familiar with the application process? Explain:</label>
+                    {{form.familiar}}
+
+                    <label for="id_share">Share a bit about yourself and your family (where you are from, school
+                        attended, what you do for work, favorite hobbies, etc):</label>
+                    {{form.share}}
+
+                    <label for="id_hobby">What are your hobbies?</label>
+                    {{form.hobby}}
+
+                    <label for="id_question">Do you have any questions or comments for us? (If not, please leave
+                        blank)</label>
+                    {{form.question}}
+
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-success" type="submit"> Submit</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+
             </div>
         </div>
     </div>

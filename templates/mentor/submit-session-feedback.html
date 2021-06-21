@@ -7,14 +7,56 @@
 
 <h3>Submit Session Feedback</h3>
 </br>
-<h4>Tutor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
+<h4>Mentor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
 <h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
 </br>
 
 <div class=#>
     <form action="" method="POST" class=# enctype="multipart/form-data">
         {% csrf_token %}
-        {{form}}
+
+        <label for="id_meet">How many times have you met this month in person?</label>
+        {{form.meet}}
+
+        <label for="id_dialogue">Have you had any dialogue with your
+            mentee via phone or text?</label>
+        {{form.dialogue}}
+
+        <label for="id_length">How many total hours of mentoring did you do?</label>
+        {{form.length}}
+
+        <label for="id_summary">Please write a summary of what you did with your mentee.</label>
+        {{form.summary}}
+
+        <label for="id_help">List one way you were helpful to your mentee.</label>
+        {{form.help}}
+
+        <label for="id_change">List one thing you would change to make your future sessions
+            better.</label>
+        {{form.change}}
+
+        <label for="id_rate">Please rank your mentee’s engagement on a scale of 1-5. (1 =
+            Very unengaged, 5 = very engaged)</label>
+        {{form.rate}}
+
+        <label for="id_meaningful">On a scale of 1-5, how meaningful were your sessions? (1 = Not
+            meaningful, 5 = very meaningful)</label>
+        {{form.meaningful}}
+
+        <label for="id_support">Can we support you with any of the following:</label>
+        {{form.support}}
+
+        <label for="id_elaborate">If you selected “Other” in the field above, please elaborate</label>
+        {{form.elaborate}}
+
+        <label for="id_urgent">If the support you need requires urgent attention, please give more
+            details and Komal will reach out to you shortly.</label>
+        {{form.urgent}}
+
+        <label for="id_question">Do you have any questions or comments for us? (If not, please
+            leave blank)</label>
+        {{form.question}}
+
         </br>
         <button type='submit' class="btn btn-success">Update</button>
     </form>
@@ -26,5 +68,13 @@
 
 {% block scripts %}
 
+<script>
+    $('#id_meet').on('change', function () {
+        if (this.value == '0')
+            $('label[for=id_dialogue], #id_dialogue').show('normal');
+        else
+            $('label[for=id_dialogue], #id_dialogue').hide('normal');
+    }).trigger("change");
+</script>
 
 {% endblock scripts %}

@@ -6,6 +6,8 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.db.models.signals import m2m_changed
+
 
 
 
@@ -29,6 +31,7 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
 
 
 
+@receiver(post_save, sender=Session, dispatch_uid="my_unique_identifier")
 def post_save_disconnect_connection(sender, instance, created, **kwargs):
     connection_ = instance.connection
     
@@ -62,12 +65,8 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
             connection_.save()
 
 
-post_save.connect(post_save_disconnect_connection, sender=Session, dispatch_uid="my_unique_identifier")
 
-
-
-@receiver(post_save, sender=Session)
-def post_save_flag_session(sender, instance, created, **kwargs):
+def post_save_flag_session(sender, instance, **kwargs):
 
     list_a = list((instance.get_supports().values('name')))
     list_a = list(map(lambda x: x['name'], list_a))
@@ -87,18 +86,19 @@ def post_save_flag_session(sender, instance, created, **kwargs):
     else:
         pass
 
+m2m_changed.connect(post_save_flag_session, sender=Session.support.through)
 
 
 
-@receiver(post_save, sender=Session)
-def post_save_subject_registration(sender, instance, created, **kwargs):
+def post_save_subject_registration(sender, instance, **kwargs):
 
-    if not created:
-        if instance.get_subjects():
-            for x in instance.get_subjects():
-                Subjectcalculation.objects.create(name=x)
-        else:
-            pass
+    if instance.get_subjects():
+        for x in instance.get_subjects():
+            Subjectcalculation.objects.create(name=x)
+    else:
+        pass
+
+m2m_changed.connect(post_save_subject_registration, sender=Session.subjects.through)
 
 
 
@@ -110,8 +110,6 @@ def post_save_session_question_registration(sender, instance, created, **kwargs)
             Question.objects.get_or_create(tutor=instance.connection.tutor, question=instance.question, status="UNANSWERED")
         else:
             pass
-
-
 
 
 @receiver(post_save, sender=Profile)

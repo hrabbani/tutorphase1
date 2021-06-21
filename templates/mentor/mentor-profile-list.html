@@ -17,9 +17,8 @@
             <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Emp Status</th>
-                    <th scope="col">Pref Gender</th>
-                    <th scope="col">Pref Location</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
                     <th scope="col">Student</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -30,9 +29,8 @@
             <tfoot>
                 <tr>
                     <th>Name</th>
-                    <th>Emp Status</th>
-                    <th>Pref Gender</th>
-                    <th>Pref Location</th>
+                    <th>Email</th>
+                    <th>Phone</th>
                     <th>Student</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -45,9 +43,8 @@
                 {% for obj in object_list %}
                 <tr>
                     <td><a href="{{obj.get_absolute_url}}">{{obj.first_name}} {{obj.last_name}}</a></td>
-                    <td>{{obj.employment_status}}</td>
-                    <td>{{obj.prefer_sex}}</td>
-                    <td>{{obj.geographical}}</td>
+                    <td>{{obj.email}}</td>
+                    <td>{{obj.phone}}</td>
                     <td>{% for friend in obj.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                     <td>
                         {% for friend in obj.get_friends %}

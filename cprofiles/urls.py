@@ -28,6 +28,12 @@ from .views import (
     flag_unflag_student,
     flag_unflag_mentor,
     flag_unflag_session,
+    QuestionListView,
+    action_question,
+    ParentSessionListView,
+    flag_unflag_parent_session,
+    ParentSessionDetailView,
+    ParentSessionUpdateView
 
    
 )
@@ -64,6 +70,13 @@ urlpatterns = [
     path('flag-student/', flag_unflag_student, name='flag-student'),
     path('flag-mentor/', flag_unflag_mentor, name='flag-mentor'),
     path('flag-session/', flag_unflag_session, name='flag-session'),
+    path('questions/', QuestionListView.as_view(), name='question-list-view'),
+    path('action-question/', action_question, name='action-question'),
+    path('parent-sessions/', ParentSessionListView.as_view(), name='parent-session-list'),
+    path('flag-parent-session/', flag_unflag_parent_session, name='flag-parent-session'),
+    path('<pk>/parent-session/', ParentSessionDetailView.as_view(), name='parent-session-detail'),
+    path('<pk>/submit-parent-feedback/', ParentSessionUpdateView.as_view(), name='submit-parent-feedback'),
+
 
 
     

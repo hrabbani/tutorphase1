@@ -1,11 +1,11 @@
 from django.template.defaultfilters import length
-from cprofiles.models import Student, Mentor, Connection, Task, Tasksubject, Session
+from cprofiles.models import Student, Mentor, Connection, Task, Tasksubject, Session, Question, Topiccalculation, Parentsession
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Mentor, Student
-from .forms import TaskModelForm, SessionModelForm, MentorModelForm, StudentModelForm
+from .forms import TaskModelForm, SessionModelForm, MentorModelForm, StudentModelForm, ParentSessionModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -27,6 +27,7 @@ from core.decorators import unauthenticated_user, allowed_users
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.core.mail import send_mail
+from datetime import datetime
 
 
 
@@ -194,7 +195,6 @@ def mentor_connect(request):
             email_list.append(student.email)
             email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
@@ -214,7 +214,6 @@ def mentor_connect(request):
             email_list.append(student.email)
             email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
@@ -252,7 +251,6 @@ def student_connect(request):
             email_list.append(student.email)
             email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
@@ -271,7 +269,6 @@ def student_connect(request):
             email_list.append(student.email)
             email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.parent2_email)
             email_list.append(student.academic_advisor_email)
 
             content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
@@ -342,7 +339,6 @@ def remove_connection(request):
         email_list.append(student.email)
         email_list.append(mentor.email)
         email_list.append(student.parent1_email)
-        email_list.append(student.parent2_email)
         email_list.append(student.academic_advisor_email)
 
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
@@ -421,7 +417,26 @@ def generate_session_form(request):
         fail_silently=False
         )
 
-    context = {'z':z}
+
+    g = []
+    for y in active_connection:
+        parentsession_generated = Parentsession.objects.create(connection=y)
+        parentsession_generated_pk = str(parentsession_generated.pk)
+        g.append("http://127.0.0.1:8000/cprofiles/" + parentsession_generated_pk + "/submit-parent-feedback/")
+
+        email = x.student.parent1_email
+
+        content = "http://127.0.0.1:8000/cprofiles/" + parentsession_generated_pk + "/submit-parent-feedback/"
+
+        send_mail('Please fill in the Parent Session Feedback Form',
+        content,
+        'Choice Program',
+        [email],
+        fail_silently=False
+        )
+
+    context = {'z':z,
+               'g':g}
 
     return render(request, 'choice/choice-session-form-link.html', context)
 
@@ -531,24 +546,25 @@ def student_profile_form(request):
 @allowed_users(allowed_roles=['choice', 'admin'])
 def dashboard(request):
 
+    # First Row
+
     high_student_count = Student.objects.filter(grade='8').count()
-    
     middle_student_count = Student.objects.filter(grade='5').count()
-
     off_track_conn = Connection.objects.filter(progress='off track').count()
+    total_connection = Connection.objects.all().count()
 
-    inactive_conn = Connection.objects.filter(status='inactive').count()
-
-    hour_session = Session.objects.filter(submit_status=True).aggregate(Sum('length'))
+    # Second Row
 
     avg_rate = Session.objects.filter(submit_status=True).aggregate(Avg('rate'))
+    hour_session = Session.objects.filter(submit_status=True).aggregate(Sum('length'))
+    inactive_conn = Connection.objects.filter(status='inactive').count()
+    unanswered_question_num = Question.objects.filter(status="UNANSWERED").count()
+
+    # Third Row
 
     on_track_conn = Connection.objects.filter(progress='on track').count()
-
     total_conn = Connection.objects.all().count()
-
     on_track_conn_percentage = on_track_conn/total_conn * 100
-
     other_conn_percentage = 100 - on_track_conn_percentage
     
     z = []
@@ -558,7 +574,160 @@ def dashboard(request):
     flat_list = [item for sublist in z for item in sublist]
     unique_counts = dict(collections.Counter(e['name'] for e in flat_list))
 
+    # Fourth Row
+
     month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
+    avg_eng_prod_month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(rate=Avg('rate')).annotate(prod=Avg('productivity'))
+
+    
+    # Fifth Row
+    
+    this_year = datetime.now().year
+
+    #Teacher recommendation
+    tr = Topiccalculation.objects.filter(updated__year=this_year).filter(name='Teacher recommendation').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    tr_list = []
+    for l in tr:
+        for c, m in l.items():
+            tr_list.append(m)
+
+    tr_dict = dict(zip(tr_list[::2], tr_list[1::2]))
+
+    tr_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in tr_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            tr_dict.setdefault(mmyyyy, 0)
+
+    tr_dict = dict(sorted(tr_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    tr_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in tr_dict.items()}
+
+    # Creating a Ravenna account
+    cr = Topiccalculation.objects.filter(updated__year=this_year).filter(name='Creating a Ravenna account').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    cr_list = []
+    for l in cr:
+        for c, m in l.items():
+            cr_list.append(m)
+
+    cr_dict = dict(zip(cr_list[::2], cr_list[1::2]))
+
+    cr_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in cr_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            cr_dict.setdefault(mmyyyy, 0)
+
+    cr_dict = dict(sorted(cr_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    cr_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in cr_dict.items()}
+
+
+    # Interview preparation
+    ip = Topiccalculation.objects.filter(updated__year=this_year).filter(name='Interview preparation').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    ip_list = []
+    for l in ip:
+        for c, m in l.items():
+            ip_list.append(m)
+
+    ip_dict = dict(zip(ip_list[::2], ip_list[1::2]))
+
+    ip_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in ip_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            ip_dict.setdefault(mmyyyy, 0)
+
+    ip_dict = dict(sorted(ip_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    ip_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in ip_dict.items()}
+
+
+    # Shadow day preparation
+    sd = Topiccalculation.objects.filter(updated__year=this_year).filter(name='Shadow day preparation').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    sd_list = []
+    for l in sd:
+        for c, m in l.items():
+            sd_list.append(m)
+
+    sd_dict = dict(zip(sd_list[::2], sd_list[1::2]))
+
+    sd_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in sd_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            sd_dict.setdefault(mmyyyy, 0)
+
+    sd_dict = dict(sorted(sd_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    sd_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in sd_dict.items()}
+
+    # Essays
+    es = Topiccalculation.objects.filter(updated__year=this_year).filter(name='Essays').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    es_list = []
+    for l in es:
+        for c, m in l.items():
+            es_list.append(m)
+
+    es_dict = dict(zip(es_list[::2], es_list[1::2]))
+
+    es_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in es_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            es_dict.setdefault(mmyyyy, 0)
+
+    es_dict = dict(sorted(es_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    es_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in es_dict.items()}
+
+    # Test prep
+    tp = Topiccalculation.objects.filter(updated__year=this_year).filter(name='Test prep').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    tp_list = []
+    for l in tp:
+        for c, m in l.items():
+            tp_list.append(m)
+
+    tp_dict = dict(zip(tp_list[::2], tp_list[1::2]))
+
+    tp_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in tp_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            tp_dict.setdefault(mmyyyy, 0)
+
+    tp_dict = dict(sorted(tp_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    tp_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in tp_dict.items()}
+
+    # Filling out application
+    fp = Topiccalculation.objects.filter(updated__year=this_year).filter(name='Filling out application').annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('id'))
+
+    fp_list = []
+    for l in fp:
+        for c, m in l.items():
+            fp_list.append(m)
+
+    fp_dict = dict(zip(fp_list[::2], fp_list[1::2]))
+
+    fp_dict = {datetime.strptime(str(key), '%Y-%m-%d').strftime('%m-%Y'): val for key, val in fp_dict.items()}
+
+    for year1 in range(this_year, this_year + 1):
+        for month1 in range(1, 13):
+            mmyyyy = '{:02}-{:04}'.format(month1, year1)
+            fp_dict.setdefault(mmyyyy, 0)
+
+    fp_dict = dict(sorted(fp_dict.items(), key = lambda x:datetime.strptime(x[0], '%m-%Y'), reverse=False))
+    fp_dict = {datetime.strptime(str(key), '%m-%Y').strftime('%b-%Y'): val for key, val in fp_dict.items()}
+
+    # Sixth Row
+
     recent_session = Session.objects.filter(submit_status=True).order_by('-created')[:5]
 
  
@@ -572,7 +741,17 @@ def dashboard(request):
                 'off_track_conn':  off_track_conn,
                 'avg_rate': avg_rate,
                 'hour_session': hour_session,
-                'inactive_conn': inactive_conn
+                'inactive_conn': inactive_conn,
+                'total_connection': total_connection,
+                'unanswered_question_num': unanswered_question_num,
+                'avg_eng_prod_month': avg_eng_prod_month,
+                'tr_dict': tr_dict,
+                'cr_dict': cr_dict,
+                'ip_dict': ip_dict,
+                'sd_dict': sd_dict,
+                'es_dict': es_dict,
+                'tp_dict': tp_dict,
+                'fp_dict': fp_dict,
 
                 }
 
@@ -738,3 +917,109 @@ def flag_unflag_session(request):
 
         return JsonResponse(data, safe=False)
     return redirect('profiles:dashboard')
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class QuestionListView(ListView):
+    model = Question
+    template_name = 'choice/question-list.html'
+
+    def get_queryset(self):
+        qs = Question.objects.all().order_by('status').reverse()
+        return qs
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def action_question(request):
+    if request.method == 'POST':
+
+        post_id = request.POST.get('post_id')
+        question_obj = Question.objects.get(id=post_id)
+
+        if question_obj.action == False:
+            Question.objects.filter(id=post_id).update(action=True, status='ADDRESSED')
+
+        else:
+            Question.objects.filter(id=post_id).update(action=False, status='UNANSWERED')
+
+
+        data = {
+
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('cprofiles:dashboard')
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class ParentSessionListView(ListView):
+    model = Parentsession
+    template_name = 'choice/parent-session-list.html'
+
+    def get_queryset(self):
+        qs = Parentsession.objects.filter(submit_status=True).order_by('-updated')
+        return qs
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def flag_unflag_parent_session(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+        session_obj = Parentsession.objects.get(id=post_id)
+
+        if session_obj.flag == False:
+            Parentsession.objects.filter(id=post_id).update(flag=True)
+
+        else:
+            Parentsession.objects.filter(id=post_id).update(flag=False)
+
+        
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('cprofiles:dashboard')
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class ParentSessionDetailView(DetailView):
+    model = Session
+    template_name = 'choice/parent-session-detail.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        parentsession = Parentsession.objects.get(pk=pk)
+        return parentsession
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class ParentSessionUpdateView(UpdateView):
+    form_class = ParentSessionModelForm
+    model = Parentsession
+    template_name = 'choice/submit-parent-session-feedback.html'
+    success_url = reverse_lazy('profiles:session-submitted')
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        parentsession = Parentsession.objects.get(pk=pk)
+        return parentsession
+
+    def form_valid(self, form):
+        self.object.submit_status = True
+        self.object = form.save()
+        return super().form_valid(form)

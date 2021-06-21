@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Mentor, Student, Connection, Session
+from .models import Mentor, Student, Connection, Session, Question
 from django.views.generic import ListView, DetailView, UpdateView
 from core.decorators import unauthenticated_user, allowed_users
 from django.utils.decorators import method_decorator
@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.http.response import HttpResponse, JsonResponse
-from .forms import MentorModelForm, StudentModelForm, SessionModelForm
+from .forms import MentorModelForm, StudentModelForm, SessionModelForm, MentorNoteModelForm, StudentNoteModelForm, ConnectionNoteModelForm
 from django.urls import reverse_lazy, reverse
 from django.db.models.functions import TruncMonth
 import collections
@@ -17,6 +17,8 @@ from datetime import timedelta
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+from collections import defaultdict
+
 
 
 
@@ -327,23 +329,23 @@ def remove_connection(request):
         rel.status = 'disconnected'
         rel.save()
 
-        email_list = []
-        email_list.append(student.email)
-        email_list.append(mentor.email)
-        email_list.append(student.academic_advisor_email)
+        # email_list = []
+        # email_list.append(student.email)
+        # email_list.append(mentor.email)
+        # email_list.append(student.academic_advisor_email)
 
-        program_manager_email_list = list(i for i in User.objects.filter(groups__name='mentor').values_list('email', flat=True))
+        # program_manager_email_list = list(i for i in User.objects.filter(groups__name='mentor').values_list('email', flat=True))
 
-        email_list.extend(program_manager_email_list)
+        # email_list.extend(program_manager_email_list)
 
-        content = "Connection is disconnected between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
+        # content = "Connection is disconnected between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
 
-        send_mail('Connection Disconnected',
-        content,
-        'Mentor Program',
-        email_list,
-        fail_silently=False
-        )
+        # send_mail('Connection Disconnected',
+        # content,
+        # 'Mentor Program',
+        # email_list,
+        # fail_silently=False
+        # )
         
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('mprofiles:mentor-profiles-list')
@@ -433,10 +435,7 @@ class SessionUpdateView(UpdateView):
     def form_valid(self, form):
         self.object.submit_status = True
         self.object = form.save()
-        return super().form_valid(form)
-
-
-
+        return redirect('profiles:session-submitted') 
 
 
 @method_decorator(login_required, name='dispatch')
@@ -476,6 +475,40 @@ class MentorUpdateView(UpdateView):
         return reverse("mprofiles:mentor-profiles-detail", kwargs={"slug": self.object.slug})
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+class MentorNoteUpdateView(UpdateView):
+    form_class = MentorNoteModelForm
+    model = Mentor
+    template_name = 'mentor/note-update.html'
+
+    def get_success_url(self):
+        return reverse("mprofiles:mentor-profiles-detail", kwargs={"slug": self.object.slug})
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+class StudentNoteUpdateView(UpdateView):
+    form_class = StudentNoteModelForm
+    model = Student
+    template_name = 'mentor/note-update.html'
+
+    def get_success_url(self):
+        return reverse("mprofiles:student-profiles-detail", kwargs={"slug": self.object.slug})
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+class ConnectionNoteUpdateView(UpdateView):
+    form_class = ConnectionNoteModelForm
+    model = Connection
+    template_name = 'mentor/note-update.html'
+
+    def get_success_url(self):
+        return reverse("mprofiles:connection-profile-detail", kwargs={"pk": self.object.pk})
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -496,6 +529,15 @@ class StudentUpdateView(UpdateView):
 @allowed_users(allowed_roles=['mentor', 'admin'])
 def dashboard(request):
 
+    # 1st Row
+
+    todays_date = timezone.now()
+    thirty_days_ago = todays_date-timedelta(days=30)
+    thirty_days_session = Session.objects.filter(submit_status=True).filter(updated__gte=thirty_days_ago, updated__lte=todays_date)
+
+    num_session = thirty_days_session.count()
+    hour_session = thirty_days_session.aggregate(Sum('length'))
+
     x = 0
     for mentor in Mentor.objects.all():
         if mentor.get_friends_no() == 0:
@@ -506,23 +548,42 @@ def dashboard(request):
         if student.get_friends_no() == 0:
             y = y + 1
 
-    todays_date = timezone.now()
-    thirty_days_ago = todays_date-timedelta(days=30)
-    thirty_days_session = Session.objects.filter(submit_status=True).filter(created__gte=thirty_days_ago, created__lte=todays_date)
+    # 2nd Row
 
-    num_session = thirty_days_session.count()
-    hour_session = thirty_days_session.aggregate(Sum('length'))
+    unanswered_question_num = Question.objects.filter(status="UNANSWERED").count()
+    num_tutor = Mentor.objects.all().count()
+    inactive_conn = Connection.objects.filter(status='inactive').count()
+    connected_conn = Connection.objects.filter(status='connected').count()
+
+    # 3rd Row
 
     month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
+
+    tutor_list = []
+    for session in Session.objects.filter(submit_status=True):
+        tutor_list.append(session.connection.mentor.first_name) 
+
+    hour_list = []
+    for session in Session.objects.filter(submit_status=True):
+        hour_list.append(session.length) 
+
+    my_dict = defaultdict(list)
+    for k, v in zip(tutor_list, hour_list):
+        my_dict[k].append(v)
+
+    top_tutor = {k: sum(v) for (k, v) in my_dict.items()}
+    top_tutor = dict(sorted(top_tutor.items(), key=lambda item: item[1], reverse=False))
+    top_tutor = list(top_tutor.items())[:10]
+    top_tutor = dict(top_tutor)
+   
+
+    # 4th Row
+
+    avg_eng_meaning_month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(rate=Avg('rate')).annotate(meaningful=Avg('meaningful'))
+
+    print(avg_eng_meaning_month)
+   
     recent_session = Session.objects.filter(submit_status=True).order_by('-created')[:5]
-
-    num_tutor = Mentor.objects.all().count()
-
-    avg_rate = Session.objects.filter(submit_status=True).aggregate(Avg('rate'))
-
-    inactive_conn = Connection.objects.filter(status='inactive').count()
-
-    connected_conn = Connection.objects.filter(status='connected').count()
 
     context = {'month':month,
                 'x':x,
@@ -531,9 +592,12 @@ def dashboard(request):
                 'hour_session':hour_session,
                 'recent_session':recent_session,
                 'num_tutor': num_tutor,
-                'avg_rate': avg_rate,
                 'inactive_conn': inactive_conn,
                 'connected_conn': connected_conn,
+                'unanswered_question_num': unanswered_question_num,
+                'top_tutor': top_tutor,
+                'avg_eng_meaning_month': avg_eng_meaning_month,
+
                 }
 
     return render(request, 'mentor/dashboard.html', context)
@@ -666,6 +730,42 @@ def flag_unflag_session(request):
         data = {
             # 'value': like.value,
             # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+class QuestionListView(ListView):
+    model = Question
+    template_name = 'mentor/question-list.html'
+
+    def get_queryset(self):
+        qs = Question.objects.all().order_by('status').reverse()
+        return qs
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])	
+def action_question(request):
+    if request.method == 'POST':
+
+        post_id = request.POST.get('post_id')
+        question_obj = Question.objects.get(id=post_id)
+
+        if question_obj.action == False:
+            Question.objects.filter(id=post_id).update(action=True, status='ADDRESSED')
+
+        else:
+            Question.objects.filter(id=post_id).update(action=False, status='UNANSWERED')
+
+
+        data = {
+
         }
 
         return JsonResponse(data, safe=False)

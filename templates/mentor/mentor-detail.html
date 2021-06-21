@@ -105,6 +105,22 @@
 
 </div>
 
+<h3>Notes</h3>
+
+<a href="{% url 'mprofiles:mentor-note-update-profile' mentor.slug %}"><button type="submit"
+        class="btn btn-info">Edit</button></a>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card h-100">
+            <div class="card-body">
+                <p class="card-text">{{mentor.note}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</br>
 
 <h3>All Info</h3>
 

@@ -2,9 +2,11 @@ from django.db import connection
 from django.db.models.signals import post_save, pre_delete
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from .models import Connection, Session, Task, Tasksubject, Copytask
+from .models import Connection, Session, Task, Tasksubject, Copytask, Student, Mentor, Question, Topiccalculation, Parentsession
 import datetime
 from django.core.mail import send_mail
+from django.db.models.signals import m2m_changed
+
 
 
 
@@ -136,68 +138,95 @@ def post_save_update_connection(sender, instance, created, **kwargs):
             instance.connection.progress = None
             instance.connection.save()
         if instance.task1status == 'not completed':
-            if instance.tasksubject.all()[0].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[0].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task2status == 'not completed':
-            if instance.tasksubject.all()[1].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[1].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task3status == 'not completed':
-            if instance.tasksubject.all()[2].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[2].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task4status == 'not completed':
-            if instance.tasksubject.all()[3].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[3].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task5status == 'not completed':
-            if instance.tasksubject.all()[4].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[4].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task6status == 'not completed':
-            if instance.tasksubject.all()[5].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[5].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task7status == 'not completed':
-            if instance.tasksubject.all()[6].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[6].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task8status == 'not completed':
-            if instance.tasksubject.all()[7].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[7].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task9status == 'not completed':
-            if instance.tasksubject.all()[8].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
+            try:
+                if instance.tasksubject.all()[8].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
         if instance.task10status == 'not completed':
-            if instance.tasksubject.all()[9].duedate < today_date:
-                instance.connection.flag = True
-                instance.connection.progress = 'off track'
-                instance.connection.status = 'off track'
-                instance.connection.save()
-
-
-
+            try:
+                if instance.tasksubject.all()[9].duedate < today_date:
+                    instance.connection.flag = True
+                    instance.connection.progress = 'off track'
+                    instance.connection.status = 'off track'
+                    instance.connection.save()
+            except:
+                pass
 
 
 @receiver(post_save, sender=Task)
@@ -219,6 +248,55 @@ def post_save_create_copy_task(sender, instance, created, **kwargs):
 
 
 
+@receiver(post_save, sender=Student)
+def post_save_student_form_question_registration(sender, instance, created, **kwargs):
+
+    if created:
+        if instance.question:
+            Question.objects.get_or_create(student=instance, role='Student/Parent', question=instance.question, status="UNANSWERED")
+        else:
+            pass
 
 
+
+@receiver(post_save, sender=Mentor)
+def post_save_mentor_form_question_registration(sender, instance, created, **kwargs):
+
+    if created:
+        if instance.question:
+            Question.objects.get_or_create(mentor=instance, role='Mentor', question=instance.question, status="UNANSWERED")
+        else:
+            pass
+
+
+
+@receiver(post_save, sender=Session)
+def post_save_session_question_registration(sender, instance, created, **kwargs):
+
+    if not created:
+        if instance.question:
+            Question.objects.get_or_create(mentor=instance.connection.mentor, role='Mentor', question=instance.question, status="UNANSWERED")
+        else:
+            pass
+
+
+@receiver(post_save, sender=Parentsession)
+def post_save_parent_session_question_registration(sender, instance, created, **kwargs):
+
+    if not created:
+        if instance.question:
+            Question.objects.get_or_create(student=instance.connection.student, role='Student/Parent', question=instance.question, status="UNANSWERED")
+        else:
+            pass
+
+
+def post_save_topic_registration(sender, instance, **kwargs):
+
+    if instance.get_topics():
+        for x in instance.get_topics():
+            Topiccalculation.objects.create(name=x)
+    else:
+        pass
+
+m2m_changed.connect(post_save_topic_registration, sender=Session.topic.through)
 

@@ -22,6 +22,10 @@
                     <p>{{mentor.email}}</p>
         </div>
 
+        <div class="col-sm">
+            <p>Language Spoken:<p>
+                    {% for language in mentor.get_languages %}<li>{{language}} </li>{% endfor %}
+        </div>
 
         <div class="col-sm">
             <p>Prefer Grade:<p>
@@ -29,9 +33,25 @@
         </div>
 
         <div class="col-sm">
-            <p>Prefer Location:<p>
-                    <p>{{mentor.prefer_location}}</p>
+            <p>Prefer Gender:<p>
+                    <p>{{mentor.prefer_gender}}</p>
         </div>
+
+        <div class="col-sm">
+            <p>Hobbies:<p>
+                    <p>{{mentor.hobby}}</p>
+        </div>
+
+        <div class="col-sm">
+            <p>Prefer Location:<p>
+                    {% for location in mentor.get_locations %}<li>{{location}} </li>{% endfor %}
+        </div>
+
+        <div class="col-sm">
+            <p>Previous Experience:<p>
+                      <p>{{mentor.experience}}</p>
+        </div>
+
     </div>
 </div>
 
@@ -45,8 +65,10 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Grade</th>
+                <th scope="col">Gender</th>
                 <th scope="col">School</th>
-                <th scope="col">Address</th>
+                <th scope="col">Hobbies</th>
+                <th scope="col">Prefer Language</th>
                 <th scope="col">Tutor</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -57,8 +79,10 @@
             <tr>
                 <th>Name</th>
                 <th>Grade</th>
+                <th>Gender</th>
                 <th>School</th>
-                <th>Address</th>
+                <th>Hobbies</th>
+                <th>Prefer Language</th>
                 <th>Tutor</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -69,11 +93,14 @@
 
             {% for student in students %}
             <tr>
-                <td>{{student.first_name}}</td>
+                <td>{{student.first_name}} {{student.last_name}}</td>
                 <td>{{student.grade}}</td>
+                <td>{{student.gender}}</td>
                 <td>{{student.school}}</td>
-                <td>{{student.address}}</td>
-                <td>{% for friend in student.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
+                <td>{{student.hobby}}</td>
+                <td>{{student.language_preference}}</td>
+                <td>{% for friend in student.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>
+                    {% endfor %}</td>
                 <td>
                     {% for friend in student.get_friends %}
                     <div><span class="badge badge-success">Connected</span></div>
@@ -107,78 +134,75 @@
 
 {% block scripts %}
 <script>
+    $(document).ready(function () {
 
+        var table = $('#myTable').DataTable({
+            "pageLength": 10,
 
-        $(document).ready(function () {
-
-            var table = $('#myTable').DataTable({
-                "pageLength": 10,
-
-                initComplete: function () {
-                    count = 0;
-                    this.api().columns().every(function () {
-                        var title = this.header();
-                        //replace spaces with dashes
-                        title = $(title).html().replace(/[\W]/g, '-');
-                        var column = this;
-                        var select = $('<select id="' + title +
-                                '" class="select2" ></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                //Get the "text" property from each selected data 
-                                //regex escape the value and store in array
-                                var data = $.map($(this).select2('data'), function (
-                                    value,
-                                    key) {
-                                    return value.text ? '^' + $.fn.dataTable
-                                        .util
-                                        .escapeRegex(value.text) + '$' : null;
-                                });
-
-                                //if no data selected use ""
-                                if (data.length === 0) {
-                                    data = [""];
-                                }
-
-                                //join array into string with regex or (|)
-                                var val = data.join('|');
-
-                                //search for the option(s) selected
-                                column
-                                    .search(val ? val : '', true, false)
-                                    .draw();
+            initComplete: function () {
+                count = 0;
+                this.api().columns().every(function () {
+                    var title = this.header();
+                    //replace spaces with dashes
+                    title = $(title).html().replace(/[\W]/g, '-');
+                    var column = this;
+                    var select = $('<select id="' + title +
+                            '" class="select2" ></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            //Get the "text" property from each selected data 
+                            //regex escape the value and store in array
+                            var data = $.map($(this).select2('data'), function (
+                                value,
+                                key) {
+                                return value.text ? '^' + $.fn.dataTable
+                                    .util
+                                    .escapeRegex(value.text) + '$' : null;
                             });
 
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d +
-                                '</option>');
+                            //if no data selected use ""
+                            if (data.length === 0) {
+                                data = [""];
+                            }
+
+                            //join array into string with regex or (|)
+                            var val = data.join('|');
+
+                            //search for the option(s) selected
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
                         });
 
-                        //use column title as selector and placeholder
-                        $('#' + title).select2({
-                            multiple: true,
-                            closeOnSelect: false,
-                            placeholder: "Select a " + title
-                        });
-
-                        //initially clear select otherwise first option is selected
-                        $('.select2').val(null).trigger('change');
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d +
+                            '</option>');
                     });
-                }
-            });
+
+                    //use column title as selector and placeholder
+                    $('#' + title).select2({
+                        multiple: true,
+                        closeOnSelect: false,
+                        placeholder: "Select a " + title
+                    });
+
+                    //initially clear select otherwise first option is selected
+                    $('.select2').val(null).trigger('change');
+                });
+            }
         });
+    });
 
 
 
     $(document).ready(function () {
 
-      document.getElementById("Status").parentElement.innerHTML = ""
-      document.getElementById("Action").parentElement.innerHTML = ""
-      document.getElementById("Name").parentElement.innerHTML = ""
+        document.getElementById("Status").parentElement.innerHTML = ""
+        document.getElementById("Action").parentElement.innerHTML = ""
+        document.getElementById("Name").parentElement.innerHTML = ""
 
 
 
     });
-
 </script>
 {% endblock scripts %}

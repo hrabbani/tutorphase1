@@ -5,8 +5,24 @@ from django.contrib.auth.models import User
 from .utils import get_random_code
 from django.template.defaultfilters import slugify
 from django.db.models import Q
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
 
 
+
+
+YES_NO = (
+    ('yes', 'yes'),
+    ('no', 'no'),
+)
+
+class Academicadvisor(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+    email = models.EmailField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 GENDER_CHOICES = (
@@ -38,13 +54,6 @@ GEOGRAPHICAL_CHOICES = (
 
 
 
-class Reason(models.Model):
-    name = models.CharField(max_length=200, blank=True)
-
-    def __str__(self):
-        return self.name
-
-
         
 class Student(models.Model):
     avatar = models.ImageField(default='avatar.png', upload_to='avatars/')
@@ -55,26 +64,25 @@ class Student(models.Model):
     address = models.CharField(max_length=200, blank=True)
     grade = models.CharField(max_length=200, blank=True)
     school = models.CharField(max_length=200, blank=True)
-    academic_advisor = models.CharField(max_length=200, blank=True)
+    academic_advisor = models.ForeignKey(Academicadvisor, null=True, blank=True, on_delete=models.CASCADE, related_name='academic_advisor')
     academic_advisor_email = models.EmailField(max_length=200, blank=True)
-    reason = models.ManyToManyField(Reason, blank=True, related_name='reasons')
+    reason = models.TextField(null=True, blank=True, max_length=1000)
+    know = models.TextField(null=True, blank=True, max_length=1000)
     question1 = models.CharField(max_length=200, choices=QUESTION_CHOICES)
     answer1 = models.TextField(null=True, blank=True, max_length=1000)
     question2 = models.CharField(max_length=200, choices=QUESTION_CHOICES)
     answer2 = models.TextField(null=True, blank=True, max_length=1000)
-    question3 = models.CharField(max_length=200, choices=QUESTION_CHOICES)
-    answer3 = models.TextField(null=True, blank=True, max_length=1000)
     prefer_sex = models.CharField(max_length=200, choices=GENDER_CHOICES)
     geographical = models.CharField(max_length=200, choices=GEOGRAPHICAL_CHOICES)
-    commit = models.BooleanField(default=False)
-    available = models.BooleanField(default=False)
-    seminar = models.BooleanField(default=False)
+    commit = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    available = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    seminar = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
     signature = models.TextField(null=True, blank=True, max_length=1000)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
     flag = models.BooleanField(default=False)
-
+    note = models.TextField(null=True, blank=True, max_length=1000)
 
     
     def __str__(self):
@@ -88,10 +96,6 @@ class Student(models.Model):
 
     def get_friends_no(self):
         return self.mentors.all().count()
-
-
-    def get_reasons(self):
-        return self.reason.all()
 
     def get_student_connections(self):
         return self.student.filter()
@@ -138,18 +142,19 @@ GRANT_CHOICES = (
 
 
 
-class Mentorreason(models.Model):
-    name = models.CharField(max_length=200, blank=True)
-
-    def __str__(self):
-        return self.name
-
 
 class Support(models.Model):
     name = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         return self.name
+
+SPANISH_CHOICES = (
+    ('Not at all', 'Not at all'),
+    ('Low (can make simple conversation)', 'Low (can make simple conversation)'),
+    ('Medium (somewhat fluent)', 'Medium (somewhat fluent)'),
+    ('High (proficient enough to have a lengthy and detailed conversation)', 'High (proficient enough to have a lengthy and detailed conversation)'),
+)
 
 
 class Mentor(models.Model):
@@ -159,27 +164,38 @@ class Mentor(models.Model):
     email = models.EmailField(max_length=200, blank=True)
     phone = models.CharField(max_length=200, blank=True)
     address = models.CharField(max_length=200, blank=True)
+    spanish = models.CharField(null=True, blank=True, max_length=200, choices=SPANISH_CHOICES)
     language = models.TextField(null=True, blank=True, max_length=1000)
     emergency_contact = models.TextField(null=True, blank=True, max_length=1000)
     employment_status = models.CharField(max_length=200, choices=EMPLOYMENT_CHOICES)
     employer_info = models.TextField(null=True, blank=True, max_length=1000)
+    partner = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    hear = models.TextField(null=True, blank=True, max_length=1000)
     experience = models.TextField(null=True, blank=True, max_length=1000)
-    reason = models.ManyToManyField(Mentorreason, blank=True, related_name='mentorreasons')
+    reason = models.TextField(null=True, blank=True, max_length=1000)
+    know = models.TextField(null=True, blank=True, max_length=1000)
+    question1 = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_CHOICES)
+    answer1 = models.TextField(null=True, blank=True, max_length=1000)
+    question2 = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_CHOICES)
+    answer2 = models.TextField(null=True, blank=True, max_length=1000)
     support = models.ManyToManyField(Support, blank=True, related_name='supports')
     prefer_sex = models.CharField(max_length=200, choices=GENDER_CHOICES)
     geographical = models.CharField(max_length=200, choices=GEOGRAPHICAL_CHOICES)
-    commit = models.BooleanField(default=False)
-    available = models.BooleanField(default=False)
-    seminar = models.BooleanField(default=False)
+    commit = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    available = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    seminar = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
     signature = models.TextField(null=True, blank=True, max_length=1000)
     grant = models.CharField(max_length=200, choices=GRANT_CHOICES)
-    check_bridge = models.BooleanField(default=False)
     cont_student_bridge = models.TextField(null=True, blank=True, max_length=1000)
+    check = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    question = models.TextField(null=True, blank=True, max_length=1000)
     friends = models.ManyToManyField(Student, blank=True, related_name='mentors')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
     flag = models.BooleanField(default=False)
+    note = models.TextField(null=True, blank=True, max_length=1000)
+
 
 
     def __str__(self):
@@ -240,6 +256,8 @@ class Connection(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     flag = models.BooleanField(default=False)
+    note = models.TextField(null=True, blank=True, max_length=1000)
+
 
     def __str__(self):
         return f"{self.student}-{self.mentor}-{self.status}"
@@ -274,14 +292,17 @@ class Sessionsupport(models.Model):
 class Session(models.Model):
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
     meet = models.IntegerField(null=True, blank=True)
+    dialogue = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
     length = models.FloatField(null=True, blank=True)
     summary = models.TextField(null=True, blank=True, max_length=1000)
     help = models.TextField(null=True, blank=True, max_length=1000)
     change = models.TextField(null=True, blank=True, max_length=1000)
     rate = models.IntegerField(null=True, blank=True)
+    meaningful = models.IntegerField(null=True, blank=True)
     support = models.ManyToManyField(Sessionsupport, blank=True, related_name='sessionsupports')
+    elaborate = models.TextField(null=True, blank=True, max_length=1000)
+    urgent = models.TextField(null=True, blank=True, max_length=1000)
     question = models.TextField(null=True, blank=True, max_length=1000)
-    cont = models.CharField(null=True, blank=True, max_length=200, choices=CONT_STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     submit_status = models.BooleanField(default=False)
@@ -298,5 +319,19 @@ class Session(models.Model):
         return reverse("mprofiles:session-detail", kwargs={"pk": self.pk})
 
 
+QUESTION_STATUS_CHOICES = (
+    ('UNANSWERED', 'UNANSWERED'),
+    ('ADDRESSED', 'ADDRESSED'),
 
+)
 
+class Question(models.Model):
+    mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE, related_name='mentor_question')
+    question = models.TextField(null=True, blank=True, max_length=1000)
+    action = models.BooleanField(default=False)
+    status = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_STATUS_CHOICES)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.question

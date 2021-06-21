@@ -8,7 +8,7 @@
 
 
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{high_student_count}}</h1>
@@ -16,7 +16,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{middle_student_count}}</h1>
@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{off_track_conn}}</h1>
@@ -32,10 +32,18 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{total_connection}}</h1>
+                <p class="card-text">Total Connections</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{avg_rate.rate__avg|floatformat:1}}</h1>
@@ -43,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{hour_session.length__sum}}</h1>
@@ -51,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title">{{inactive_conn}}</h1>
@@ -59,26 +67,113 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{unanswered_question_num}}</h1>
+                <p class="card-text"><a href="{% url 'cprofiles:question-list-view' %}">Unanswered Questions</a></p>
+            </div>
+        </div>
+    </div>
 </div>
 
-</br>
-
-<h3>Application Progress %</h3>
-<canvas id="progressChart" width="400" height="150"></canvas>
 
 </br>
 
-<h3>Mentoring Breakdown</h3>
-<canvas id="subjectChart" width="400" height="150"></canvas>
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Application Progress %<</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Mentoring Breakdown</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Activity</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="sessionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Engagement and Productivity</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="eng_prod_Chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Mentoring Breakdown - Year”</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="mentor_breakdown_yearChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+        </div>
+    </div>
+</div>
+
 
 </br>
-</br>
-<h3>Activity</h3>
-<canvas id="sessionChart" width="400" height="150"></canvas>
 
 
-</br>
-</br>
+
+
+
+
 
 <h3>Recent Sessions</h3>
 
@@ -260,6 +355,132 @@ $(document).ready(function () {
 
 });
 
+
+$(document).ready(function () {
+    var ctx = document.getElementById('eng_prod_Chart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for x in avg_eng_prod_month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
+            datasets: [{
+                label: 'Average Engagement by Month',
+                fill: false,
+                data: [{% for x in avg_eng_prod_month %}{{x.rate}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                  ],
+                borderWidth: 1
+            },
+            
+            {
+                label: 'Average Productivity by Month',
+                fill: false,
+                data: [{% for x in avg_eng_prod_month %}{{x.prod}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('mentor_breakdown_yearChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for key, value in tr_dict.items %}'{{ key }}',{% endfor %}],
+            datasets: [
+            {
+                label: 'Teacher recommendation',
+                data: [{% for key, value in tr_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'blue',
+                borderColor: 'blue',
+                borderWidth: 0.5,
+                fill: false,
+
+            },
+            {
+                label: 'Creating a Ravenna account',
+                data: [{% for key, value in cr_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'red',
+                borderColor: 'red',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'Interview preparation',
+                data: [{% for key, value in ip_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'purple',
+                borderColor: 'purple',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'Shadow day preparation',
+                data: [{% for key, value in sd_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'yellow',
+                borderColor: 'yellow',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'Essays',
+                data: [{% for key, value in es_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'orange',
+                borderColor: 'orange',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'Test prep',
+                data: [{% for key, value in tp_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'green',
+                borderColor: 'green',
+                borderWidth: 0.5,
+                fill: false,    
+            },
+            {
+                label: 'Filling out application',
+                data: [{% for key, value in fp_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'green',
+                borderColor: 'green',
+                borderWidth: 0.5,
+                fill: false,    
+            },
+            
+        ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
 
 </script>
 {% endblock scripts %}

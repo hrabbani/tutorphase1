@@ -10,19 +10,113 @@
     <div class="fade-in">
         <div class="row justify-content-md-center">
             <div class="col-sm-6">
-                
-                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data"
-                        autocomplete="off">
-                        <div class="card-header">
-                            <h2>Student Submission Form</h2>
-                        </div>
-                        {{form.as_p}}
-                        <div class="card-footer">
-                            <button class="btn btn-sm btn-success" type="submit"> Submit</button>
-                        </div>
-                        {% csrf_token %}
-                    </form>
-                
+
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+                    <div class="card-header">
+                        <h2>Student Submission Form</h2>
+                    </div>
+
+                    <label for="id_first_name">First name:</label>
+                    {{form.first_name}}
+
+                    <label for="id_last_name">Last name:</label>
+                    {{form.last_name}}
+
+                    <label for="id_email">Email:</label>
+                    {{form.email}}  
+
+                    <label for="id_gender">Gender:</label>
+                    {{form.gender}}
+
+                    <label for="id_grade">Grade:</label>
+                    {{form.grade}}
+
+                    <label for="id_school">School:</label>
+                    {{form.school}}
+
+                    <label for="id_language_preference">Student Language Preference:</label>
+                    {{form.language_preference}}
+
+                    <label for="id_parent1_first_name">Parent First Name:</label>
+                    {{form.parent1_first_name}}
+
+                    <label for="id_parent1_last_name">Parent Last Name:</label>
+                    {{form.parent1_last_name}}
+
+                    <label for="id_parent1_phone">Parent Phone Number:</label>
+                    {{form.parent1_phone}}
+
+                    <label for="id_parent1_email">Parent Email:</label>
+                    {{form.parent1_email}}
+
+                    </br>
+                    <h4>Student Questions</h4>
+
+                    <label for="id_activity">What extracurricular activities and sports do you participate in?</label>
+                    {{form.activity}}
+
+                    <label for="id_ind_scl">Why are you interested in applying to an independent school?</label>
+                    {{form.ind_scl}}
+
+                    <label for="id_dont_know">One thing most people don’t know about me is…</label>
+                    {{form.dont_know}}
+
+                    <label for="id_proud">I am most proud of…</label>
+                    {{form.proud}}
+
+                    <label for="id_learn">Something I want to learn is…</label>
+                    {{form.learn}}
+
+                    <label for="id_happy">I am the happiest when…</label>
+                    {{form.happy}}
+
+                    <label for="id_hobby">What are your hobbies?</label>
+                    {{form.hobby}}
+
+                    </br>
+                    <h4>Parent Questions</h4>
+
+                    <label for="id_int_ind_school">Why are you interested in an independent or parochial school for your
+                        child?</label>
+                    {{form.int_ind_school}}
+
+                    <label for="id_look_ind_school">What are you looking for in an independent or parochial school?
+                        Share
+                        which elements are the most important to you and your student (sports,
+                        clubs, teachers)?</label>
+                    {{form.look_ind_school}}
+
+                    <label for="id_strength">What are your students' strengths and areas for growth (both academic
+                        and personal)?</label>
+                    {{form.strength}}
+
+                    <label for="id_obstacle">Describe an obstacle the applicant has faced and how you helped him/her
+                        navigate and work through the challenge?</label>
+                    {{form.obstacle}}
+
+                    <label for="id_child_strength">Check the top THREE phrases that describe your child’s strengths in
+                        your
+                        opinion. (Hold the Control or Command key to select multiple)</label>
+                    {{form.child_strength}}
+
+                    <label for="id_social_strength">Check the top THREE phrases that best describe your child’s social
+                        strengths in your opinion. (Hold the Control or Command key to select
+                        multiple options)</label>
+                    {{form.social_strength}}
+
+                    <label for="id_interview_language">Interview Language</label>
+                    {{form.interview_language}}
+
+                    <label for="id_question">Do you have any questions or comments for us? (If not, please leave
+                        blank)</label>
+                    {{form.question}}
+
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-success" type="submit"> Submit</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+
             </div>
         </div>
     </div>

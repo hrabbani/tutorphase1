@@ -440,7 +440,7 @@ class SessionUpdateView(UpdateView):
     def form_valid(self, form):
         self.object.submit_status = True
         self.object = form.save()
-        return super().form_valid(form)
+        return redirect('profiles:session-submitted')
 
 
 @login_required(login_url='login')
@@ -937,3 +937,6 @@ def action_question(request):
 
         return JsonResponse(data, safe=False)
     return redirect('profiles:dashboard')
+
+
+

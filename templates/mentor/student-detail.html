@@ -105,6 +105,24 @@
 
 </div>
 
+
+<h3>Notes</h3>
+
+<a href="{% url 'mprofiles:student-note-update-profile' student.slug %}"><button type="submit"
+        class="btn btn-info">Edit</button></a>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card h-100">
+            <div class="card-body">
+                <p class="card-text">{{student.note}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</br>
+
 <h3>All Info</h3>
 
 <a href="{% url 'mprofiles:student-update-profile' student.slug %}"><button type="submit"

@@ -11,12 +11,46 @@
 <h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
 </br>
 
-    <div class=#>
-        <form action="" method="POST" class=# enctype="multipart/form-data">
-            {% csrf_token %}
-            {{form}}
-            </br>
-            <button type='submit' class="btn btn-success">Update</button>
-        </form>
-    </div>
+<div class=#>
+    <form action="" method="POST" class=# enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label for="id_meet">How many times have you and the student met in the past 2 weeks?</label>
+        {{form.meet}}
+
+        <label for="id_length">How many total hours of mentoring did you do?</label>
+        {{form.length}}
+
+        <label for="id_topic">What topics have you covered?</label>
+        {{form.topic}}
+
+        <label for="id_feedback">Share how your sessions have been going with the student.</label>
+        {{form.feedback}}
+
+
+        <label for="id_change">What would you change to make your future sessions better?</label>
+        {{form.change}}
+
+
+        <label for="id_support">Can we support you with any of the following:</label>
+        {{form.support}}
+
+        <label for="id_elaborate">Please elaborate on your answer above:</label>
+        {{form.elaborate}}
+
+        <label for="id_rate">On a scale of 1-5, how would you rate the student’s level of engagement
+            (1 = Very unengaged, 5 = very engaged)</label>
+        {{form.rate}}
+
+        <label for="id_productivity">On a scale of 1-5, how would you rate the productivity of your sessions?</label>
+        {{form.productivity}}
+
+        <label for="id_question">Do you have any questions or comments for us? (If not, please leave
+            blank)</label>
+        {{form.question}}
+
+        </br>
+        <button type='submit' class="btn btn-success">Update</button>
+    </form>
+</div>
 {% endblock content %}
