@@ -95,6 +95,12 @@ class Student(models.Model):
     def get_friends(self):
         return self.mentors.all()
 
+    def get_child_strengths(self):
+        return self.child_strength.all()
+
+    def get_social_strengths(self):
+        return self.social_strength.all()
+
     def get_friends_no(self):
         return self.mentors.all().count()
 
@@ -159,6 +165,15 @@ class Mentorlanguage(models.Model):
         return self.name
 
 
+ETHNIC_CHOICES = (
+    ('African American or Black', 'African American or Black'),
+    ('American Indian or Alaskan Native', 'American Indian or Alaskan Native'),
+    ('Asian American', 'Asian American'),
+    ('Caucasian or White', 'Caucasian or White'),
+    ('Hispanic or Latino', 'Hispanic or Latino'),
+    ('Native Hawaiian or Other Pacific Islander', 'Native Hawaiian or Other Pacific Islander'),
+    ('I prefer not to say', 'I prefer not to say')
+)
 
 class Mentor(models.Model):
     avatar = models.ImageField(default='avatar.png', upload_to='avatars/')
@@ -182,6 +197,8 @@ class Mentor(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
     flag = models.BooleanField(default=False)
+    ethnic = models.CharField(null=True, blank=True, max_length=200, choices=ETHNIC_CHOICES)
+
 
     
     def __str__(self):

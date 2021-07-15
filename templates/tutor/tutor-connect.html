@@ -18,28 +18,24 @@
     <div class="row">
 
         <div class="col-sm">
-            <p>Email:<p>
-                    <p>{{profile.email}}</p>
-        </div>
-
-
-        <div class="col-sm">
             <p>Grade:<p>
-                    <p>{{profile.grade}}</p>
+            <p>{{profile.grade}}</p>
         </div>
 
 
         <div class="col-sm">
             <p>Subjects:<p>
-                    {% for subject in profile.get_subjects %}
-                    <li>{{subject}}</li>
-                    {% endfor %}
+            {% for subject in profile.get_subjects %}
+            <li>{{subject}}</li>
+            {% endfor %}
         </div>
 
 
         <div class="col-sm">
-            <p>School:<p>
-                    <p>{{profile.school}}</p>
+            <p>Language:<p>
+            {% for language in profile.get_languages %}
+            <li>{{language}}</li>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -55,7 +51,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Grade</th>
                 <th scope="col">Subjects</th>
-                <th scope="col">School</th>
+                <th scope="col">Parent Language</th>
                 <th scope="col">Tutor</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -67,7 +63,7 @@
                 <th>Name</th>
                 <th>Grade</th>
                 <th>Subjects</th>
-                <th>School</th>
+                <th>Parent Language</th>
                 <th>Tutor</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -77,11 +73,11 @@
 
             {% for student in students %}
             <tr>
-                <td>{{student.first_name}}</td>
+                <td>{{student.first_name}} {{student.last_name}}</td>
                 <td>{{student.grade}}</td>
 
                 <td>{% for subject in student.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
-                <td>{{student.school}}</td>
+                <td>{{student.parent_languages}}</td>
                 <td>{% for friend in student.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
 

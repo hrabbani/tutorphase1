@@ -37,7 +37,7 @@
                     <label for="id_school">School:</label>
                     {{form.school}}
 
-                    <label for="id_avatar">Photo of yourself:</label>
+                    <label for="id_avatar">Recent photo of yourself</label>
                     {{form.avatar}}
 
                     <label for="id_academic_advisor">Academic advisor:</label>
@@ -51,22 +51,26 @@
                         interests, background, etc):</label>
                     {{form.know}}
 
-                    <p>Please choose a writing prompt to answer.</p>
+                    <p>Fun fact about yourself: Please choose a writing prompt to answer. (#1)</p>
 
                     {{form.question1}}
                     <p>Answer</p>
                     {{form.answer1}}
 
-                    <p>Please choose a writing prompt to answer.</p>
+                    <p>Fun fact about yourself: Please choose a writing prompt to answer. (#2)</p>
                     {{form.question2}}
                     <p>Answer</p>
                     {{form.answer2}}
+
+                    <p>Please let us know what your preferences are for the following two questions. While we cannot guarantee we will be able to follow your preferences exactly, we will try our best.</p>
 
                     <label for="id_prefer_sex">I prefer my mentor to be:</label>
                     {{form.prefer_sex}}
 
                     <label for="id_geographical">My geographical preference is:</label>
                     {{form.geographical}}
+
+                    </h3><b>Ground Rules</b></h3>
 
                     <label for="id_commit">Can you commit to participating in the mentoring program for a minimum
                         of one year from the time you are matched with a mentor?</label>
@@ -81,18 +85,14 @@
                         relationship with your mentor?</label>
                     {{form.seminar}}
 
-                    <label for="id_signature">I agree to adhere to the above ground rules to help keep me safe and respected. By signing this, I understand that not showing up to a
-                        committed session or ignoring communication with your mentor will result
-                        in the mentor program manager reaching out to your parents and/or
-                        academic advisor. (Please type your full name below.)</label>
+                    <label for="id_understand">I understand that not showing up to a committed session or ignoring communication with my mentor will result in the mentoring program manager reaching out to my parents and/or academic advisor.</label>
+                    {{form.understand}}
+
+                    <label for="id_signature">I agree to the above ground rules.</label>
                     {{form.signature}}
 
-
-
-
-
                     <div class="card-footer">
-                        <button class="btn btn-sm btn-success" type="submit"> Submit</button>
+                        <button class="btn btn-sm btn-success" type="submit">Submit</button>
                     </div>
                     {% csrf_token %}
                 </form>

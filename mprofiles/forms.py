@@ -12,7 +12,7 @@ class MentorModelForm(forms.ModelForm):
         model = Mentor
         fields = ('first_name', 'last_name', 'avatar', 'email', 'phone', 'address', 'language', 'emergency_contact',
         'employment_status', 'employer_info', 'partner', 'hear', 'experience', 'reason', 'know', 'question1', 'answer1', 'question2', 'answer2', 'support', 'prefer_sex', 'geographical',
-        'commit', 'available', 'seminar', 'signature', 'grant', 'cont_student_bridge', 'check', 'spanish', 'question',)
+        'commit', 'available', 'seminar', 'signature', 'grant', 'cont_student_bridge', 'check', 'spanish', 'question', 'ethnic')
         
     def __init__(self, *args, **kwargs):
         super(MentorModelForm, self).__init__(*args, **kwargs)
@@ -71,7 +71,7 @@ class StudentModelForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ('first_name', 'last_name', 'avatar', 'email', 'phone', 'address', 'grade', 'school',
-        'academic_advisor', 'academic_advisor_email', 'reason', 'know', 'question1', 'answer1', 'question2', 'answer2', 'prefer_sex', 'geographical', 'commit', 'available', 'seminar', 'signature',)
+        'academic_advisor', 'academic_advisor_email', 'reason', 'know', 'question1', 'answer1', 'question2', 'answer2', 'prefer_sex', 'geographical', 'commit', 'available', 'seminar', 'understand', 'signature',)
 
     def __init__(self, *args, **kwargs):
         super(StudentModelForm, self).__init__(*args, **kwargs)
@@ -87,7 +87,7 @@ class SessionModelForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ('meet', 'dialogue', 'length', 'summary', 'help', 'change', 'rate', 'support', 'question', 'meaningful', 'elaborate', 'urgent')
+        fields = ('meet', 'dialogue', 'length', 'summary', 'help', 'change', 'rate', 'support', 'question', 'meaningful', 'elaborate', 'urgent', 'urgent_check')
 
     def __init__(self, *args, **kwargs):
         super(SessionModelForm, self).__init__(*args, **kwargs)

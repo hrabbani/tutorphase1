@@ -18,6 +18,8 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from collections import defaultdict
+import csv
+
 
 
 
@@ -362,7 +364,7 @@ def mentor_profile_form(request):
         form = MentorModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
-            return HttpResponse('Mentor Profile Added')
+            return HttpResponse('Thank you for your interest in becoming a mentor.  Someone will be in touch shortly to schedule a short phone interview.  Also, there will be a virtual training workshop in mid-September (date TBD).')
   
     context = {'form':form}
 
@@ -399,11 +401,11 @@ def generate_session_form(request):
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
         session_generated_pk = str(session_generated.pk)
-        z.append("http://127.0.0.1:8000/mprofiles/" + session_generated_pk + "/submit-feedback/")
+        z.append("http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/submit-feedback/")
 
         email = x.mentor.email
 
-        content = "http://127.0.0.1:8000/mprofiles/" + session_generated_pk + "/submit-feedback/"
+        content = "http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/submit-feedback/"
 
         send_mail('Please fill in the Session Feedback Form',
         content,
@@ -558,32 +560,15 @@ def dashboard(request):
     # 3rd Row
 
     month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
-
-    tutor_list = []
-    for session in Session.objects.filter(submit_status=True):
-        tutor_list.append(session.connection.mentor.first_name) 
-
-    hour_list = []
-    for session in Session.objects.filter(submit_status=True):
-        hour_list.append(session.length) 
-
-    my_dict = defaultdict(list)
-    for k, v in zip(tutor_list, hour_list):
-        my_dict[k].append(v)
-
-    top_tutor = {k: sum(v) for (k, v) in my_dict.items()}
-    top_tutor = dict(sorted(top_tutor.items(), key=lambda item: item[1], reverse=False))
-    top_tutor = list(top_tutor.items())[:10]
-    top_tutor = dict(top_tutor)
+   
+    avg_eng_meaning_month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(rate=Avg('rate'))
    
 
     # 4th Row
 
-    avg_eng_meaning_month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(rate=Avg('rate')).annotate(meaningful=Avg('meaningful'))
-
-    print(avg_eng_meaning_month)
-   
     recent_session = Session.objects.filter(submit_status=True).order_by('-created')[:5]
+
+
 
     context = {'month':month,
                 'x':x,
@@ -595,7 +580,6 @@ def dashboard(request):
                 'inactive_conn': inactive_conn,
                 'connected_conn': connected_conn,
                 'unanswered_question_num': unanswered_question_num,
-                'top_tutor': top_tutor,
                 'avg_eng_meaning_month': avg_eng_meaning_month,
 
                 }
@@ -770,3 +754,124 @@ def action_question(request):
 
         return JsonResponse(data, safe=False)
     return redirect('profiles:dashboard')
+
+
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])	
+def search_connection(request):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        qs = Connection.objects.all().order_by('-created').filter(status=status)
+
+    context = {'qs':qs}
+
+    return render(request, 'mentor/connection-list-search.html', context)
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])
+def export_mentoring_mentor_list(request):
+
+    mentors = Mentor.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=mentoring_mentor_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'first_name', 'last_name', 'avatar', 'email', 'phone', 'address', 'language', 'emergency_contact',
+        'employment_status', 'employer_info', 'partner', 'hear', 'experience', 'reason', 'know', 'question1', 'answer1', 
+        'question2', 'answer2', 'prefer_sex', 'geographical', 'commit', 'available', 'seminar', 'signature', 
+        'grant', 'cont_student_bridge', 'check', 'spanish', 'question', 'student', 'date_added', 'flag'])
+    
+    for q in mentors:
+        writer.writerow([q.id, q.first_name, q.last_name, q.avatar, q.email, q.phone, q.address, q.language, q.emergency_contact,
+        q.employment_status, q.employer_info, q.partner, q.hear, q.experience, q.reason, q.know, q.question1, q.answer1, q.question2, q.answer2, q.prefer_sex, q.geographical,
+        q.commit, q.available, q.seminar, q.signature, q.grant, q.cont_student_bridge, q.check, q.spanish, q.question,
+        '|'.join(c.first_name + ' ' + c.last_name for c in q.friends.all()), q.created, q.flag])
+
+    return response
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])
+def export_mentoring_student_list(request):
+
+    students = Student.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=mentoring_student_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'first_name', 'last_name', 'avatar', 'email', 'phone', 'address', 'grade', 'school',
+        'academic_advisor', 'academic_advisor_email', 'reason', 'know', 'question1', 'answer1', 'question2', 
+        'answer2', 'prefer_sex', 'geographical', 'commit', 'available', 'seminar', 'signature',
+        'mentor', 'date_added', 'flag'])
+    
+    for q in students:
+        writer.writerow([q.id, q.first_name, q.last_name, q.avatar, q.email, q.phone, q.address, q.grade, q.school,
+        q.academic_advisor, q.academic_advisor_email, q.reason, q.know, q.question1, q.answer1, q.question2,
+        q.answer2, q.prefer_sex, q.geographical, q.commit, q.available, q.seminar, q.signature,
+        '|'.join(c.first_name + ' ' + c.last_name for c in q.get_friends()), q.created, q.flag])
+
+    return response
+
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])
+def export_mentoring_connection_list(request):
+
+    connections = Connection.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=mentoring_connection_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'created', 'student', 'mentor', 'status', 'updated', 'flag', 'note'])
+    
+    for q in connections:
+        writer.writerow([q.id, q.created, q.student.first_name + ' ' + q.student.last_name, q.mentor.first_name + ' ' + q.mentor.last_name, q.status, q.updated, q.flag, q.note])
+        
+    return response
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])
+def export_mentoring_session_list(request):
+
+    sessions = Session.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=mentoring_session_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'connection', 'meet', 'dialogue', 'length', 'summary', 'help', 'change', 'rate', 
+    'meaningful', 'support', 'elaborate', 'urgent', 'question', 'updated', 'created', 'submit_status', 'flag'])
+    
+    for q in sessions:
+        writer.writerow([q.id, q.connection, q.meet, q.dialogue, q.length, q.summary,
+        q.help, q.change, q.rate, q.meaningful, '|'.join(c.name for c in q.support.all()), q.elaborate, 
+        q.urgent, q.question, q.updated, q.created, q.submit_status, q.flag])
+        
+    return response
+
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])	
+def search_question(request):
+    if request.method == 'POST':
+        source = request.POST.get('status')
+        qs = Question.objects.all().order_by('-created').filter(source=source)
+
+    context = {'qs':qs}
+
+    return render(request, 'mentor/question-list-search.html', context)
+
+ 

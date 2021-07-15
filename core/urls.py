@@ -8,9 +8,9 @@ from .views import home_view, login_page, logout_user
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home-view'),
-    path('profiles/', include('profiles.urls', namespace='profiles')),
-    path('cprofiles/', include('cprofiles.urls', namespace='cprofiles')),
-    path('mprofiles/', include('mprofiles.urls', namespace='mprofiles')),
+    path('tutoring/', include('profiles.urls', namespace='profiles')),
+    path('choice/', include('cprofiles.urls', namespace='cprofiles')),
+    path('mentoring/', include('mprofiles.urls', namespace='mprofiles')),
     path('accounts/login/', login_page, name="login"),
     path('account/logout/', logout_user, name="logout"),
 

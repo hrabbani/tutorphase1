@@ -26,26 +26,26 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
 
 
 
-@receiver(post_save, sender=Session)
-def post_save_flag_session(sender, instance, created, **kwargs):
+# @receiver(post_save, sender=Session)
+# def post_save_flag_session(sender, instance, created, **kwargs):
 
-    list_a = list((instance.get_supports().values('name')))
-    list_a = list(map(lambda x: x['name'], list_a))
+#     list_a = list((instance.get_supports().values('name')))
+#     list_a = list(map(lambda x: x['name'], list_a))
 
-    list_b = ['Engaging with mentees during session', 'Scheduling and communication issues', 'Other (please specify)']
+#     list_b = ['Engaging with mentees during session', 'Scheduling and communication issues', 'Other (please specify)']
 
-    def common_member(a, b):
-        a_set = set(a)
-        b_set = set(b)
-        if (a_set & b_set):
-            return True 
-        else:
-            return False
+#     def common_member(a, b):
+#         a_set = set(a)
+#         b_set = set(b)
+#         if (a_set & b_set):
+#             return True 
+#         else:
+#             return False
           
-    if common_member(list_a, list_b) is True:
-        Session.objects.filter(pk=instance.id).update(flag=True)
-    else:
-        pass
+#     if common_member(list_a, list_b) is True:
+#         Session.objects.filter(pk=instance.id).update(flag=True)
+#     else:
+#         pass
 
 
 
@@ -108,7 +108,7 @@ def post_save_mentor_form_background_check(sender, instance, created, **kwargs):
             html_content = render_to_string("mentor/background-check-email.html", {'mentor': instance })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Background Check Email",
+                "PB Mentoring Program Background Check",
                 text_context,
                 'Mentor Program',
                 email_list,
@@ -130,11 +130,9 @@ def post_save_flag_session(sender, instance, created, **kwargs):
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='mentor').values_list('email', flat=True))
         email_list.extend(program_manager_email_list)
 
-        content = "http://127.0.0.1:8000/mprofiles/" + session_generated_pk + "/session/"
+        content = "http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/session/"
 
-        print(instance.urgent)
-
-        if instance.urgent:
+        if instance.urgent_check == True:
             send_mail('[URGENT] Feedback Form Submitted',
             content,
             'Mentor Program',
@@ -156,7 +154,7 @@ def post_save_mentor_form_question_registration(sender, instance, created, **kwa
 
     if created:
         if instance.question:
-            Question.objects.get_or_create(mentor=instance, question=instance.question, status="UNANSWERED")
+            Question.objects.get_or_create(mentor=instance, question=instance.question, status="UNANSWERED", source="Sign-Up")
         else:
             pass
 
@@ -166,6 +164,31 @@ def post_save_session_question_registration(sender, instance, created, **kwargs)
 
     if not created:
         if instance.question:
-            Question.objects.get_or_create(mentor=instance.connection.mentor, question=instance.question, status="UNANSWERED")
+            Question.objects.get_or_create(mentor=instance.connection.mentor, question=instance.question, status="UNANSWERED", source="Feedback Form")
+        else:
+            pass
+
+
+
+
+@receiver(post_save, sender=Session)
+def post_save_session_support_registration(sender, instance, created, **kwargs):
+
+    if not created:
+        if instance.support:
+            Question.objects.get_or_create(mentor=instance.connection.mentor, question=instance.support, status="UNANSWERED", source="Feedback Form")
+        else:
+            pass
+
+
+
+@receiver(post_save, sender=Session)
+def post_save_session_flag_urgent_check(sender, instance, created, **kwargs):
+
+    if not created:
+        
+        if instance.urgent_check == True:
+            Session.objects.filter(pk=instance.id).update(flag=True)
+        
         else:
             pass

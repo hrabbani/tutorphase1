@@ -5,8 +5,19 @@
 
 {% block content %}
 
-<h3>Students</h3>
-
+<div class="row">
+    <div class="col-auto mr-auto">
+        <h3>Students</h3>
+    </div>
+    <div class="col-auto">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <form action="{% url 'profiles:export-tutoring-student-list' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-dark">Download All Data</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <div class="table-responsive-lg">
@@ -16,10 +27,11 @@
                 <th scope="col">Name</th>
                 <th scope="col">Grade</th>
                 <th scope="col">Subjects</th>
-                <th scope="col">School</th>
+                <th scope="col">Parent Phone</th>
                 <th scope="col">Tutor</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
+                <th scope="col">Date Added</th>
                 <th scope="col">Flag</th>
             </tr>
         </thead>
@@ -29,10 +41,11 @@
                 <th>Name</th>
                 <th>Grade</th>
                 <th>Subjects</th>
-                <th>School</th>
+                <th>Parent Phone</th>
                 <th>Tutor</th>
                 <th>Status</th>
                 <th>Action</th>
+                <th>Date Added</th>
                 <th>Flag</th>
             </tr>
         </tfoot>
@@ -43,7 +56,7 @@
                 <td><a href="{{obj.get_absolute_url}}">{{obj.first_name}} {{obj.last_name}}</a></td>
                 <td>{{obj.grade}}</td>
                 <td>{% for subject in obj.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
-                <td>{{obj.school}}</td>
+                <td>{{obj.parent1_phone}}</td>
                 <td>{% for friend in obj.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
                     {% for friend in obj.get_friends %}
@@ -56,6 +69,7 @@
                 <td><a href="{% url 'profiles:student-detail-view' obj.slug %}"><button type="submit"
                             class="btn btn-info">Connect Tutor</button></a></td>
 
+                <td>{{ obj.created |date:"d M Y"  }}</td>
                 <td>
                     <form action="{% url 'profiles:like-post-view' %}" method="POST" class='like-form' id='{{obj.id}}'>
                         {% csrf_token %}

@@ -179,8 +179,8 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Do you speak any languages other than English? If so, which languages?</h5>
-                <p class="card-text">{{mentor.language}}</p>
+                <h5 class="card-title">Do you speak Spanish and if so, what is your level of fluency?</h5>
+                <p class="card-text">{{mentor.spanish}}</p>
             </div>
         </div>
     </div>
@@ -218,15 +218,33 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Do you have any previous experience volunteering or working with youth? If so,
-                    please
-                    specify</h5>
-                <p class="card-text">{{mentor.experience}}</p>
+                <h5 class="card-title">Is your employer a current corporate PB partner?</h5>
+                <p class="card-text">{{mentor.partner}}</p>
             </div>
         </div>
     </div>
 </div>
 
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">How did you hear about this program?</h5>
+                <p class="card-text">{{mentor.hear}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any previous experience volunteering or working with
+                        youth? If so, please specify.</h5>
+                <p class="card-text">{{mentor.experience}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-sm-6">
@@ -240,12 +258,37 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">In which ways do you feel comfortable providing support?</h5>
-                <p class="card-text">{{mentor.support}}</p>
+                <h5 class="card-title">What would you like your future mentee to know about you?
+                        (hobbies, interests, background, etc)</h5>
+                <p class="card-text">{{mentor.know}}</p>
             </div>
         </div>
     </div>
 </div>
+
+<h5>Please choose a writing prompt to answer.</h5>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{mentor.question1}}</h5>
+                <p class="card-text">{{mentor.answer1}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{mentor.question2}}</h5>
+                <p class="card-text">{{mentor.answer2}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <div class="row">
     <div class="col-sm-6">
@@ -267,12 +310,12 @@
 </div>
 
 
+
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Can you commit to participating in the Peninsula Bridge's mentoring program for a
-                    minimum of one year from the time you are matched with a mentee?</h5>
+                <h5 class="card-title">Can you commit to participating in the mentoring program for a minimum of one year from the time you are matched with a mentor?</h5>
                 <p class="card-text">{{mentor.commit}}</p>
             </div>
         </div>
@@ -280,9 +323,9 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Are you available to meet with your mentee (in-person or virtually) once a month
-                    along
-                    with phone/email contact every two weeks?</h5>
+                <h5 class="card-title">Are you available to meet with your mentee (in-person or virtually)
+                        once a month along with phone/email contact every two weeks?
+                </h5>
                 <p class="card-text">{{mentor.available}}</p>
             </div>
         </div>
@@ -296,8 +339,9 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Can you commit to a one-time (one hour) training seminar to better understand the
-                    program and how to maximize the quality of your relationship with your mentee?
+                <h5 class="card-title">Can you commit to a one-time (one hour) training seminar to
+                        better understand the program and how to maximize the quality of
+                        your relationship with your mentee?
                 </h5>
                 <p class="card-text">{{mentor.seminar}}</p>
             </div>
@@ -306,8 +350,8 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">I agree to adhere to the above ground rules to help keep my mentee safe and
-                    respected.
+                <h5 class="card-title">I agree to adhere to the above ground rules to help keep my
+                        mentee safe and respected. (Please type your full name below.)
                 </h5>
                 <p class="card-text">{{mentor.signature}}</p>
             </div>
@@ -321,9 +365,10 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Opportunities called "volunteer grants" exist in many corporations. Companies pay
-                    $10-25/hour to a nonprofit where employees volunteer. Would you be able to inquire
-                    about this at your corporation?
+                <h5 class="card-title">Opportunities called "volunteer grants" exist in many corporations.
+                        Companies pay $10-25/hour to a nonprofit where employees
+                        volunteer. Would you be able to inquire about this at your
+                        corporation?
                 </h5>
                 <p class="card-text">{{mentor.grant}}</p>
             </div>
@@ -332,16 +377,15 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">I have completed a background check for another Peninsula Bridge program in the
-                    past.
-
+                <h5 class="card-title">If you would like to continue mentoring the student you had
+                        mentored last year in the Choice Program, please mention his/her
+                        name.
                 </h5>
-                <p class="card-text">{{mentor.check_bridge}}</p>
+                <p class="card-text">{{mentor.cont_student_bridge}}</p>
             </div>
         </div>
     </div>
 </div>
-
 
 
 
@@ -349,15 +393,24 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">If you would like to continue mentoring the student you had mentored last year in
-                    Peninsula Bridge's Choice Program, please mention his/her name.
+                <h5 class="card-title">I have completed a background check for another PB program in
+                        the past.
                 </h5>
-                <p class="card-text">{{mentor.cont_student_bridge}}</p>
+                <p class="card-text">{{mentor.check}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us? (If not, please
+                        leave blank)
+                </h5>
+                <p class="card-text">{{mentor.question}}</p>
+            </div>
+        </div>
     </div>
 </div>
+
 
 {% endblock content %}

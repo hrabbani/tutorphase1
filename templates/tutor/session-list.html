@@ -5,8 +5,20 @@
 
 {% block content %}
 
-<h3>Sessions</h3>
 
+<div class="row">
+    <div class="col-auto mr-auto">
+        <h3>Sessions</h3>
+    </div>
+    <div class="col-auto">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <form action="{% url 'profiles:export-tutoring-session-list' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-dark">Download All Data</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <div class="table-responsive-lg">
@@ -17,7 +29,7 @@
                 <th scope="col">Student</th>
                 <th scope="col">Tutor</th>
                 <th scope="col">Length</th>
-                <th scope="col">Subjets</th>
+                <th scope="col">Subjects</th>
                 <th scope="col">Supports</th>
                 <th scope="col">Action</th>
                 <th scope="col">Flag</th>
@@ -30,7 +42,7 @@
                 <th>Student</th>
                 <th>Tutor</th>
                 <th>Length</th>
-                <th>Subjets</th>
+                <th>Subjects</th>
                 <th>Supports</th>
                 <th>Action</th>
                 <th>Flag</th>

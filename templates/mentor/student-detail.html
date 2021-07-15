@@ -219,14 +219,31 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Why do you want a mentor?</h5>
-                {% for reason in student.get_reasons %}
-                <li>{{reason}}</li>
-                {% endfor %}
+                <h5 class="card-title">Why do you want a mentor? Please give as much information as
+                        possible.</h5>
+                <p class="card-text">{{student.reason}}</p>
             </div>
         </div>
     </div>
 </div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What would you like your future mentor to know about you? (hobbies,
+                        interests, background, etc):</h5>
+                <p class="card-text">{{student.know}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+    </div>
+</div>
+
+<h5>Please choose a writing prompt to answer.</h5>
+
 
 <div class="row">
     <div class="col-sm-6">
@@ -251,23 +268,11 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">{{student.question3}}</h5>
-                <p class="card-text">{{student.answer3}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
                 <h5 class="card-title">I prefer my mentor to be:</h5>
                 <p class="card-text">{{student.prefer_sex}}</p>
             </div>
         </div>
     </div>
-</div>
-
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -276,55 +281,55 @@
             </div>
         </div>
     </div>
+</div>
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">- Can you commit to participating in the mentoring program for a minimum of one
-                    year
-                    from the time you are matched with a mentor?</h5>
+                <h5 class="card-title">Can you commit to participating in the mentoring program for a minimum
+                        of one year from the time you are matched with a mentor?</h5>
                 <p class="card-text">{{student.commit}}</p>
             </div>
         </div>
     </div>
-</div>
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">- Are you available to meet with your mentor (in-person or virtually) once a
-                    month along
-                    with phone/email contact every two weeks?</h5>
+                <h5 class="card-title">Are you available to meet with your mentor (in-person or virtually) once a
+                        month along with phone/email contact every two weeks?</h5>
                 <p class="card-text">{{student.available}}</p>
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Can you and a parent/guardian commit to a one-time training seminar to better
-                    understand the program and how to maximize the quality of your relationship with your
-                    mentor?</h5>
-                <p class="card-text">{{student.seminar}}</p>
-            </div>
-        </div>
-    </div>
 </div>
-
 
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">I agree to adhere to the above ground rules to help keep me safe and respected.
-                </h5>
-                <p class="card-text">{{student.signature}}</p>
+                <h5 class="card-title">Can you and a parent/guardian commit to a one-time training seminar to
+                        better understand the program and how to maximize the quality of your
+                        relationship with your mentor?</h5>
+                <p class="card-text">{{student.seminar}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">I agree to adhere to the above ground rules to help keep me safe and respected. By signing this, I understand that not showing up to a
+                        committed session or ignoring communication with your mentor will result
+                        in the mentor program manager reaching out to your parents and/or
+                        academic advisor. (Please type your full name below.)</h5>
+                <p class="card-text">{{student.signature}}</p>
+            </div>
+        </div>
     </div>
 </div>
+
+
 
 
 </br>

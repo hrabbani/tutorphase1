@@ -77,7 +77,8 @@ class Student(models.Model):
     commit = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
     available = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
     seminar = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
-    signature = models.TextField(null=True, blank=True, max_length=1000)
+    understand = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    signature = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
@@ -151,11 +152,28 @@ class Support(models.Model):
 
 SPANISH_CHOICES = (
     ('Not at all', 'Not at all'),
-    ('Low (can make simple conversation)', 'Low (can make simple conversation)'),
+    ('Low (can make basic conversation)', 'Low (can make basic conversation)'),
     ('Medium (somewhat fluent)', 'Medium (somewhat fluent)'),
     ('High (proficient enough to have a lengthy and detailed conversation)', 'High (proficient enough to have a lengthy and detailed conversation)'),
 )
 
+
+PARTNER_CHOICES = (
+    ('yes', 'yes'),
+    ('no', 'no'),
+    ('unsure', 'unsure')
+)
+
+
+ETHNIC_CHOICES = (
+    ('African American or Black', 'African American or Black'),
+    ('American Indian or Alaskan Native', 'American Indian or Alaskan Native'),
+    ('Asian American', 'Asian American'),
+    ('Caucasian or White', 'Caucasian or White'),
+    ('Hispanic or Latino', 'Hispanic or Latino'),
+    ('Native Hawaiian or Other Pacific Islander', 'Native Hawaiian or Other Pacific Islander'),
+    ('I prefer not to say', 'I prefer not to say')
+)
 
 class Mentor(models.Model):
     avatar = models.ImageField(default='avatar.png', upload_to='avatars/')
@@ -169,7 +187,7 @@ class Mentor(models.Model):
     emergency_contact = models.TextField(null=True, blank=True, max_length=1000)
     employment_status = models.CharField(max_length=200, choices=EMPLOYMENT_CHOICES)
     employer_info = models.TextField(null=True, blank=True, max_length=1000)
-    partner = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    partner = models.CharField(null=True, blank=True, max_length=200, choices=PARTNER_CHOICES)
     hear = models.TextField(null=True, blank=True, max_length=1000)
     experience = models.TextField(null=True, blank=True, max_length=1000)
     reason = models.TextField(null=True, blank=True, max_length=1000)
@@ -195,6 +213,8 @@ class Mentor(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     flag = models.BooleanField(default=False)
     note = models.TextField(null=True, blank=True, max_length=1000)
+    ethnic = models.CharField(null=True, blank=True, max_length=200, choices=ETHNIC_CHOICES)
+
 
 
 
@@ -299,7 +319,7 @@ class Session(models.Model):
     change = models.TextField(null=True, blank=True, max_length=1000)
     rate = models.IntegerField(null=True, blank=True)
     meaningful = models.IntegerField(null=True, blank=True)
-    support = models.ManyToManyField(Sessionsupport, blank=True, related_name='sessionsupports')
+    support = models.TextField(null=True, blank=True, max_length=1000)
     elaborate = models.TextField(null=True, blank=True, max_length=1000)
     urgent = models.TextField(null=True, blank=True, max_length=1000)
     question = models.TextField(null=True, blank=True, max_length=1000)
@@ -307,13 +327,11 @@ class Session(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     submit_status = models.BooleanField(default=False)
     flag = models.BooleanField(default=False)
+    urgent_check = models.BooleanField(default=False)
 
 
     def __str__(self):
         return f"{self.connection.student.first_name}-{self.connection.mentor.first_name}"
-
-    def get_supports(self):
-        return self.support.all()
 
     def get_absolute_url(self):
         return reverse("mprofiles:session-detail", kwargs={"pk": self.pk})
@@ -332,6 +350,7 @@ class Question(models.Model):
     status = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    source = models.CharField(null=True, blank=True, max_length=200)
 
     def __str__(self):
         return self.question

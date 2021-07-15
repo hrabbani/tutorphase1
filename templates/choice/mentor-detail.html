@@ -23,8 +23,6 @@
                                 <div style="font-size:25px; font-weight:bold" class="profile-name">
                                     {{mentor.first_name}}
                                     {{mentor.last_name}}</div>
-                                <div style="font-size:15px" class="profile-name">
-                                    Preferred Location: {{mentor.prefer_location}}</div>
                             </div>
                             <div class="col-6">
                             </div>
@@ -50,7 +48,7 @@
                     <th scope="col">Student</th>
                     <th scope="col">Tutor</th>
                     <th scope="col">Length</th>
-                    <th scope="col">Subjets</th>
+                    <th scope="col">Subjects</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -143,18 +141,40 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Prefer Grade</h5>
+                <h5 class="card-title">Phone</h5>
+                <p class="card-text">{{mentor.phone}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Mailing Address:</h5>
+                <p class="card-text">{{mentor.address}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Preferred Grade Level:</h5>
                 <p class="card-text">{{mentor.prefer_grade}}</p>
             </div>
         </div>
     </div>
 </div>
 
+
+
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Prefer Gender</h5>
+                <h5 class="card-title">Preferred Gender</h5>
                 <p class="card-text">{{mentor.prefer_gender}}</p>
             </div>
         </div>
@@ -162,18 +182,23 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Prefer Location</h5>
-                <p class="card-text">{{mentor.prefer_location}}</p>
+                <h5 class="card-title">Preferred Location</h5>
+                {% for location in mentor.get_locations %}
+                <li>{{location}}</li>
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
 
+
+
+
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Mentor Last Year</h5>
+                <h5 class="card-title">Were you a mentor last year?</h5>
                 <p class="card-text">{{mentor.mentor_last_year}}</p>
             </div>
         </div>
@@ -181,8 +206,10 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Language</h5>
-                <p class="card-text">{{mentor.language}}</p>
+                <h5 class="card-title">Languages spoken:</h5>
+                {% for language in mentor.get_languages %}
+                <li>{{language}}</li>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -193,20 +220,62 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Experience</h5>
-                <p class="card-text">{{mentor.experience}}</p>
+                <h5 class="card-title">What is your ethnic/racial background?</h5>
+                <p class="card-text">{{mentor.ethnic}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Familiar</h5>
-                <p class="card-text">{{mentor.familiar}}</p>
+                <h5 class="card-title">Do you have any previous experience mentoring?</h5>
+                <p class="card-text">{{mentor.experience}}</p>
             </div>
         </div>
     </div>
 </div>
 
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Are you familiar with the application process? Explain:</h5>
+                <p class="card-text">{{mentor.familiar}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Share a bit about yourself and your family (where you are from, school attended, what you do for work, favorite hobbies, etc):</h5>
+                <p class="card-text">{{mentor.share}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What are your hobbies?</h5>
+                <p class="card-text">{{mentor.hobby}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us? (If not, please leave blank)</h5>
+                <p class="card-text">{{mentor.question}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

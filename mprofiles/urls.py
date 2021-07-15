@@ -31,6 +31,12 @@ from .views import (
     MentorNoteUpdateView,
     StudentNoteUpdateView,
     ConnectionNoteUpdateView,
+    search_connection,
+    export_mentoring_mentor_list,
+    export_mentoring_student_list,
+    export_mentoring_connection_list,
+    export_mentoring_session_list,
+    search_question,
    
 )
 
@@ -68,6 +74,12 @@ urlpatterns = [
     path('<slug>/mentor-note-update-profile', MentorNoteUpdateView.as_view(), name='mentor-note-update-profile'),
     path('<slug>/student-note-update-profile', StudentNoteUpdateView.as_view(), name='student-note-update-profile'),
     path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
+    path('search-connection/', search_connection, name='search-connection'),
+    path('export-mentoring-mentor-list/', export_mentoring_mentor_list, name='export-mentoring-mentor-list'),
+    path('export-mentoring-student-list/', export_mentoring_student_list, name='export-mentoring-student-list'),
+    path('export-mentoring-connection-list/', export_mentoring_connection_list, name='export-mentoring-connection-list'),
+    path('export-mentoring-ession-list/', export_mentoring_session_list, name='export-mentoring-session-list'),
+    path('search-question/', search_question, name='search-question'),
 
 
     

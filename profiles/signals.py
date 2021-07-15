@@ -53,9 +53,9 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
             html_content = render_to_string("tutor/disconnection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Disconnection Email",
+                "Peninsula Bridge: Tutoring Disconnection",
                 text_context,
-                'Student-Tutor Program',
+                'Tutoring Program',
                 email_list,
             )
 
@@ -131,5 +131,44 @@ def post_save_tutor_form_academic_advisor_email_registration(sender, instance, c
             email = Academicadvisor.objects.get(name=instance.academic_advisor).email
             instance.academic_advisor_email = email
             instance.save()
+        else:
+            pass
+
+
+
+@receiver(post_save, sender=Session)
+def post_save_urgent_check_session(sender, instance, created, **kwargs):
+
+    if not created:
+
+        session_generated_pk = str(instance.pk)
+
+        email_list = []
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+        email_list.extend(program_manager_email_list)
+
+
+        tutor_first_name = instance.connection.tutor.first_name
+        tutor_last_name = instance.connection.tutor.last_name
+        date = instance.updated
+        tutor_email = instance.connection.tutor.email
+        question = instance.question
+        link = "http://127.0.0.1:8000/tutoring/" + session_generated_pk + "/session/"
+
+        if instance.urgent_check == True:
+
+            html_content = render_to_string("tutor/session-urgent-check-email.html", {'tutor_first_name': tutor_first_name, 'tutor_last_name': tutor_last_name,
+             'date': date, 'tutor_email': tutor_email, 'question': question, 'link': link})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "[URGENT] Support Needed - Tutoring",
+                text_context,
+                'Tutoring Program',
+                email_list,
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
         else:
             pass

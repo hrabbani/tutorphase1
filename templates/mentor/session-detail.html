@@ -10,7 +10,21 @@
 
 <h4>Tutor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
 <h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
-</br>
+
+<div>
+    <form action="{% url 'mprofiles:flag-session' %}" method="POST" class='like-form' id='{{session.id}}'>
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value={{session.id}}>
+        <button type="submit" class="like_btn btn btn-light like-btn{{session.id}}">
+            {% if session.flag == False %}
+            <i class="fa fa-flag thumb{{session.id}}" style="color:black"></i>
+            {% else %}
+            <i class="fa fa-flag thumb{{session.id}}" style="color:red"></i>
+            {% endif %}
+        </button>
+    </form>
+</div>
+
 
 
 
@@ -20,7 +34,7 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">How many times have you met this month?</h5>
+                <h5 class="card-title">How many times have you met this month in person?</h5>
                 <p class="card-text">{{session.meet}}
                 </p>
             </div>
@@ -29,15 +43,26 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">- How many total hours of mentoring did you do?</h5>
-                <p class="card-text">{{session.length}} hrs</p>
+                <h5 class="card-title">Have you had any dialogue with your
+                        mentee via phone or text?</h5>
+                <p class="card-text">{{session.dialogue}}
+                </p>
             </div>
         </div>
     </div>
+
 </div>
 
 
 <div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">How many total hours of mentoring did you do?</h5>
+                <p class="card-text">{{session.length}} hrs</p>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
@@ -46,35 +71,70 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">- List one way you were helpful to your mentee.</h5>
-                <p class="card-text">{{session.help}}</p>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="row">
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">List one thing you would change to make your future sessions better.</h5>
-                <p class="card-text">{{session.change}}</p>
+                <h5 class="card-title">List one way you were helpful to your mentee.</h5>
+                <p class="card-text">{{session.help}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Please rank your student’s engagement on a scale of 1-5.</h5>
-                <p class="card-text">{{session.rate}}</p>
+                <h5 class="card-title">List one thing you would change to make your future sessions
+                        better.</h5>
+                <p class="card-text">{{session.change}}</p>
             </div>
         </div>
     </div>
 </div>
 
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">List one way you were helpful to your mentee.</h5>
+                <p class="card-text">{{session.help}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">List one thing you would change to make your future sessions
+                        better.</h5>
+                <p class="card-text">{{session.change}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Please rank your mentee’s engagement on a scale of 1-5. (1 =
+                        Very unengaged, 5 = very engaged)</h5>
+                <p class="card-text">{{session.rate}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">On a scale of 1-5, how meaningful were your sessions? (1 = Not
+                        meaningful, 5 = very meaningful)</h5>
+                <p class="card-text">{{session.meaningful}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="row">
@@ -91,8 +151,8 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Do you have any questions or comments for us?</h5>
-                <p class="card-text">{{session.question}}</p>
+                <h5 class="card-title">If you selected “Other” in the field above, please elaborate</h5>
+                <p class="card-text">{{session.elaborate}}</p>
             </div>
         </div>
     </div>
@@ -103,12 +163,20 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Are you going to continue mentoring this student?</h5>
-                <p class="card-text">{{session.cont}}</p>
+                <h5 class="card-title">If the support you need requires urgent attention, please give more
+                        details and Komal will reach out to you shortly.</h5>
+                <p class="card-text">{{session.urgent}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us? (If not, please
+                        leave blank)</h5>
+                <p class="card-text">{{session.question}}</p>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -116,3 +184,45 @@
 </br>
 
 {% endblock content %}
+
+
+
+
+{% block scripts %}
+<script>
+
+    
+    $('.like-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        const thumbcolor = $(`.thumb${post_id}`).css('color')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+
+                if (thumbcolor === 'rgb(0, 0, 0)') {
+                    $(`.thumb${post_id}`).css('color', 'red');
+                } else {
+                    $(`.thumb${post_id}`).css('color', 'black');
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
+
+
+</script>
+{% endblock scripts %}

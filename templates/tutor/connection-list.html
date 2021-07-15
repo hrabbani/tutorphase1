@@ -26,6 +26,10 @@
                 <input type="hidden" name="status" value='inactive'>
                 <button type="submit" class="btn btn-outline-dark">Inactive</button>
             </form>
+            <form action="{% url 'profiles:export-tutoring-connection-list' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-dark">Download All Data</button>
+            </form>
         </div>
     </div>
 </div>

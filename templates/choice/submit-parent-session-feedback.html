@@ -1,45 +1,52 @@
-{% extends 'cbase.html' %}
+{% extends 'form-base.html' %}
 {% load static %}
-{% block stylesheet %}{% static '/css/update.css' %}{% endblock %}
-{% block title %}Submit Parent Session Feedback{% endblock title %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Submit Session Feedback{% endblock title %}
 
 {% block content %}
 
-<h3>Submit Session Feedback</h3>
-</br>
-<h4>Student: {{parentsession.connection.student.first_name}} {{parentsession.connection.student.last_name}}</h4>
-<h4>Mentor: {{parentsession.connection.mentor.first_name}} {{parentsession.connection.mentor.last_name}}</h4>
-</br>
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-6">
 
-<div class=#>
-    <form action="" method="POST" class=# enctype="multipart/form-data">
-        {% csrf_token %}
+                <h3>Submit Session Feedback</h3>
+                </br>
+                <h4>Student: {{parentsession.connection.student.first_name}}
+                    {{parentsession.connection.student.last_name}}</h4>
+                <h4>Mentor: {{parentsession.connection.mentor.first_name}} {{parentsession.connection.mentor.last_name}}
+                </h4>
+                </br>
+
+                <form action="" method="POST" class=# enctype="multipart/form-data">
+                    {% csrf_token %}
 
 
-        <label for="id_meet">How many times have you and the mentor met in the past 2 weeks?</label>
-        {{form.meet}}
+                    <label for="id_meet">How many times have you and the mentor met in the past 2 weeks?</label>
+                    {{form.meet}}
 
-        <label for="id_length">How many total hours of mentoring did you do?</label>
-        {{form.length}}
+                    <label for="id_length">How many total hours of mentoring did you do?</label>
+                    {{form.length}}
 
-        <label for="id_topic">What topics have you covered? (Hold the Control or Command key to
-select multiple options)</label>
-        {{form.topic}}
+                    <label for="id_topic">What topics have you covered? (Hold the Control or Command key to
+                        select multiple options)</label>
+                    {{form.topic}}
 
-        <label for="id_share">Share how your sessions have been going with the student.</label>
-        {{form.share}}
+                    <label for="id_share">Share how your sessions have been going with the student.</label>
+                    {{form.share}}
 
-        <label for="id_change">What would you change to make your future sessions better?</label>
-        {{form.change}}
+                    <label for="id_change">What would you change to make your future sessions better?</label>
+                    {{form.change}}
 
-        <label for="id_question">Can we support you with anything? (If not, please leave blank)</label>
-        {{form.question}}
+                    <label for="id_question">Can we support you with anything? (If not, please leave blank)</label>
+                    {{form.question}}
 
-       
-        </br>
-        <button type='submit' class="btn btn-success">Update</button>
-    </form>
+
+                    </br>
+                    <button type='submit' class="btn btn-success">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
-
-

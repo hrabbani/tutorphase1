@@ -28,6 +28,8 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.core.mail import send_mail
 from datetime import datetime
+import csv
+
 
 
 
@@ -404,11 +406,11 @@ def generate_session_form(request):
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
         session_generated_pk = str(session_generated.pk)
-        z.append("http://127.0.0.1:8000/cprofiles/" + session_generated_pk + "/submit-feedback/")
+        z.append("http://127.0.0.1:8000/choice/" + session_generated_pk + "/submit-feedback/")
 
         email = x.mentor.email
 
-        content = "http://127.0.0.1:8000/cprofiles/" + session_generated_pk + "/submit-feedback/"
+        content = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/submit-feedback/"
 
         send_mail('Please fill in the Session Feedback Form',
         content,
@@ -422,11 +424,11 @@ def generate_session_form(request):
     for y in active_connection:
         parentsession_generated = Parentsession.objects.create(connection=y)
         parentsession_generated_pk = str(parentsession_generated.pk)
-        g.append("http://127.0.0.1:8000/cprofiles/" + parentsession_generated_pk + "/submit-parent-feedback/")
+        g.append("http://127.0.0.1:8000/choice/" + parentsession_generated_pk + "/submit-parent-feedback/")
 
         email = x.student.parent1_email
 
-        content = "http://127.0.0.1:8000/cprofiles/" + parentsession_generated_pk + "/submit-parent-feedback/"
+        content = "http://127.0.0.1:8000/choice/" + parentsession_generated_pk + "/submit-parent-feedback/"
 
         send_mail('Please fill in the Parent Session Feedback Form',
         content,
@@ -1023,3 +1025,104 @@ class ParentSessionUpdateView(UpdateView):
         self.object.submit_status = True
         self.object = form.save()
         return super().form_valid(form)
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def search_connection(request):
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        qs = Connection.objects.all().order_by('-created').filter(status=status)
+
+    context = {'qs':qs}
+
+    return render(request, 'choice/connection-list-search.html', context)
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
+def export_choice_mentor_list(request):
+
+    mentors = Mentor.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=choice_mentor_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'first_name', 'last_name', 'email', 'phone', 'address', 'avatar', 'prefer_grade', 'prefer_gender', 'prefer_location', 'mentor_last_year', 'language', 
+    'experience', 'familiar', 'share', 'hobby', 'question', 'student', 'date_added', 'flag'])
+    
+    for q in mentors:
+        writer.writerow([q.id, q.first_name, q.last_name, q.email, q.phone, q.address, q.avatar, q.prefer_grade, q.prefer_gender, 
+        '|'.join(c.name for c in q.prefer_location.all()), q.mentor_last_year, '|'.join(c.name for c in q.language.all()),
+        q.experience, q.familiar, q.share, q.hobby, q.question, '|'.join(c.first_name + ' ' + c.last_name for c in q.friends.all()), 
+        q.created, q.flag])
+    return response
+
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
+def export_choice_student_list(request):
+
+    students = Student.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=choice_student_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'first_name', 'last_name', 'email', 'gender', 'grade', 'school', 'language_preference', 
+    'parent1_first_name', 'parent1_last_name', 'parent1_phone', 'parent1_email', 'activity', 'ind_scl', 
+    'dont_know', 'proud', 'learn', 'happy', 'hobby', 'int_ind_school', 'look_ind_school', 'strength', 
+    'obstacle', 'child_strength', 'social_strength', 'interview_language', 'question', 'mentor', 'date_added', 'flag'])
+    
+    for q in students:
+        writer.writerow([q.id, q.first_name, q.last_name, q.email, q.gender, q.grade, q.school, q.language_preference, 
+    q.parent1_first_name, q.parent1_last_name, q.parent1_phone, q.parent1_email, q.activity, q.ind_scl, 
+    q.dont_know, q.proud, q.learn, q.happy, q.hobby, q.int_ind_school, q.look_ind_school, q.strength, 
+    q.obstacle, '|'.join(c.name for c in q.child_strength.all()), '|'.join(c.name for c in q.social_strength.all()), q.interview_language, q.question,
+    '|'.join(c.first_name + ' ' + c.last_name for c in q.get_friends()), q.created, q.flag])
+    return response
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
+def export_choice_connection_list(request):
+
+    connections = Connection.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=choice_connection_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'created', 'student', 'mentor', 'status', 'updated', 'flag', 'progress'])
+    
+    for q in connections:
+        writer.writerow([q.id, q.created, q.student.first_name + ' ' + q.student.last_name,
+        q.mentor.first_name + ' ' + q.mentor.last_name, q.status, q.updated, q.flag, q.progress])
+        
+    return response
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
+def export_choice_session_list(request):
+
+    sessions = Session.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=choice_session_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'connection', 'meet', 'length', 'topic', 'updated', 'created', 'feedback', 'change', 'support', 
+    'elaborate', 'rate', 'productivity', 'question', 'submit_status', 'step', 'flag' ])
+    
+    for q in sessions:
+        writer.writerow([q.id, q.connection, q.meet, q.length, '|'.join(c.name for c in q.topic.all()), q.updated,
+        q.created, q.feedback, q.change, '|'.join(c.name for c in q.support.all()), q.elaborate, 
+        q.rate, q.productivity, q.question, q.submit_status, q.step, q.flag])
+        
+    return response
+
+
+

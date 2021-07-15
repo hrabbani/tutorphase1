@@ -74,6 +74,16 @@ GRADE_CHOICES = (
     ('Not in grade school', 'Not in grade school'),
 )
 
+
+ETHNIC_CHOICES = (
+    ('African American or Black', 'African American or Black'),
+    ('American Indian or Alaskan Native', 'American Indian or Alaskan Native'),
+    ('Asian American', 'Asian American'),
+    ('Caucasian or White', 'Caucasian or White'),
+    ('Hispanic or Latino', 'Hispanic or Latino'),
+    ('Native Hawaiian or Other Pacific Islander', 'Native Hawaiian or Other Pacific Islander'),
+    ('I prefer not to say', 'I prefer not to say')
+)
         
 class Profile(models.Model):
     role = models.CharField(max_length=200, choices=ROLE_CHOICES_PROFILE, null=True)
@@ -105,8 +115,9 @@ class Profile(models.Model):
     optional_school_loop_profile_link = models.TextField(null=True, blank=True, max_length=500)
     optional_school_loop_username = models.TextField(null=True, blank=True, max_length=500)
     optional_school_loop_password = models.TextField(null=True, blank=True, max_length=500)
-    parent_languages = models.ManyToManyField(Parentlanguage, blank=True, related_name='subjects')
+    parent_languages = models.CharField(null=True, blank=True, max_length=200, choices=LANGUAGE_CHOICES)
     age = models.IntegerField(null=True, blank=True)
+    ethnic = models.CharField(null=True, blank=True, max_length=200, choices=ETHNIC_CHOICES)
 
 
     
@@ -124,6 +135,9 @@ class Profile(models.Model):
 
     def get_subjects(self):
         return self.subjects.all()
+
+    def get_languages(self):
+        return self.languages.all()
 
     def get_tutor_connections(self):
         return self.tutor.filter()
@@ -217,7 +231,7 @@ class Session(models.Model):
     meet = models.IntegerField(null=True, blank=True)
     length = models.FloatField(null=True, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name='sessionsubjects')
-    updated = models.DateTimeField(null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     help = models.TextField(null=True, blank=True, max_length=1000)
     support = models.ManyToManyField(Support, blank=True, related_name='supports')
@@ -229,7 +243,7 @@ class Session(models.Model):
     submit_status = models.BooleanField(default=False)
     flag = models.BooleanField(default=False)
     reason_disconnect= models.TextField(null=True, blank=True, max_length=1000)
-
+    urgent_check = models.BooleanField(default=False)
 
 
     def __str__(self):

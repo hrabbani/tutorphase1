@@ -33,7 +33,12 @@ from .views import (
     ParentSessionListView,
     flag_unflag_parent_session,
     ParentSessionDetailView,
-    ParentSessionUpdateView
+    ParentSessionUpdateView,
+    search_connection,
+    export_choice_mentor_list,
+    export_choice_student_list,
+    export_choice_connection_list,
+    export_choice_session_list,
 
    
 )
@@ -76,6 +81,12 @@ urlpatterns = [
     path('flag-parent-session/', flag_unflag_parent_session, name='flag-parent-session'),
     path('<pk>/parent-session/', ParentSessionDetailView.as_view(), name='parent-session-detail'),
     path('<pk>/submit-parent-feedback/', ParentSessionUpdateView.as_view(), name='submit-parent-feedback'),
+    path('search-connection/', search_connection, name='search-connection'),
+    path('export-choice-mentor-list/', export_choice_mentor_list, name='export-choice-mentor-list'),
+    path('export-choice-student-list/', export_choice_student_list, name='export-choice-student-list'),
+    path('export-choice-connection-list/', export_choice_connection_list, name='export-choice-connection-list'),
+    path('export-choice-session-list/', export_choice_session_list, name='export-choice-session-list'),
+
 
 
 

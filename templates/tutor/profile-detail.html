@@ -51,7 +51,7 @@
                     <th scope="col">Student</th>
                     <th scope="col">Tutor</th>
                     <th scope="col">Length</th>
-                    <th scope="col">Subjets</th>
+                    <th scope="col">Subjects</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -156,16 +156,16 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Grade</h5>
-                <p class="card-text">{{profile.grade}}</p>
+                <h5 class="card-title">Email</h5>
+                <p class="card-text">{{profile.email}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Email</h5>
-                <p class="card-text">{{profile.email}}</p>
+                <h5 class="card-title">Phone Number</h5>
+                <p class="card-text">{{profile.phone}}</p>
             </div>
         </div>
     </div>
@@ -175,9 +175,9 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Subjets</h5>
+                <h5 class="card-title">What subjects can you tutor in? </h5>
                 {% for subject in profile.get_subjects %}
-                {{subject}}
+                <li>{{subject}}</li>
                 {% endfor %}
             </div>
         </div>
@@ -185,8 +185,10 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">School</h5>
-                <p class="card-text">{{profile.school}}</p>
+                <h5 class="card-title">What languages do you speak? </h5>
+                {% for language in profile.get_languages %}
+                <li>{{language}}</li>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -196,21 +198,40 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Language</h5>
-                <p class="card-text">{{profile.language}}</p>
+                <h5 class="card-title">What is your ethnic/racial background?</h5>
+                <p class="card-text">{{profile.ethnic}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Student Capacity</h5>
-                <p class="card-text">{{profile.student_capacity}}</p>
+                <h5 class="card-title">Grade:</h5>
+                <p class="card-text">{{profile.grade}}</p>
             </div>
         </div>
     </div>
 </div>
 
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What is the maximum number of students you are willing to tutor?</h5>
+                <p class="card-text">{{profile.student_capacity}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions for us? </h5>
+                <p class="card-text">{{profile.question}}</p>
+            </div>
+        </div>
+    </div>   
+</div>
 
 
 
@@ -247,25 +268,6 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Grade</h5>
-                <p class="card-text">{{profile.grade}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Academic Advisor</h5>
-                <p class="card-text">{{profile.academic_advisor}}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
                 <h5 class="card-title">Email</h5>
                 <p class="card-text">{{profile.email}}</p>
             </div>
@@ -274,10 +276,8 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Subjets</h5>
-                {% for subject in profile.get_subjects %}
-                {{subject}}
-                {% endfor %}
+                <h5 class="card-title">Grade</h5>
+                <p class="card-text">{{profile.grade}}</p>
             </div>
         </div>
     </div>
@@ -287,7 +287,50 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 First Name</h5>
+                <h5 class="card-title">Academic advisor:</h5>
+                <p class="card-text">{{profile.academic_advisor}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Academic Advisor Email:</h5>
+                <p class="card-text">{{profile.academic_advisor_email}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What subjects would you like tutoring in?</h5>
+                {% for subject in profile.get_subjects %}
+                <li>{{subject}}</li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">School:</h5>
+                <p class="card-text">{{profile.school}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent/Guardian First Name:</h5>
                 <p class="card-text">{{profile.parent1_first_name}}</p>
             </div>
         </div>
@@ -295,33 +338,99 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 Last Name</h5>
+                <h5 class="card-title">Parent/Guardian Last Name:</h5>
                 <p class="card-text">{{profile.parent1_last_name}}</p>
             </div>
         </div>
     </div>
 </div>
 
+
+
+
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 Phone</h5>
-                <p class="card-text">{{profile.parent1_phone}}</p>
+                <h5 class="card-title">Parent/Guardian Email:</h5>
+                <p class="card-text">{{profile.parent1_email}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 Email</h5>
-                <p class="card-text">{{profile.parent1_email}}</p>
+                <h5 class="card-title">Parent/Guardian Phone Number:</h5>
+                <p class="card-text">{{profile.parent1_phone}}</p>
             </div>
         </div>
     </div>
 </div>
 
 
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent Language Preferences:</h5>
+                <p class="card-text">{{profile.parent_languages}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Are you comfortable with us sharing your phone number or your student's phone number with the tutor?</h5>
+                <p class="card-text">{% if profile.comfortable_share_phone == True %} Yes {% else %} No {% endif %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you give permission for us to share your student's grades with their tutor?</h5>
+                <p class="card-text">{% if profile.permission_share_grade == True %} Yes {% else %} No {% endif %}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">(Optional) School Profile Profile Link:</h5>
+                <p class="card-text">{{profile.optional_school_loop_profile_link}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">(Optional) School Profile Username:</h5>
+                <p class="card-text">{{profile.optional_school_loop_username}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">(Optional) School Profile Password:</h5>
+                <p class="card-text">{{profile.optional_school_loop_password}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 

@@ -23,8 +23,6 @@
                                 <div style="font-size:25px; font-weight:bold" class="profile-name">
                                     {{student.first_name}}
                                     {{student.last_name}}</div>
-                                <div style="font-size:15px" class="profile-name">
-                                    Address: {{student.address}}</div>
                             </div>
                             <div class="col-6">
                             </div>
@@ -137,11 +135,22 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
+                <h5 class="card-title">Email</h5>
+                <p class="card-text">{{student.email}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
                 <h5 class="card-title">Gender</h5>
                 <p class="card-text">{{student.gender}}</p>
             </div>
         </div>
     </div>
+</div>
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -150,9 +159,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -161,126 +167,95 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Address</h5>
-                <p class="card-text">{{student.address}}</p>
-            </div>
-        </div>
-    </div>
 </div>
+
 
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 First Name</h5>
+                <h5 class="card-title">Student Language Preference:</h5>
+                <p class="card-text">{{student.language_preference }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Parent First Name:</h5>
                 <p class="card-text">{{student.parent1_first_name}}</p>
             </div>
         </div>
     </div>
+</div>
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 Last Name</h5>
+                <h5 class="card-title">Parent Last Name:</h5>
                 <p class="card-text">{{student.parent1_last_name}}</p>
             </div>
         </div>
     </div>
-</div>
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 Phone</h5>
+                <h5 class="card-title">Parent Phone Number:</h5>
                 <p class="card-text">{{student.parent1_phone}}</p>
             </div>
         </div>
     </div>
+</div>
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent1 Email</h5>
+                <h5 class="card-title">Parent Email</h5>
                 <p class="card-text">{{student.parent1_email}}</p>
             </div>
         </div>
     </div>
+    <div class="col-sm-6">
+    </div>
 </div>
+
+<h5>Student Questions</h5>
 
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent2 First Name</h5>
-                <p class="card-text">{{student.parent2_first_name}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Parent2 Last Name</h5>
-                <p class="card-text">{{student.parent2_last_name}}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Parent2 Phone</h5>
-                <p class="card-text">{{student.parent2_phone}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Parent2 Email</h5>
-                <p class="card-text">{{student.parent2_email}}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Parent Language</h5>
-                <p class="card-text">{{student.parent_language}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Activity</h5>
+                <h5 class="card-title">What extracurricular activities and sports do you participate in?</h5>
                 <p class="card-text">{{student.activity}}</p>
             </div>
         </div>
     </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Why are you interested in applying to an independent school?</h5>
+                <p class="card-text">{{student.ind_scl}}</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Reason</h5>
-                <p class="card-text">{{student.reason}}</p>
+                <h5 class="card-title">One thing most people don’t know about me is…</h5>
+                <p class="card-text">{{student.dont_know}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Prompt</h5>
-                <p class="card-text">{{student.prompt}}</p>
+                <h5 class="card-title">I am most proud of…</h5>
+                <p class="card-text">{{student.proud}}</p>
             </div>
         </div>
     </div>
@@ -291,11 +266,111 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Parent Response</h5>
-                <p class="card-text">{{student.parent_response}}</p>
+                <h5 class="card-title">Something I want to learn is…</h5>
+                <p class="card-text">{{student.learn}}</p>
             </div>
         </div>
     </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">I am the happiest when…</h5>
+                <p class="card-text">{{student.happy}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What are your hobbies?</h5>
+                <p class="card-text">{{student.hobby}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+    </div>
+</div>
+
+<h5>Parent Questions</h5>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Why are you interested in an independent or parochial school for your
+                        child?</h5>
+                <p class="card-text">{{student.int_ind_school}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What are you looking for in an independent or parochial school?
+                        Share
+                        which elements are the most important to you and your student (sports,
+                        clubs, teachers)?</h5>
+                <p class="card-text">{{student.look_ind_school}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What are your students' strengths and areas for growth (both academic
+                        and personal)?</h5>
+                <p class="card-text">{{student.strength}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Describe an obstacle the applicant has faced and how you helped him/her
+                        navigate and work through the challenge?</h5>
+                <p class="card-text">{{student.obstacle}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Check the top THREE phrases that describe your child’s strengths in
+                        your
+                        opinion. (Hold the Control or Command key to select multiple)</h5>
+                {% for strength in student.get_child_strengths %}
+                <li>{{strength}}</li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Check the top THREE phrases that best describe your child’s social
+                        strengths in your opinion. (Hold the Control or Command key to select
+                        multiple options)</h5>
+                {% for strength in student.get_social_strengths %}
+                <li>{{strength}}</li>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -304,8 +379,16 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us? (If not, please leave
+                        blank)</h5>
+                <p class="card-text">{{student.question}}</p>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 </br>
 </br>

@@ -17,32 +17,28 @@
     <div class="row">
 
         <div class="col-sm">
-            <p>Email:<p>
-                    <p>{{profile.email}}</p>
-        </div>
-
-
-        <div class="col-sm">
             <p>Grade:<p>
-                    <p>{{profile.grade}}</p>
+            <p>{{profile.grade}}</p>
         </div>
 
 
         <div class="col-sm">
             <p>Subjects:<p>
-                    {% for subject in profile.get_subjects %}
-                    <li>{{subject}}</li>
-                    {% endfor %}
+            {% for subject in profile.get_subjects %}
+            <li>{{subject}}</li>
+            {% endfor %}
+        </div>
+
+
+        <div class="col-sm">
+            <p>Parent Language:<p>
+            <p>{{profile.parent_languages}}</p>
         </div>
 
 
         <div class="col-sm">
             <p>School:<p>
-                    <p>{{profile.school}}</p>
-        </div>
-        <div class="col-sm">
-            <p>Academic Advisor:<p>
-                    <p>{{profile.academic_advisor}}</p>
+            <p>{{profile.school}}</p>
         </div>
     </div>
 </div>
@@ -58,7 +54,6 @@
                 <th scope="col">Name</th>
                 <th scope="col">Grade</th>
                 <th scope="col">Subjects</th>
-                <th scope="col">School</th>
                 <th scope="col">Student</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -72,7 +67,6 @@
                 <th>Name</th>
                 <th>Grade</th>
                 <th>Subjects</th>
-                <th>School</th>
                 <th>Student</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -83,11 +77,10 @@
 
             {% for tutor in tutors %}
             <tr>
-                <td>{{tutor.first_name}}</td>
+                <td>{{tutor.first_name}} {{tutor.last_name}}</td>
                 <td>{{tutor.grade}}</td>
 
                 <td>{% for subject in tutor.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
-                <td>{{tutor.school}}</td>
                 <td>{% for friend in tutor.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
                     {% for friend in tutor.get_friends %}

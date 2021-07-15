@@ -10,9 +10,20 @@
 
 <h4>Tutor: {{session.connection.tutor.first_name}} {{session.connection.tutor.last_name}}</h4>
 <h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
-</br>
 
-
+<div>
+    <form action="{% url 'profiles:flag-session' %}" method="POST" class='like-form' id='{{session.id}}'>
+        {% csrf_token %}
+        <input type="hidden" name="post_id" value={{session.id}}>
+        <button type="submit" class="like_btn btn btn-light like-btn{{session.id}}">
+            {% if session.flag == False %}
+            <i class="fa fa-flag thumb{{session.id}}" style="color:black"></i>
+            {% else %}
+            <i class="fa fa-flag thumb{{session.id}}" style="color:red"></i>
+            {% endif %}
+        </button>
+    </form>
+</div>
 
 
 
@@ -49,26 +60,34 @@
             </div>
         </div>
     </div>
-
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Please rate the productivity of your session from 1-5 (1 = not productive, 5 = very productive):</h5>
+                <p class="card-text">{{session.productivity}}</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Please eleborate your response.</h5>
-                <p class="card-text">{{session.elaborate}}</p>
+                <h5 class="card-title">Please rate the level of engagement of your student from 1-5 (1 = very low, 5 = very high)</h5>
+                <p class="card-text">{{session.rate}}</p>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Change:</h5>
-                <p class="card-text">{{session.change}}</p>
+                <h5 class="card-title">List one way you were helpful to your student.</h5>
+                <p class="card-text">{{session.help}}</p>
             </div>
         </div>
     </div>
+
 </div>
 
 
@@ -77,7 +96,7 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Support</h5>
+                <h5 class="card-title">Can we support you with any of the following:</h5>
                 {% for support in session.get_supports %}
                 <p class="card-text">{{support}}</p>
                 {% endfor %}
@@ -87,7 +106,7 @@
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Other Support</h5>
+                <h5 class="card-title">If you selected “Other” in the above question, please elaborate.</h5>
                 <p class="card-text">{{session.othersupport}}</p>
             </div>
         </div>
@@ -95,48 +114,86 @@
 </div>
 
 
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">On a scale of 1-5, how would you rate the student’s level of engagement (1 = Very
-                    unengaged, 5 = very engaged)</h5>
-                <p class="card-text">{{session.rate}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Question:</h5>
-                <p class="card-text">{{session.question}}</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Would you like to disconnet from this student?</h5>
+                <h5 class="card-title">Are you and this student going to continue working together?</h5>
                 <p class="card-text">{{session.disconnect}}</p>
             </div>
         </div>
     </div>
-
-    {% if session.disconnect == 'yes'%}
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Reason to Disconnect</h5>
+                <h5 class="card-title">Why have you and your student decided to stop working together?</h5>
                 <p class="card-text">{{session.reason_disconnect}}</p>
             </div>
         </div>
     </div>
-    {% endif %}
 </div>
 
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Do you have any questions or comments for us, or do you need any support from our team? (If not, please leave blank)</h5>
+                <p class="card-text">{{session.question}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Does the support you need require urgent attention? If so, please check the box below and we will reach out to you shortly.</h5>
+                <p class="card-text">{{session.urgent_check}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 </br>
 
 {% endblock content %}
+
+
+
+{% block scripts %}
+<script>
+
+    
+    $('.like-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        const thumbcolor = $(`.thumb${post_id}`).css('color')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+
+                if (thumbcolor === 'rgb(0, 0, 0)') {
+                    $(`.thumb${post_id}`).css('color', 'red');
+                } else {
+                    $(`.thumb${post_id}`).css('color', 'black');
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
+
+
+</script>
+{% endblock scripts %}

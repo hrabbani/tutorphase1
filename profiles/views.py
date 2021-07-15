@@ -28,6 +28,7 @@ from django.utils.timezone import now
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import csv
 
 
 
@@ -180,13 +181,15 @@ def tutor_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Connection Established",
+                "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Student-Tutor Program',
+                'Tutoring Program',
                 email_list,
             )
 
@@ -201,13 +204,15 @@ def tutor_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Connection Established",
+                "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Student-Tutor Program',
+                'Tutoring Program',
                 email_list,
             )
 
@@ -244,13 +249,15 @@ def student_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Connection Established",
+                "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Student-Tutor Program',
+                'Tutoring Program',
                 email_list,
             )
 
@@ -266,13 +273,15 @@ def student_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("tutor/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Connection Established",
+                "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Student-Tutor Program',
+                'Tutoring Program',
                 email_list,
             )
 
@@ -348,9 +357,9 @@ def remove_connection(request):
         html_content = render_to_string("tutor/disconnection-email.html", {'student': student, 'tutor': tutor })
         text_context = strip_tags(html_content)
         email = EmailMultiAlternatives(
-            "Disconnection Email",
+            "Peninsula Bridge: Tutoring Disconnection",
             text_context,
-            'Student-Tutor Program',
+            'Tutoring Program',
             email_list,
         )
 
@@ -398,19 +407,19 @@ def generate_session_form(request):
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
         session_generated_pk = str(session_generated.pk)
-        z.append("http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/")
+        z.append("http://127.0.0.1:8000/tutoring/" + session_generated_pk + "/submit-feedback/")
 
         tutor = x.tutor
         email = x.tutor.email
 
-        form_link = "http://127.0.0.1:8000/profiles/" + session_generated_pk + "/submit-feedback/"
+        form_link = "http://127.0.0.1:8000/tutoring/" + session_generated_pk + "/submit-feedback/"
 
         html_content = render_to_string("tutor/weekly-feedback-email.html", {'tutor': tutor, 'form_link': form_link })
         text_context = strip_tags(html_content)
         email = EmailMultiAlternatives(
-            "Weekly feedback Form",
+            "Peninsula Bridge Tutoring: Required Weekly Feedback Form",
             text_context,
-            'Student-Tutor Program',
+            'Tutoring Program',
             [email],
         )
 
@@ -530,6 +539,7 @@ def dashboard(request):
         z.append(list(session.get_subjects().values('name')))   
 
     flat_list = [item for sublist in z for item in sublist]
+
     unique_counts = dict(collections.Counter(e['name'] for e in flat_list))
 
     month = Session.objects.filter(submit_status=True).annotate(month=TruncMonth('updated')).values('month').annotate(total=Count('connection'))
@@ -852,18 +862,20 @@ def check_connection_status(request):
                 x.flag = True
                 x.save()
                 email_list = []
+                email_list.append(x.student.parent1_email)
                 email_list.append(x.student.academic_advisor_email)
                 program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
                 email_list.extend(program_manager_email_list)
                 student = x.student
                 tutor = x.tutor
+                subject = "Inactive Tutoring Connection " + "| " + student.first_name + " and " + tutor.first_name
                
                 html_content = render_to_string("tutor/connection-inactive-email.html", {'student': student, 'tutor': tutor })
                 text_context = strip_tags(html_content)
                 email = EmailMultiAlternatives(
-                    "Connection Becomes Inactive",
+                    subject,
                     text_context,
-                    'Student-Tutor Program',
+                    'Tutoring Program',
                     email_list,
                 )
 
@@ -881,19 +893,21 @@ def check_connection_status(request):
             x.flag = True
             x.save()
             email_list = []
+            email_list.append(x.student.parent1_email)
             email_list.append(x.student.academic_advisor_email)
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
             student = x.student
             tutor = x.tutor
-            
+            subject = "Inactive Tutoring Connection " + "| " + student.first_name + " and " + tutor.first_name
+
             html_content = render_to_string("tutor/connection-inactive-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Connection Becomes Inactive",
+                subject,
                 text_context,
-                'Student-Tutor Program',
+                'Tutoring Program',
                 email_list,
             )
 
@@ -937,6 +951,97 @@ def action_question(request):
 
         return JsonResponse(data, safe=False)
     return redirect('profiles:dashboard')
+
+
+
+# def export_question(request):
+
+#     questions = Question.objects.all()
+#     response = HttpResponse('')
+#     response['Content-Disposition'] = 'attachment; filename=questions.csv'
+#     writer = csv.writer(response)
+#     writer.writerow(['id', 'tutor', 'question', 'action', 'status', 'updated', 'created'])
+#     questions = questions.values_list('id', 'tutor__first_name', 'question', 'action', 'status', 'updated', 'created')
+#     for q in questions:
+#         writer.writerow(q)
+#     return response
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])
+def export_tutoring_tutor_list(request):
+
+    tutors = Profile.objects.filter(role='tutor')
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=tutoring_tutor_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'first_name', 'last_name', 'phone', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question', 'age', 'student', 'date_added', 'flag'])
+    
+    for q in tutors:
+        writer.writerow([q.id, q.first_name, q.last_name, q.phone, q.grade, q.avatar, q.email, '|'.join(c.name for c in q.subjects.all()), '|'.join(c.name for c in q.languages.all()), q.school, q.student_capacity, q.question, q.age, '|'.join(c.first_name + ' ' + c.last_name for c in q.friends.all()), q.created, q.flag])
+    return response
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])
+def export_tutoring_student_list(request):
+
+    students = Profile.objects.filter(role='student')
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=tutoring_student_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'first_name', 'last_name', 'student_grade', 'academic_advisor', 'email', 'subjects', 'school', 'parent1_first_name', 'parent1_last_name', 'parent1_phone',
+         'parent1_email', 'parent_languages', 'comfortable_share_phone', 'permission_share_grade', 'optional_school_loop_profile_link', 'optional_school_loop_username', 'optional_school_loop_password',
+         'tutor', 'date_added', 'flag'])
+    
+    for q in students:
+        writer.writerow([q.id, q.first_name, q.last_name, q.student_grade, q.academic_advisor, q.email, 
+        '|'.join(c.name for c in q.subjects.all()), q.school, q.parent1_first_name, q.parent1_last_name, q.parent1_phone, q.parent1_email,
+        '|'.join(c.name for c in q.parent_languages.all()), q.comfortable_share_phone, q.permission_share_grade, q.optional_school_loop_profile_link, q.optional_school_loop_username,
+        q.optional_school_loop_password, '|'.join(c.first_name + ' ' + c.last_name for c in q.friends.all()), q.created, q.flag ])
+        
+    return response
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])
+def export_tutoring_connection_list(request):
+
+    connections = Connection.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=tutoring_connection_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'created', 'student', 'tutor', 'status', 'updated', 'flag'])
+    
+    for q in connections:
+        writer.writerow([q.id, q.created, q.student.first_name + ' ' + q.student.last_name,
+        q.tutor.first_name + ' ' + q.tutor.last_name, q.status, q.updated, q.flag])
+        
+    return response
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])
+def export_tutoring_session_list(request):
+
+    sessions = Session.objects.all()
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=tutoring_session_list.csv'
+    writer = csv.writer(response)
+    writer.writerow(['id', 'connection', 'meet', 'length', 'subjects', 'updated', 'created', 'help', 'support', 'othersupport', 'rate',
+    'productivity', 'question', 'disconnect', 'submit_status', 'flag', 'reason_disconnect'])
+    
+    for q in sessions:
+        writer.writerow([q.id, q.connection, q.meet, q.length, '|'.join(c.name for c in q.subjects.all()), q.updated,
+        q.created, q.help, '|'.join(c.name for c in q.support.all()), q.othersupport, q.rate, q.productivity,
+        q.question, q.disconnect, q.submit_status, q.flag, q.reason_disconnect])
+        
+    return response
 
 
 

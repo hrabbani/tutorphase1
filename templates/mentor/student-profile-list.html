@@ -5,7 +5,19 @@
 
 {% block content %}
 
-<h3>Students</h3>
+<div class="row">
+    <div class="col-auto mr-auto">
+        <h3>Students</h3>
+    </div>
+    <div class="col-auto">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <form action="{% url 'mprofiles:export-mentoring-student-list' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-dark">Download All Data</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 
@@ -22,6 +34,7 @@
                 <th scope="col">Mentor</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
+                <th scope="col">Date Added</th>
                 <th scope="col">Flag</th>
             </tr>
         </thead>
@@ -37,6 +50,7 @@
                 <th>Mentor</th>
                 <th>Status</th>
                 <th>Action</th>
+                <th>Date Added</th>
                 <th>Flag</th>
             </tr>
         </tfoot>
@@ -62,6 +76,7 @@
 
                 <td><a href="{% url 'mprofiles:student-connect-detail' obj.slug %}"><button type="submit"
                             class="btn btn-info">Connect Mentor</button></a></td>
+                <td>{{ obj.created |date:"d M Y"  }}</td>
                 <td>
                     <form action="{% url 'mprofiles:flag-student' %}" method="POST" class='like-form' id='{{obj.id}}'>
                         {% csrf_token %}

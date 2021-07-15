@@ -73,7 +73,7 @@ class MentorModelForm(forms.ModelForm):
 
     class Meta:
         model = Mentor
-        fields = ('first_name', 'last_name', 'email', 'phone', 'address', 'avatar', 'prefer_grade', 'prefer_gender', 'prefer_location', 'mentor_last_year', 'language', 'experience', 'familiar', 'share', 'hobby', 'question') 
+        fields = ('first_name', 'last_name', 'email', 'phone', 'address', 'avatar', 'prefer_grade', 'prefer_gender', 'prefer_location', 'mentor_last_year', 'language', 'experience', 'familiar', 'share', 'hobby', 'question', 'ethnic') 
 
     def __init__(self, *args, **kwargs):
         super(MentorModelForm, self).__init__(*args, **kwargs)

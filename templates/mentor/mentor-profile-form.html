@@ -31,8 +31,11 @@
                     <label for="id_address">Address:</label>
                     {{form.address}}
 
-                    <label for="id_avatar">Photo of yourself</label>
+                    <label for="id_avatar">Recent photo of yourself</label>
                     {{form.avatar}}
+
+                    <label for="id_spanish">What is your ethnic/racial background?</label>
+                    {{form.ethnic}}
 
                     <label for="id_spanish">Do you speak Spanish and if so, what is your level of fluency?</label>
                     {{form.spanish}}
@@ -49,6 +52,12 @@
                     <label for="id_partner">Is your employer a current corporate PB partner?</label>
                     {{form.partner}}
 
+                    <label for="id_grant">Opportunities called "volunteer grants" exist in many corporations.
+                        Companies pay $10-25/hour to a nonprofit where employees
+                        volunteer. Would you be able to inquire about this at your
+                        corporation?</label>
+                    {{form.grant}}
+
                     <label for="id_hear">How did you hear about this program?</label>
                     {{form.hear}}
 
@@ -64,13 +73,13 @@
                     {{form.know}}
 
 
-                    <p>Please choose a writing prompt to answer.</p>
+                    <p>Fun fact about yourself: Please choose a writing prompt to answer. (#1)</p>
 
                     {{form.question1}}
                     <p>Answer</p>
                     {{form.answer1}}
 
-                    <p>Please choose a writing prompt to answer.</p>
+                    <p>Fun fact about yourself: Please choose a writing prompt to answer. (#2)</p>
                     {{form.question2}}
                     <p>Answer</p>
                     {{form.answer2}}
@@ -97,20 +106,12 @@
                         mentee safe and respected. (Please type your full name below.)</label>
                     {{form.signature}}
 
-
-                    <label for="id_grant">Opportunities called "volunteer grants" exist in many corporations.
-                        Companies pay $10-25/hour to a nonprofit where employees
-                        volunteer. Would you be able to inquire about this at your
-                        corporation?</label>
-                    {{form.grant}}
-
                     <label for="id_cont_student_bridge">If you would like to continue mentoring the student you had
                         mentored last year in the Choice Program, please mention his/her
                         name.</label>
                     {{form.cont_student_bridge}}
 
-                    <label for="id_check">I have completed a background check for another PB program in
-                        the past.</label>
+                    <label for="id_check">I have completed a background check for another PB program in the past. (As the last step of the application, we ask you to please complete a confidential and secure background check by going to the link sent to your email.).</label>
                     {{form.check}}
 
                     <label for="id_question">Do you have any questions or comments for us? (If not, please

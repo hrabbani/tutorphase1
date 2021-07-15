@@ -35,12 +35,6 @@
     <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
-                <h1 class="card-title">
-                    {% for key, value in hour_session.items %}
-                    {{ value }}
-                    {% endfor %}
-                </h1>
-                <p class="card-text">Hours of Mentoring</p>
             </div>
         </div>
     </div>
@@ -108,24 +102,7 @@
             <div class="card border-light shadow-sm">
                 <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
                     <div class="d-block">
-                        <div class="h5 font-weight-normal text-gray mb-2">Top Mentors</div>
-                    </div>
-                </div>
-                <div class="card-body p-2">
-                    <canvas id="toptutorChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12 col-xl-6 mb-4">
-        <div class="col-12 mb-4">
-            <div class="card border-light shadow-sm">
-                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
-                    <div class="d-block">
-                        <div class="h5 font-weight-normal text-gray mb-2">Engagement and Meaningfulness</div>
+                        <div class="h6 font-weight-normal text-gray mb-2">Engagement</div>
                     </div>
                 </div>
                 <div class="card-body p-2">
@@ -134,11 +111,8 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-xl-6 mb-4">
-        <div class="col-12 mb-4">
-        </div>
-    </div>
 </div>
+
 
 </br>
 </br>
@@ -152,9 +126,11 @@
                 <th scope="col">Date</th>
                 <th scope="col">Student</th>
                 <th scope="col">Mentor</th>
-                <th scope="col">Length</th>
-                <th scope="col">Supports</th>
+                <th scope="col">General Feedback</th>
+                <th scope="col">Engagement</th>
+                <th scope="col">Support</th>
                 <th scope="col">Action</th>
+                <th scope="col">Flag</th>
             </tr>
         </thead>
         <tbody>
@@ -166,15 +142,27 @@
                         {{obj.connection.student.last_name}}</a></td>
                 <td><a href="{{obj.connection.mentor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
                         {{obj.connection.mentor.last_name}}</a></td>
-                <td>{{obj.length}} hr</td>
-                <td>
-                    {% for support in obj.get_supports %}
-                    <li>{{support}}</li>
-                    {% endfor %}
-                </td>
+                <td>{{obj.summary}}</td>
+                <td>{{obj.rate}}</td>
+                <td>{{obj.support}}</td>
                 <td>
                     <a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
                             Form</button></a>
+                </td>
+                <td>
+                    <form action="{% url 'mprofiles:flag-session' %}" method="POST" class='like-form' id='{{obj.id}}'>
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value={{obj.id}}>
+                        <button type="submit" class="like_btn btn btn-light like-btn{{obj.id}}">
+                            {% if obj.flag == False %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:black"></i>
+                            <p class="flag">false</p>
+                            {% else %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:red"></i>
+                            <p class="flag">true</p>
+                            {% endif %}
+                        </button>
+                    </form>
                 </td>
 
             </tr>
@@ -241,54 +229,6 @@ $(document).ready(function () {
 });
 
 
-
-$(document).ready(function () {
-    var ctx = document.getElementById('toptutorChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [{% for key, value in top_tutor.items %}'{{ key }}',{% endfor %}],
-            datasets: [{
-                label: 'Top Mentors',
-                fill: false,
-                data: [{% for key, value in top_tutor.items %}{{ value }},{% endfor %}],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        stepSize: 1 
-                    }
-                }]
-            },
-            legend: {
-                display: false
-            },
-        }
-    });
-
-});
-
-
 $(document).ready(function () {
     var ctx = document.getElementById('eng_meaning_Chart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -306,19 +246,6 @@ $(document).ready(function () {
                     'rgba(255, 99, 132, 1)',
                   ],
                 borderWidth: 1
-            },
-            
-            {
-                label: 'Average Meaningful by Month',
-                fill: false,
-                data: [{% for x in avg_eng_meaning_month %}{{x.meaningful}},{% endfor %}],
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                ],
-                borderWidth: 1
             }]
         },
         options: {
@@ -333,6 +260,44 @@ $(document).ready(function () {
     });
 
 });
+
+
+
+
+    $('.like-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        const thumbcolor = $(`.thumb${post_id}`).css('color')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+
+                if (thumbcolor === 'rgb(0, 0, 0)') {
+                    $(`.thumb${post_id}`).css('color', 'red');
+                } else {
+                    $(`.thumb${post_id}`).css('color', 'black');
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
+
+    for (let element of document.getElementsByClassName("flag")){
+    element.style.display="none";
+    }
 
 </script>
 {% endblock scripts %}

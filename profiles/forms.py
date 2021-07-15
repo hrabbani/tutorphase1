@@ -8,7 +8,7 @@ class TutorModelForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'phone', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question', 'age')
+        fields = ('first_name', 'last_name', 'phone', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question', 'age', 'ethnic')
 
 
     def __init__(self, *args, **kwargs):
@@ -40,7 +40,7 @@ class SessionModelForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ('meet', 'length', 'subjects', 'help', 'support', 'othersupport', 'rate', 'productivity', 'question', 'disconnect', 'reason_disconnect')
+        fields = ('meet', 'length', 'subjects', 'help', 'support', 'othersupport', 'rate', 'productivity', 'question', 'disconnect', 'reason_disconnect', 'urgent_check')
 
     def __init__(self, *args, **kwargs):
         super(SessionModelForm, self).__init__(*args, **kwargs)

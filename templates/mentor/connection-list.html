@@ -9,6 +9,29 @@
     <div class="col-auto mr-auto">
         <h3>Connections</h3>
     </div>
+    <div class="col-auto">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <form action="{% url 'mprofiles:search-connection' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="status" value='connected'>
+                <button type="submit" class="btn btn-outline-dark">Connected</button>
+            </form>
+            <form action="{% url 'mprofiles:search-connection' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="status" value='disconnected'>
+                <button type="submit" class="btn btn-outline-dark">Disconnected</button>
+            </form>
+            <form action="{% url 'mprofiles:search-connection' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="status" value='inactive'>
+                <button type="submit" class="btn btn-outline-dark">Inactive</button>
+            </form>
+            <form action="{% url 'mprofiles:export-mentoring-connection-list' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-dark">Download All Data</button>
+            </form>
+        </div>
+    </div> 
 </div>
 
 

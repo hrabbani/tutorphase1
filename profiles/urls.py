@@ -30,6 +30,10 @@ from .views import (
     flag_unflag_session,
     QuestionListView,
     action_question,
+    export_tutoring_tutor_list,
+    export_tutoring_student_list,
+    export_tutoring_connection_list,
+    export_tutoring_session_list,
         
 
 )
@@ -65,6 +69,10 @@ urlpatterns = [
     path('flag-session/', flag_unflag_session, name='flag-session'),
     path('questions/', QuestionListView.as_view(), name='question-list-view'),
     path('action-question/', action_question, name='action-question'),
+    path('export-tutoring-tutor-list/', export_tutoring_tutor_list, name='export-tutoring-tutor-list'),
+    path('export-tutoring-student-list/', export_tutoring_student_list, name='export-tutoring-student-list'),
+    path('export-tutoring-connection-list/', export_tutoring_connection_list, name='export-tutoring-connection-list'),
+    path('export-tutoring-session-list/', export_tutoring_session_list, name='export-tutoring-session-list'),
 
 
    
