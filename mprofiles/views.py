@@ -875,3 +875,39 @@ def search_question(request):
     return render(request, 'mentor/question-list-search.html', context)
 
  
+
+ 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])	
+def change_check_mentor(request):
+    if request.method == 'POST':
+        mentor_id = request.POST.get('mentor_id')
+
+        Mentor.objects.filter(id=mentor_id).update(check='yes')
+       
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')
+
+
+
+ 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])	
+def change_uncheck_mentor(request):
+    if request.method == 'POST':
+        mentor_id = request.POST.get('mentor_id')
+
+        Mentor.objects.filter(id=mentor_id).update(check='no')
+       
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')

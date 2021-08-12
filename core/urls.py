@@ -13,6 +13,7 @@ urlpatterns = [
     path('mentoring/', include('mprofiles.urls', namespace='mprofiles')),
     path('accounts/login/', login_page, name="login"),
     path('account/logout/', logout_user, name="logout"),
+    path('middleschool/', include('middleschool.urls', namespace='middleschool')),
 
 ]
 

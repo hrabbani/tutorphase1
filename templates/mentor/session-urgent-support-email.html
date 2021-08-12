@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Check Email</title>
+</head>
+<body>
+
+<p><b>Date Submitted:</b> {{session.updated}}</p>
+
+<p><b>Mentor:</b> {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</p>
+
+<p><b>Mentor Email:</b> {{session.connection.mentor.email}}</p>
+
+<p><b>Response:</b> {{session.support}}</p>
+
+<p>Full Form: {{form_link}}</p>
+
+
+</body>
+</html>

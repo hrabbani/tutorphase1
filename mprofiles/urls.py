@@ -37,6 +37,8 @@ from .views import (
     export_mentoring_connection_list,
     export_mentoring_session_list,
     search_question,
+    change_check_mentor,
+    change_uncheck_mentor,
    
 )
 
@@ -80,6 +82,8 @@ urlpatterns = [
     path('export-mentoring-connection-list/', export_mentoring_connection_list, name='export-mentoring-connection-list'),
     path('export-mentoring-ession-list/', export_mentoring_session_list, name='export-mentoring-session-list'),
     path('search-question/', search_question, name='search-question'),
+    path('change-check-mentor/', change_check_mentor, name='change-check-mentor'),
+    path('change-uncheck-mentor/', change_uncheck_mentor, name='change-uncheck-mentor'),
 
 
     

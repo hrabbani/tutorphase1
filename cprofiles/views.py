@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Mentor, Student
-from .forms import TaskModelForm, SessionModelForm, MentorModelForm, StudentModelForm, ParentSessionModelForm
+from .forms import TaskModelForm, SessionModelForm, MentorModelForm, StudentModelForm, ParentSessionModelForm, StudentNoteModelForm, ConnectionNoteModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -29,6 +29,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from datetime import datetime
 import csv
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 
@@ -195,37 +198,73 @@ def mentor_connect(request):
 
             email_list = []
             email_list.append(student.email)
-            email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Choice Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Mentor Connection for Choice Program",
+                text_context,
+                'Choice Program',
+                email_list,
             )
-    
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+            #Email to Mentor
+
+            email_mentor = []
+            email_mentor.append(mentor.email)
+
+            html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email_to_mentor = EmailMultiAlternatives(
+                "Mentor Pairing - Choice Program 2021",
+                text_context,
+                'Choice Program',
+                email_mentor,
+            )
+
+            email_to_mentor.attach_alternative(html_content, "text/html")
+            email_to_mentor.send()
+
 
         else:
             rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
 
             email_list = []
             email_list.append(student.email)
-            email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Choice Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Mentor Connection for Choice Program",
+                text_context,
+                'Choice Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+            #Email to Mentor
+
+            email_mentor = []
+            email_mentor.append(mentor.email)
+
+            html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email_to_mentor = EmailMultiAlternatives(
+                "Mentor Pairing - Choice Program 2021",
+                text_context,
+                'Choice Program',
+                email_mentor,
+            )
+
+            email_to_mentor.attach_alternative(html_content, "text/html")
+            email_to_mentor.send()
  
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -251,36 +290,72 @@ def student_connect(request):
 
             email_list = []
             email_list.append(student.email)
-            email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Choice Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Mentor Connection for Choice Program",
+                text_context,
+                'Choice Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+            #Email to Mentor
+
+            email_mentor = []
+            email_mentor.append(mentor.email)
+
+            html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email_to_mentor = EmailMultiAlternatives(
+                "Mentor Pairing - Choice Program 2021",
+                text_context,
+                'Choice Program',
+                email_mentor,
+            )
+
+            email_to_mentor.attach_alternative(html_content, "text/html")
+            email_to_mentor.send()
             
         else:
             rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
 
             email_list = []
             email_list.append(student.email)
-            email_list.append(mentor.email)
             email_list.append(student.parent1_email)
-            email_list.append(student.academic_advisor_email)
 
-            content = "Connection is established between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
-
-            send_mail('Connection Established',
-            content,
-            'Choice Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Mentor Connection for Choice Program",
+                text_context,
+                'Choice Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+            #Email to Mentor
+
+            email_mentor = []
+            email_mentor.append(mentor.email)
+
+            html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
+            text_context = strip_tags(html_content)
+            email_to_mentor = EmailMultiAlternatives(
+                "Mentor Pairing - Choice Program 2021",
+                text_context,
+                'Choice Program',
+                email_mentor,
+            )
+
+            email_to_mentor.attach_alternative(html_content, "text/html")
+            email_to_mentor.send()
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -347,14 +422,17 @@ def remove_connection(request):
 
         email_list.extend(program_manager_email_list)
 
-        content = "Connection is disconnected between Student " + student.first_name + " " + student.last_name + " " + "Mentor" + " " + mentor.first_name + " " + mentor.last_name
-
-        send_mail('Connection Disconnected',
-        content,
-        'Choice Program',
-        email_list,
-        fail_silently=False
+        html_content = render_to_string("choice/disconnection-email.html", {'student': student, 'mentor': mentor })
+        text_context = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Mentor/Student Disconnection ",
+            text_context,
+            'Choice Program',
+            email_list,
         )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
         
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -408,16 +486,22 @@ def generate_session_form(request):
         session_generated_pk = str(session_generated.pk)
         z.append("http://127.0.0.1:8000/choice/" + session_generated_pk + "/submit-feedback/")
 
-        email = x.mentor.email
+        email_list = []
+        email_list.append(x.mentor.email)
 
-        content = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/submit-feedback/"
+        form_link = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/submit-feedback/"
 
-        send_mail('Please fill in the Session Feedback Form',
-        content,
-        'Choice Program',
-        [email],
-        fail_silently=False
+        html_content = render_to_string("choice/choice-mentor-feedback-form.email.html", {'connection': x, 'form_link': form_link})
+        text_context = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Choice Mentor Feedback Form",
+            text_context,
+            'Choice Program',
+            email_list,
         )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
 
     g = []
@@ -426,16 +510,22 @@ def generate_session_form(request):
         parentsession_generated_pk = str(parentsession_generated.pk)
         g.append("http://127.0.0.1:8000/choice/" + parentsession_generated_pk + "/submit-parent-feedback/")
 
-        email = x.student.parent1_email
+        email_list = []
+        email_list.append(x.student.parent1_email)
 
-        content = "http://127.0.0.1:8000/choice/" + parentsession_generated_pk + "/submit-parent-feedback/"
+        form_link = "http://127.0.0.1:8000/choice/" + parentsession_generated_pk + "/submit-parent-feedback/"
 
-        send_mail('Please fill in the Parent Session Feedback Form',
-        content,
-        'Choice Program',
-        [email],
-        fail_silently=False
+        html_content = render_to_string("choice/choice-parent-feedback-form.html", {'connection': x, 'form_link': form_link})
+        text_context = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Feedback Form // Forma de Comentarios",
+            text_context,
+            'Choice Program',
+            email_list,
         )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
     context = {'z':z,
                'g':g}
@@ -459,10 +549,7 @@ def update_session(request, pk):
 
         form = SessionModelForm(request.POST, instance=session)
         if form.is_valid():
-            new_status = form.save(commit=False)
-            new_status.submit_status = True
-            new_status.save()
-            form.save_m2m()
+            form.save()
             return redirect('cprofiles:task-form', task)
 
     context = {'form':form,
@@ -470,6 +557,7 @@ def update_session(request, pk):
 
                 }
     return render(request, 'choice/choice-submit-session-feedback.html', context)
+
 
 
 
@@ -566,7 +654,12 @@ def dashboard(request):
 
     on_track_conn = Connection.objects.filter(progress='on track').count()
     total_conn = Connection.objects.all().count()
-    on_track_conn_percentage = on_track_conn/total_conn * 100
+
+    if total_conn == 0:
+        on_track_conn_percentage = 0
+    else:
+        on_track_conn_percentage = on_track_conn/total_conn * 100
+    
     other_conn_percentage = 100 - on_track_conn_percentage
     
     z = []
@@ -782,18 +875,23 @@ def check_connection_status(request):
                 x.flag = True
                 x.save()
                 email_list = []
-                email_list.append(x.student.academic_advisor_email)
+                email_list.append(x.student.email)
+                email_list.append(x.student.parent1_email)
+                email_list.append(x.mentor.email)
                 program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
                 email_list.extend(program_manager_email_list)
 
-                content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Mentor" + " " + x.mentor.first_name + " " + x.mentor.last_name + " " + "because no session feedback form was submitted for fours weeks straight"
-
-                send_mail('Connection Inactive',
-                content,
-                'Choice Program',
-                email_list,
-                fail_silently=False
+                html_content = render_to_string("choice/connection-inactive-email.html", {'connection': x})
+                text_context = strip_tags(html_content)
+                email = EmailMultiAlternatives(
+                    "Choice Program: Inactive Mentor/Student Relationship",
+                    text_context,
+                    'Choice Program',
+                    email_list,
                 )
+
+                email.attach_alternative(html_content, "text/html")
+                email.send()
 
                 break
   
@@ -806,18 +904,23 @@ def check_connection_status(request):
             x.flag = True
             x.save()
             email_list = []
-            email_list.append(x.student.academic_advisor_email)
+            email_list.append(x.student.email)
+            email_list.append(x.student.parent1_email)
+            email_list.append(x.mentor.email)
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
-            content = "Connection is Inactive between Student " + x.student.first_name + " " + x.student.last_name + " " + "Mentor" + " " + x.mentor.first_name + " " + x.mentor.last_name + " " + "because 'Zero' Meets were submitted in Session Feedback form for four sessions straight."
-
-            send_mail('Connection Inactive',
-            content,
-            'Choice Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("choice/connection-inactive-email.html", {'connection': x})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Choice Program: Inactive Mentor/Student Relationship",
+                text_context,
+                'Choice Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
     return HttpResponse("Connection Status Checked")
 
@@ -1024,7 +1127,7 @@ class ParentSessionUpdateView(UpdateView):
     def form_valid(self, form):
         self.object.submit_status = True
         self.object = form.save()
-        return super().form_valid(form)
+        return redirect('profiles:session-submitted')
 
 
 
@@ -1126,3 +1229,82 @@ def export_choice_session_list(request):
 
 
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class ParentSessionSpanishUpdateView(UpdateView):
+    form_class = ParentSessionModelForm
+    model = Parentsession
+    template_name = 'choice/submit-parent-session-feedback-spanish.html'
+    success_url = reverse_lazy('profiles:session-submitted')
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        parentsession = Parentsession.objects.get(pk=pk)
+        return parentsession
+
+    def form_valid(self, form):
+        self.object.submit_status = True
+        self.object = form.save()
+        return redirect('profiles:session-submitted')
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class StudentNoteUpdateView(UpdateView):
+    form_class = StudentNoteModelForm
+    model = Student
+    template_name = 'choice/note-update.html'
+
+    def get_success_url(self):
+        return reverse("cprofiles:student-profiles-detail", kwargs={"slug": self.object.slug})
+
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+class ConnectionNoteUpdateView(UpdateView):
+    form_class = ConnectionNoteModelForm
+    model = Connection
+    template_name = 'choice/note-update.html'
+
+    def get_success_url(self):
+        return reverse("cprofiles:connection-profile-detail", kwargs={"pk": self.object.pk})
+
+
+from datetime import datetime, timedelta
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
+def feedback_form_status(request):
+
+    active_connection = Connection.objects.filter(status='connected')
+
+    try:
+        latest_session = Session.objects.latest('created')
+    except Session.DoesNotExist:
+        latest_session = None
+
+    if latest_session:
+        now = latest_session.created
+        monday = now - timedelta(days = now.weekday())
+        last_monday = monday - timedelta(days=14)
+        last_last_monday = monday - timedelta(days=28)
+
+    else:
+        monday = None
+        last_monday = None
+        last_last_monday = None
+
+    context = {'active_connection':active_connection,
+                'monday': monday,
+                'last_monday': last_monday,
+                'last_last_monday': last_last_monday,
+                }
+
+    return render(request, 'choice/feedback-form-status.html', context)

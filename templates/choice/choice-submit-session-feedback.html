@@ -13,7 +13,7 @@
 
                 <h3>Submit Session Feedback</h3>
                 </br>
-                <h4>Tutor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
+                <h4>Mentor: {{session.connection.mentor.first_name}} {{session.connection.mentor.last_name}}</h4>
                 <h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
                 </br>
 
@@ -26,7 +26,7 @@
                     <label for="id_length">How many total hours of mentoring did you do?</label>
                     {{form.length}}
 
-                    <label for="id_topic">What topics have you covered?</label>
+                    <label for="id_topic">What topics have you covered? (Hold the Control or Command key to select multiple options)</label>
                     {{form.topic}}
 
                     <label for="id_feedback">Share how your sessions have been going with the student.</label>
@@ -37,11 +37,14 @@
                     {{form.change}}
 
 
-                    <label for="id_support">Can we support you with any of the following:</label>
+                    <label for="id_support">Can we support you with any of the following? (Hold the Control or Command key to select multiple options)</label>
                     {{form.support}}
 
                     <label for="id_elaborate">Please elaborate on your answer above:</label>
                     {{form.elaborate}}
+
+                    <label for="id_question">Does the support you need require urgent attention? If so, please check the box below and we will reach out to you shortly.</label>
+                    {{form.urgent_check}}
 
                     <label for="id_rate">On a scale of 1-5, how would you rate the student’s level of engagement
                         (1 = Very unengaged, 5 = very engaged)</label>

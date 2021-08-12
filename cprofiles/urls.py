@@ -39,7 +39,10 @@ from .views import (
     export_choice_student_list,
     export_choice_connection_list,
     export_choice_session_list,
-
+    ParentSessionSpanishUpdateView,
+    StudentNoteUpdateView,
+    ConnectionNoteUpdateView,
+    feedback_form_status,
    
 )
 
@@ -86,9 +89,10 @@ urlpatterns = [
     path('export-choice-student-list/', export_choice_student_list, name='export-choice-student-list'),
     path('export-choice-connection-list/', export_choice_connection_list, name='export-choice-connection-list'),
     path('export-choice-session-list/', export_choice_session_list, name='export-choice-session-list'),
-
-
-
+    path('<pk>/submit-parent-feedback-spanish/', ParentSessionSpanishUpdateView.as_view(), name='submit-parent-feedback-spanish'),
+    path('<slug>/student-note-update-profile', StudentNoteUpdateView.as_view(), name='student-note-update-profile'),
+    path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
+    path('feedback-form-status/', feedback_form_status, name='feedback-form-status'),
 
     
 ]

@@ -9,42 +9,56 @@
     <div class="fade-in">
         <div class="row justify-content-md-center">
             <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-auto mr-auto">
+                            <h3>Submit Session Feedback</h3>
+                        </div>
+                        <div class="col-auto">
+                            <div class="btn-group" role="group" aria-label="Basic example">
 
-                <h3>Submit Session Feedback</h3>
-                </br>
-                <h4>Student: {{parentsession.connection.student.first_name}}
-                    {{parentsession.connection.student.last_name}}</h4>
-                <h4>Mentor: {{parentsession.connection.mentor.first_name}} {{parentsession.connection.mentor.last_name}}
-                </h4>
-                </br>
-
-                <form action="" method="POST" class=# enctype="multipart/form-data">
-                    {% csrf_token %}
-
-
-                    <label for="id_meet">How many times have you and the mentor met in the past 2 weeks?</label>
-                    {{form.meet}}
-
-                    <label for="id_length">How many total hours of mentoring did you do?</label>
-                    {{form.length}}
-
-                    <label for="id_topic">What topics have you covered? (Hold the Control or Command key to
-                        select multiple options)</label>
-                    {{form.topic}}
-
-                    <label for="id_share">Share how your sessions have been going with the student.</label>
-                    {{form.share}}
-
-                    <label for="id_change">What would you change to make your future sessions better?</label>
-                    {{form.change}}
-
-                    <label for="id_question">Can we support you with anything? (If not, please leave blank)</label>
-                    {{form.question}}
-
-
+                                <a class="btn btn-primary"
+                                    href="{% url 'cprofiles:submit-parent-feedback-spanish' parentsession.id %}">En
+                                    Español</a>
+                            </div>
+                        </div>
+                    </div>
                     </br>
-                    <button type='submit' class="btn btn-success">Update</button>
-                </form>
+                    <h4>Student: {{parentsession.connection.student.first_name}}
+                        {{parentsession.connection.student.last_name}}</h4>
+                    <h4>Mentor: {{parentsession.connection.mentor.first_name}}
+                        {{parentsession.connection.mentor.last_name}}
+                    </h4>
+                    </br>
+
+                    <form action="" method="POST" class=# enctype="multipart/form-data">
+                        {% csrf_token %}
+
+
+                        <label for="id_meet">How many times have you and the mentor met in the past 2 weeks?</label>
+                        {{form.meet}}
+
+                        <label for="id_length">How many total hours of mentoring did you do?</label>
+                        {{form.length}}
+
+                        <label for="id_topic">What topics have you covered? (Hold the Control or Command key to
+                            select multiple options)</label>
+                        {{form.topic}}
+
+                        <label for="id_share">Share how your sessions have been going with the student.</label>
+                        {{form.share}}
+
+                        <label for="id_change">What would you change to make your future sessions better?</label>
+                        {{form.change}}
+
+                        <label for="id_question">Can we support you with anything? (If not, please leave blank)</label>
+                        {{form.question}}
+
+                        <label for="id_question">Does the support you need require urgent attention? If so, please check the box below and we will reach out to you shortly.</label>
+                        {{form.urgent_check}}
+
+                        </br>
+                        <button type='submit' class="btn btn-success">Update</button>
+                    </form>
             </div>
         </div>
     </div>

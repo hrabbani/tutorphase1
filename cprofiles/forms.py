@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task, Session, Mentor, Student, Parentsession
+from .models import Task, Session, Mentor, Student, Parentsession, Connection
 from django.forms import TextInput, widgets
 from django.forms import DateField
 
@@ -58,7 +58,7 @@ class SessionModelForm(forms.ModelForm):
 
     class Meta:
         model = Session
-        fields = ('meet', 'length', 'topic', 'feedback', 'change', 'support', 'rate', 'question', 'elaborate', 'productivity')
+        fields = ('meet', 'length', 'topic', 'feedback', 'change', 'support', 'rate', 'question', 'elaborate', 'productivity', 'urgent_check')
 
     def __init__(self, *args, **kwargs):
         super(SessionModelForm, self).__init__(*args, **kwargs)
@@ -88,7 +88,7 @@ class StudentModelForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ('first_name', 'last_name', 'email', 'gender', 'grade', 'school', 'language_preference', 'parent1_first_name', 'parent1_last_name', 'parent1_phone',
-         'parent1_email', 'activity', 'ind_scl', 'dont_know', 'proud', 'learn', 'happy', 'hobby', 'int_ind_school', 'look_ind_school', 'strength', 'obstacle', 'child_strength', 'social_strength', 'interview_language', 'question')
+         'parent1_email', 'activity', 'ind_scl', 'dont_know', 'proud', 'learn', 'happy', 'hobby', 'int_ind_school', 'look_ind_school', 'strength', 'obstacle', 'child_strength', 'social_strength', 'interview_language', 'question',  'question1', 'answer1', 'question2', 'answer2')
 
     def __init__(self, *args, **kwargs):
         super(StudentModelForm, self).__init__(*args, **kwargs)
@@ -104,7 +104,7 @@ class ParentSessionModelForm(forms.ModelForm):
 
     class Meta:
         model = Parentsession
-        fields = ('meet', 'length', 'topic', 'share', 'change', 'question')
+        fields = ('meet', 'length', 'topic', 'share', 'change', 'question', 'urgent_check')
 
     def __init__(self, *args, **kwargs):
         super(ParentSessionModelForm, self).__init__(*args, **kwargs)
@@ -113,3 +113,32 @@ class ParentSessionModelForm(forms.ModelForm):
                 'class': 'form-control'
             })
 
+
+
+
+class StudentNoteModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Student
+        fields = ('note',)
+        
+    def __init__(self, *args, **kwargs):
+        super(StudentNoteModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+
+class ConnectionNoteModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Connection
+        fields = ('note',)
+        
+    def __init__(self, *args, **kwargs):
+        super(ConnectionNoteModelForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })

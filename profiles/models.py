@@ -27,6 +27,14 @@ class Subject(models.Model):
         return self.name
 
 
+class Interest(models.Model):
+
+    name = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Language(models.Model):
 
     name = models.CharField(max_length=200, blank=True)
@@ -55,10 +63,6 @@ LANGUAGE_CHOICES = (
 )
 
 STUDENT_GRADE_CHOICES = (
-    ('5', '5'),
-    ('6', '6'),
-    ('7', '7'),
-    ('8', '8'),
     ('9', '9'),
     ('10', '10'),
     ('11', '11'),
@@ -118,6 +122,8 @@ class Profile(models.Model):
     parent_languages = models.CharField(null=True, blank=True, max_length=200, choices=LANGUAGE_CHOICES)
     age = models.IntegerField(null=True, blank=True)
     ethnic = models.CharField(null=True, blank=True, max_length=200, choices=ETHNIC_CHOICES)
+    note = models.TextField(null=True, blank=True, max_length=1000)
+    interest = models.ManyToManyField(Interest, blank=True, related_name='interest')
 
 
     
@@ -144,6 +150,9 @@ class Profile(models.Model):
  
     def get_student_connections(self):
         return self.student.filter()
+
+    def get_interests(self):
+        return self.interest.all()
 
     __initial_first_name = None
     __initial_last_name = None
@@ -186,6 +195,8 @@ class Connection(models.Model):
     status = models.CharField(max_length=200, choices=STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     flag = models.BooleanField(default=False)
+    note = models.TextField(null=True, blank=True, max_length=1000)
+
 
 
     def __str__(self):
@@ -292,6 +303,7 @@ class Question(models.Model):
     status = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    source = models.CharField(null=True, blank=True, max_length=200)
 
     def __str__(self):
         return self.question

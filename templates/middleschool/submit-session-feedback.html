@@ -1,0 +1,87 @@
+{% extends 'form-base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Submit Session Feedback{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-6">
+
+                <h3>Submit Session Feedback</h3>
+                </br>
+                <h4>Tutor: {{session.connection.tutor.first_name}} {{session.connection.tutor.last_name}}</h4>
+                <h4>Student: {{session.connection.student.first_name}} {{session.connection.student.last_name}}</h4>
+                </br>
+
+                    <form action="" method="POST" class=# enctype="multipart/form-data">
+                        {% csrf_token %}
+
+
+                        <label for="id_meet">How many times did you meet this week?</label>
+                        {{form.meet}}
+
+                        <label for="id_length">How many total hours of tutoring did you do?</label>
+                        {{form.length}}
+
+                        <label for="id_subjects">What subjects did you cover? (Hold the “Control” or “Command” key to
+                            select multiple subjects.)</label>
+                        {{form.subjects}}
+
+                        <label for="id_rate">Please rate the productivity of your session from 1-5 (1 = not productive,
+                            5 = very productive):</label>
+                        {{form.productivity}}
+
+                        <label for="id_rate">Please rate the level of engagement of your student from 1-5 (1 = very low, 5 = very high)</label>
+                        {{form.rate}}
+
+                        <label for="id_help">List one way you were helpful to your student.</label>
+                        {{form.help}}
+
+                        <label for="id_support">Can we support you with any of the following:</label>
+                        {{form.support}}
+
+                        <label for="id_othersupport">If you selected “Other” in the above question, please
+                            elaborate.</label>
+                        {{form.othersupport}}
+
+                        <label for="id_disconnect">Are you and this student going to continue working together?</label>
+                        {{form.disconnect}}
+
+                        <label for="id_reason_disconnect">Why have you and your student decided to stop working
+                            together?</label>
+                        {{form.reason_disconnect}}
+
+                        <label for="id_question">Do you have any questions or comments for us, or do you need any support from our team? (If not, please leave blank)</label>
+                        {{form.question}}
+
+                        <label for="id_urgent_check">Does the support you need require urgent attention? If so, please check the box below and we will reach out to you shortly.</label>
+                        {{form.urgent_check}}
+
+                        </br>
+                        <button type='submit' class="btn btn-success">Update</button>
+                    </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script>
+    $('#id_disconnect').on('change', function () {
+        if (this.value == 'no')
+            $('label[for=id_reason_disconnect], #id_reason_disconnect').show('normal');
+        else
+            $('label[for=id_reason_disconnect], #id_reason_disconnect').hide('normal');
+    }).trigger("change");
+</script>
+
+
+{% endblock scripts %}

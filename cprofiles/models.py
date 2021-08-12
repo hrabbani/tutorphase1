@@ -49,6 +49,19 @@ STUDENT_PREFER_LANGUAGE_CHOICES = (
 )
 
 
+QUESTION_CHOICES = (
+    ('What was the first job you wanted as a kid?', 'What was the first job you wanted as a kid?'),
+    ('If you were one of the seven dwarves in Snow White, which one would you be?', 'If you were one of the seven dwarves in Snow White, which one would you be?'),
+    ('What is your guilty pleasure?', 'What is your guilty pleasure?'),
+    ('What song do you sing in the shower?', 'What song do you sing in the shower?'),
+    ('What is your biggest (non-serious) fear?', 'What is your biggest (non-serious) fear?'),
+    ('What is your favorite binge-watching TV series?', 'What is your favorite binge-watching TV series?'),
+    ('What would your last meal on Earth be?', 'What would your last meal on Earth be?'),
+    ('Who is your favorite person in history?', 'Who is your favorite person in history?'),
+    ('A trip you most want to take but haven’t yet?', 'A trip you most want to take but haven’t yet?'),
+)
+
+
         
 class Student(models.Model):
     avatar = models.ImageField(default='avatar.png', upload_to='avatars/')
@@ -84,6 +97,11 @@ class Student(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
     flag = models.BooleanField(default=False)
+    note = models.TextField(null=True, blank=True, max_length=1000)
+    question1 = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_CHOICES)
+    answer1 = models.TextField(null=True, blank=True, max_length=1000)
+    question2 = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_CHOICES)
+    answer2 = models.TextField(null=True, blank=True, max_length=1000)
 
    
     def __str__(self):
@@ -273,6 +291,7 @@ class Connection(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     flag = models.BooleanField(default=False)
     progress = models.CharField(max_length=200, blank=True, null=True, choices=PROGRESS_CHOICES)
+    note = models.TextField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
         return f"{self.student}-{self.mentor}-{self.status}"
@@ -294,6 +313,10 @@ class Connection(models.Model):
 
     def get_all_sessions_four(self):
         return self.session_set.filter(submit_status=True).order_by('-updated')[:4]
+
+    def get_all_sessions_three(self):
+        return self.session_set.filter().order_by('-created')[:3]
+
 
 
 CONT_STATUS_CHOICES = (
@@ -337,6 +360,7 @@ class Session(models.Model):
     submit_status = models.BooleanField(default=False)
     step = models.CharField(max_length=200, blank=True)
     flag = models.BooleanField(default=False)
+    urgent_check = models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -431,6 +455,8 @@ class Question(models.Model):
     status = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    source = models.CharField(null=True, blank=True, max_length=200)
+
 
     def __str__(self):
         return self.question
@@ -459,6 +485,7 @@ class Parentsession(models.Model):
     flag = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    urgent_check = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.connection.student.first_name}-{self.connection.mentor.first_name}"

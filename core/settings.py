@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'profiles',
     'cprofiles',
     'mprofiles',
+    'middleschool',
+
 ]
 
 SITE_ID = 1

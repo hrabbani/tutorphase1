@@ -6,6 +6,24 @@
 {% block content %}
 
 
+<style>
+
+.lines{
+   word-break: break-word;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   line-height: 16px; /* fallback */
+   max-height: 100px; /* fallback */
+   -webkit-line-clamp: 4; /* number of lines to show */
+   -webkit-box-orient: vertical;
+}
+
+
+
+</style>
+
+
 
 <div class="row">
     <div class="col-auto mr-auto">
@@ -22,6 +40,7 @@
 </div>
 
 <a href="{% url 'cprofiles:parent-session-list'%}"><button style="float: right" type="button" class="btn btn-link btn-sm">Parent Session</button></a>
+<a href="{% url 'cprofiles:feedback-form-status'%}"><button style="float: right" type="button" class="btn btn-link btn-sm">Full Feedback Form Status</button></a>
 
 
 <div class="table-responsive-lg">
@@ -31,9 +50,10 @@
                 <th scope="col">Date</th>
                 <th scope="col">Student</th>
                 <th scope="col">Mentor</th>
-                <th scope="col">Length</th>
+                <th scope="col">Meetings</th>
                 <th scope="col">Topics</th>
                 <th scope="col">Step Completed</th>
+                <th scope="col">Support</th>
                 <th scope="col">Action</th>
                 <th scope="col">Flag</th>
             </tr>
@@ -44,9 +64,10 @@
                 <th>Date</th>
                 <th>Student</th>
                 <th>Mentor</th>
-                <th>Length</th>
+                <th>Meetings</th>
                 <th>Topics</th>
                 <th>Step Completed</th>
+                <th>Support</th>
                 <th>Action</th>
                 <th>Flag</th>
             </tr>
@@ -61,9 +82,10 @@
                         {{obj.connection.student.last_name}}</a></td>
                 <td><a href="{{obj.connection.mentor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
                         {{obj.connection.mentor.last_name}}</a></td>
-                <td>{{obj.length}} hr</td>
+                <td>{{obj.meet}}</td>
                 <td>{% for topic in obj.get_topics %}<li>{{topic}} </li>{% endfor %}</td>
                 <td>{{obj.step}}</td>
+                <td class="lines shown">{{obj.elaborate}}</td>
                 <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full Form</button></a></td>
                 <td>
                     <form action="{% url 'cprofiles:flag-session' %}" method="POST" class='like-form' id='{{obj.id}}'>
@@ -163,6 +185,8 @@
       document.getElementById("Mentor").parentElement.innerHTML = ""
       document.getElementById("Action").parentElement.innerHTML = ""
       document.getElementById("Flag").parentElement.innerHTML = ""
+      document.getElementById("Support").parentElement.innerHTML = ""
+
     });
 
 
@@ -201,6 +225,27 @@
     element.style.display="none";
     }
 
+
+    $('.lines').hover(
+
+       function(){ $(this).toggleClass('lines') },
+
+    )
+
+
+
+
+    $(document).ready(function() {
+        var colorOrig=$(".shown").css('background');
+        $(".shown").hover(
+        function() {
+            //mouse over
+            $(this).css('background', '#ff0')
+        }, function() {
+            //mouse out
+            $(this).css('background', colorOrig)
+        });
+    });
 
 </script>
 {% endblock scripts %}

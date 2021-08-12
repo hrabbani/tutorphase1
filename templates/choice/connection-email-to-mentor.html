@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Email</title>
+</head>
+<body>
+
+<p>Dear {{mentor.first_name}} {{mentor.last_name}},</p>
+
+<p>Thank you for volunteering as a mentor as a part of our Choice Program. As a mentor in this program, you will act as an advocate and sounding board for your mentee and his/her family through the application process for independent schools. The main goal is to help Peninsula Bridge students with the independent school application. You will primarily focus on the life skills developed in the process (test-taking, support in writing a personal essay, interviewing skills, character development) and their implications for continued success in school.</p>
+
+<p>The student we have paired you with is {{student.first_name}} {{student.last_name}}. You can read more about {{student.first_name}} below. <span style="color:red;">As a reminder, please call {{student.first_name}}'s parents to coordinate your first meeting by September 4th.</span></p>
+
+<p><b><u>{{student.first_name}} Student Profile:</u></b></p>
+
+<p><b>Basic Information:</b></p>
+
+<p style="margin : 0; padding-top:0;">a. First Name: {{student.first_name}}</p>
+<p style="margin : 0; padding-top:0;">b. Last Name: {{student.last_name}}</p>
+<p style="margin : 0; padding-top:0;">c. Gender: {{student.gender}}</p>
+<p style="margin : 0; padding-top:0;">d. Grade: {{student.grade}}</p>
+<p style="margin : 0; padding-top:0;">e. School: {{student.school}}</p>
+<p style="margin : 0; padding-top:0;">f. Parent Language Preference: {{student.interview_language}}</p>
+<p style="margin : 0; padding-top:0;">g. Parent First Name: {{student.parent1_first_name}}</p>
+<p style="margin : 0; padding-top:0;">h. Parent Last Name: {{student.parent1_last_name}}</p>
+<p style="margin : 0; padding-top:0;">i. Parent Phone Number: {{student.parent1_phone}}</p>
+<p style="margin : 0; padding-top:0;">j. Parent Email: {{student.parent1_email}}</p>
+
+
+<p><b>Student Responses:</b></p>
+
+<p style="margin : 0; padding-top:0;"><u>What extracurricular activities and sports do you participate in?</u></p>
+<p style="margin : 0; padding-top:0;"><i>{{student.activity}}</i></p>
+</br>
+<p style="margin : 0; padding-top:0;"><u>Why are you interested in applying to an independent school?</u></p>
+<p style="margin : 0; padding-top:0;"><i>{{student.ind_scl}}</i></p>
+</br>
+<p style="margin : 0; padding-top:0;"><u>One thing most people don’t know about me is…</u></p>
+<p style="margin : 0; padding-top:0;"><i>{{student.dont_know}}</i></p>
+</br>
+<p style="margin : 0; padding-top:0;"><u>I am most proud of...</u></p>
+<p style="margin : 0; padding-top:0;"><i>{{student.proud}}</i></p>
+</br>
+<p style="margin : 0; padding-top:0;"><u>Something I want to learn is...</u></p>
+<p style="margin : 0; padding-top:0;"><i>{{student.learn}}</i></p>
+</br>
+<p style="margin : 0; padding-top:0;"><u>I am the happiest when...</u></p>
+<p style="margin : 0; padding-top:0;"><i>{{student.happy}}</i></p>
+</br>
+<p style="margin : 0; padding-top:0;"><u>What are your hobbies?</u></p>
+<p style="margin : 0; padding-top:0;"><i>{{student.hobby}}</i></p>
+
+
+
+
+</body>
+</html>

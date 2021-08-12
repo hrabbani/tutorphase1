@@ -9,7 +9,7 @@
 <h3>Connection</h3>
 
 {% if connection.status == 'connected' %}
-<div><span class="badge badge-success">Connected</div>
+<div><span class="badge badge-success">Connected</span><span> on {{connection.created | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'disconnected' %}
 <div><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'inactive' %}
@@ -106,33 +106,38 @@
         <thead>
             <tr>
                 <th scope="col">Date</th>
-                <th scope="col">Student</th>
-                <th scope="col">Mentor</th>
-                <th scope="col">Length</th>
-                <th scope="col">Subjects</th>
-                <th scope="col">Step Completed</th>
+                <th scope="col">General Feedback</th>
+                <th scope="col">Engagement</th>
+                <th scope="col">Support</th>
                 <th scope="col">Action</th>
+                <th scope="col">Flag</th>
             </tr>
         </thead>
         <tbody>
 
             {% for obj in sessions %}
             <tr>
-                <td>{{obj.created|date:"d M Y"}}</td>
-                <td><a href="{{obj.connection.student.get_absolute_url}}">{{obj.connection.student.first_name}}
-                        {{obj.connection.student.last_name}}</a></td>
-                <td><a href="{{obj.connection.mentor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
-                        {{obj.connection.mentor.last_name}}</a></td>
-                <td>{{obj.length}} hr</td>
-                <td>
-                    {% for topic in obj.get_topics %}
-                    <li>{{topic}}</li>
-                    {% endfor %}
-                </td>
-                <td>{{obj.step}}</td>
+                <td>{{obj.updated|date:"d M Y"}}</td>
+                <td>{{obj.summary}}</td>
+                <td>{{obj.rate}}</td>
+                <td>{{obj.support}}</td>
                 <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
                             Form</button></a></td>
-
+                <td>
+                    <form action="{% url 'mprofiles:flag-session' %}" method="POST" class='like-form' id='{{obj.id}}'>
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value={{obj.id}}>
+                        <button type="submit" class="like_btn btn btn-light like-btn{{obj.id}}">
+                            {% if obj.flag == False %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:black"></i>
+                            <p class="flag">false</p>
+                            {% else %}
+                            <i class="fa fa-flag thumb{{obj.id}}" style="color:red"></i>
+                            <p class="flag">true</p>
+                            {% endif %}
+                        </button>
+                    </form>
+                </td>
             </tr>
 
             {% endfor %}
@@ -161,3 +166,43 @@
 
 
 {% endblock content %}
+
+
+{% block scripts %}
+<script>
+    $('.like-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+        const thumbcolor = $(`.thumb${post_id}`).css('color')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+
+                if (thumbcolor === 'rgb(0, 0, 0)') {
+                    $(`.thumb${post_id}`).css('color', 'red');
+                } else {
+                    $(`.thumb${post_id}`).css('color', 'black');
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
+
+    for (let element of document.getElementsByClassName("flag")) {
+        element.style.display = "none";
+    }
+</script>
+{% endblock scripts %}

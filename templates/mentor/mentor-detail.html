@@ -25,6 +25,9 @@
                                     {{mentor.last_name}}</div>
                                 <div style="font-size:15px" class="profile-name">
                                     Preferred Location: {{mentor.geographical}}</div>
+                                <div id="background-check" style="font-size:15px" class="profile-name">
+                                    {% csrf_token %}
+                                    Background Check: {% if mentor.check == 'yes' %}<span onClick="changeUncheck({{mentor.id}})" title="Click to Not Complete" class="badge badge-success" style="cursor:pointer">Completed</span>{% else %}<span title="Click to Complete" class="badge badge-danger" onClick="changeCheck({{mentor.id}})" style="cursor:pointer">Not Completed</span>{% endif %}</div>
                             </div>
                             <div class="col-6">
                             </div>
@@ -414,3 +417,64 @@
 
 
 {% endblock content %}
+
+
+
+
+
+{% block scripts %}
+
+<script>
+
+    function changeCheck(id) {
+
+        const mentor_id = id
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "mprofiles:change-check-mentor" %}',
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'mentor_id': mentor_id,
+            },
+            success: function (response) {
+
+                $('#background-check').html("Background Check: <span onClick='changeUncheck({{mentor.id}})' title='Click to Not Complete' class='badge badge-success' style='cursor:pointer'>Completed</span>")
+                
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    }
+
+
+
+    function changeUncheck(id) {
+
+        const mentor_id = id
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "mprofiles:change-uncheck-mentor" %}',
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'mentor_id': mentor_id,
+            },
+            success: function (response) {
+
+                $('#background-check').html("Background Check: <span title='Click to Complete' class='badge badge-danger' onClick='changeCheck({{mentor.id}})' style='cursor:pointer'>Not Completed</span>")
+                
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    }
+
+
+</script>
+
+{% endblock scripts %}

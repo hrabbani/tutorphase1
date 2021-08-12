@@ -141,4 +141,23 @@
 </div>
 
 
+
+<h3>Notes</h3>
+
+<a href="{% url 'profiles:connection-note-update-profile' connection.pk %}"><button type="submit"
+        class="btn btn-info">Edit</button></a>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card h-100">
+            <div class="card-body">
+                <p class="card-text">{{connection.note}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</br>
+
+
 {% endblock content %}

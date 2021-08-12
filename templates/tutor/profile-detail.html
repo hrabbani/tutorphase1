@@ -124,6 +124,24 @@
     </div>
 </div>
 
+
+<h3>Notes</h3>
+
+<a href="{% url 'profiles:profile-note-update-profile' profile.slug %}"><button type="submit"
+        class="btn btn-info">Edit</button></a>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card h-100">
+            <div class="card-body">
+                <p class="card-text">{{profile.note}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</br>
+
 <h3>All Info</h3>
 
 
@@ -171,7 +189,16 @@
     </div>
 </div>
 
+
 <div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">School</h5>
+                <p class="card-text">{{profile.school}}</p>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -182,6 +209,12 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -192,14 +225,28 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
                 <h5 class="card-title">What is your ethnic/racial background?</h5>
                 <p class="card-text">{{profile.ethnic}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">What are your interests?</h5>
+                {% for interest in profile.get_interests %}
+                <li>{{interest}}</li>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -230,7 +277,7 @@
                 <p class="card-text">{{profile.question}}</p>
             </div>
         </div>
-    </div>   
+    </div>
 </div>
 
 
@@ -316,8 +363,10 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">School:</h5>
-                <p class="card-text">{{profile.school}}</p>
+                <h5 class="card-title">What are your interests?</h5>
+                {% for interest in profile.get_interests %}
+                <li>{{interest}}</li>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -327,6 +376,14 @@
 
 
 <div class="row">
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">School:</h5>
+                <p class="card-text">{{profile.school}}</p>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -335,6 +392,12 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -343,12 +406,6 @@
             </div>
         </div>
     </div>
-</div>
-
-
-
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -357,6 +414,12 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -365,12 +428,6 @@
             </div>
         </div>
     </div>
-</div>
-
-
-
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -379,14 +436,6 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Are you comfortable with us sharing your phone number or your student's phone number with the tutor?</h5>
-                <p class="card-text">{% if profile.comfortable_share_phone == True %} Yes {% else %} No {% endif %}</p>
-            </div>
-        </div>
-    </div>
 </div>
 
 
@@ -395,11 +444,25 @@
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Do you give permission for us to share your student's grades with their tutor?</h5>
+                <h5 class="card-title">Are you comfortable with us sharing your phone number with the tutor?</h5>
+                <p class="card-text">{% if profile.comfortable_share_phone == True %} Yes {% else %} No {% endif %}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Do you give permission for us to share your grades with the tutor?</h5>
                 <p class="card-text">{% if profile.permission_share_grade == True %} Yes {% else %} No {% endif %}</p>
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -408,12 +471,6 @@
             </div>
         </div>
     </div>
-</div>
-
-
-
-
-<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -422,6 +479,11 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+<div class="row">
     <div class="col-sm-6">
         <div class="card h-100">
             <div class="card-body">
@@ -431,7 +493,6 @@
         </div>
     </div>
 </div>
-
 
 
 {% endif %}

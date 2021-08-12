@@ -34,6 +34,9 @@ from .views import (
     export_tutoring_student_list,
     export_tutoring_connection_list,
     export_tutoring_session_list,
+    ProfileNoteUpdateView,
+    ConnectionNoteUpdateView,
+    search_question,
         
 
 )
@@ -73,6 +76,9 @@ urlpatterns = [
     path('export-tutoring-student-list/', export_tutoring_student_list, name='export-tutoring-student-list'),
     path('export-tutoring-connection-list/', export_tutoring_connection_list, name='export-tutoring-connection-list'),
     path('export-tutoring-session-list/', export_tutoring_session_list, name='export-tutoring-session-list'),
+    path('<slug>/profile-note-update-profile', ProfileNoteUpdateView.as_view(), name='profile-note-update-profile'),
+    path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
+    path('search-question/', search_question, name='search-question'),
 
 
    

@@ -1,0 +1,76 @@
+{% extends 'form-base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Submit Session Feedback{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-auto mr-auto">
+                        <h3>Enviar comentarios sobre la sesión</h3>
+                    </div>
+                    <div class="col-auto">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+
+                            <a class="btn btn-primary"
+                                href="{% url 'cprofiles:submit-parent-feedback' parentsession.id %}">English</a>
+                        </div>
+                    </div>
+                </div>
+                </br>
+                <h4>Alumna/Alumno: {{parentsession.connection.student.first_name}}
+                    {{parentsession.connection.student.last_name}}</h4>
+                <h4>Mentora/Mentor: {{parentsession.connection.mentor.first_name}}
+                    {{parentsession.connection.mentor.last_name}}
+                </h4>
+                </br>
+
+                <form action="" method="POST" class=# enctype="multipart/form-data">
+                    {% csrf_token %}
+
+
+                    <label for="id_meet">¿Cuántas veces se han reunido usted y el mentor en las últimas 2
+                        semanas?</label>
+                    {{form.meet}}
+
+                    <label for="id_length">¿Cuántas horas totales de tutoría hizo?</label>
+                    {{form.length}}
+
+                    <label for="id_topic">¿Qué temas has cubierto? (Mantenga presionada la tecla Control o Comando para
+                        seleccionar múltiples opciones)</label>
+                    <select name="topic" class="form-control" id="id_topic" multiple="">
+                        <option value="1">Llenando la solicitud</option>
+                        <option value="2">Preparación de la prueba</option>
+                        <option value="3">Ensayos</option>
+                        <option value="4">Preparación del día de la sombra</option>
+                        <option value="5">Preparación de la entrevista</option>
+                        <option value="7">Crear una cuenta de Ravenna</option>
+                        <option value="8">Recomendación del maestro</option>
+                        <option value="9">Otro</option>
+                    </select>
+
+                    <label for="id_share">Comparta con el alumno cómo han ido sus sesiones.</label>
+                    {{form.share}}
+
+                    <label for="id_change">¿Qué cambiaría para mejorar sus futuras sesiones?</label>
+                    {{form.change}}
+
+                    <label for="id_question">¿Podemos apoyarte en algo? (Si no es así, déjelo en blanco)</label>
+                    {{form.question}}
+
+                    <label for="id_question">¿El apoyo que necesita requiere atención urgente? Si es así, marque la
+                        casilla a continuación y nos comunicaremos con usted a la brevedad.</label>
+                    {{form.urgent_check}}
+
+                    </br>
+                    <button type='submit' class="btn btn-success">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

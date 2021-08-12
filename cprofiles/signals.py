@@ -6,6 +6,9 @@ from .models import Connection, Session, Task, Tasksubject, Copytask, Student, M
 import datetime
 from django.core.mail import send_mail
 from django.db.models.signals import m2m_changed
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 
 
@@ -22,22 +25,28 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
         mentor_.friends.remove(student_)
         mentor_.save()
     if instance.status == 'off track':
-        email_list = []
-        email_list.append(student_.academic_advisor_email)
-        email_list.append(mentor_.email)
 
+        email_list = []
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
         email_list.extend(program_manager_email_list)
 
-        content = "Connection is 'Off Track' between Student " + student_.first_name + " " + student_.last_name + " " + "Mentor" + " " + mentor_.first_name + " " + mentor_.last_name
-       
-        send_mail('Connection Off Track',
-        content,
-        'Choice Program',
-        email_list,
-        fail_silently=False
-        )  
+        content = "Choice Program: Off-Track Progress -" + mentor_.first_name + " " + mentor_.last_name + " and " + student_.first_name + " " + student_.last_name
 
+        pk = instance.pk
+
+        link = "http://127.0.0.1:8000/choice/" + str(pk) + "/connection-detail"
+
+        html_content = render_to_string("choice/connection-offtrack-email.html", {'connection': instance, 'form_link': link})
+        text_context = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            content,
+            text_context,
+            'Choice Program',
+            email_list,
+        )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
 
 
 @receiver(post_save, sender=Connection)
@@ -56,66 +65,67 @@ def post_save_update_session(sender, instance, created, **kwargs):
 
         try:
             session = Session.objects.filter(connection=connection).latest('updated')
+            print(session.id)
         except:
             pass
 
         try:
             if instance.task10status == 'completed':
                 name = instance.tasksubject.all()[9].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+                
             
             elif instance.task9status == 'completed':
                 name = instance.tasksubject.all()[8].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
                     
             elif instance.task8status == 'completed':
                 name = instance.tasksubject.all()[7].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
                     
             elif instance.task7status == 'completed':
                 name = instance.tasksubject.all()[6].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
             
                     
             elif instance.task6status == 'completed':
                 name = instance.tasksubject.all()[5].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
                     
             elif instance.task5status == 'completed':
                 name = instance.tasksubject.all()[4].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
                     
             elif instance.task4status == 'completed':
                 name = instance.tasksubject.all()[3].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
                     
             elif instance.task3status == 'completed':
                 name = instance.tasksubject.all()[2].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
                     
             elif instance.task2status == 'completed':
                 name = instance.tasksubject.all()[1].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
             elif instance.task1status == 'completed':
                 name = instance.tasksubject.all()[0].name
-                session.step = name
-                session.save()
+                Session.objects.filter(id=session.id).update(step=name)
+
 
         except:
             pass
@@ -253,7 +263,7 @@ def post_save_student_form_question_registration(sender, instance, created, **kw
 
     if created:
         if instance.question:
-            Question.objects.get_or_create(student=instance, role='Student/Parent', question=instance.question, status="UNANSWERED")
+            Question.objects.get_or_create(student=instance, role='Student/Parent', question=instance.question, status="UNANSWERED", source='Student Sign-Up')
         else:
             pass
 
@@ -264,7 +274,7 @@ def post_save_mentor_form_question_registration(sender, instance, created, **kwa
 
     if created:
         if instance.question:
-            Question.objects.get_or_create(mentor=instance, role='Mentor', question=instance.question, status="UNANSWERED")
+            Question.objects.get_or_create(mentor=instance, role='Mentor', question=instance.question, status="UNANSWERED", source='Mentor Sign-Up')
         else:
             pass
 
@@ -275,7 +285,7 @@ def post_save_session_question_registration(sender, instance, created, **kwargs)
 
     if not created:
         if instance.question:
-            Question.objects.get_or_create(mentor=instance.connection.mentor, role='Mentor', question=instance.question, status="UNANSWERED")
+            Question.objects.get_or_create(mentor=instance.connection.mentor, role='Mentor', question=instance.question, status="UNANSWERED", source='Mentor Feedback')
         else:
             pass
 
@@ -285,7 +295,7 @@ def post_save_parent_session_question_registration(sender, instance, created, **
 
     if not created:
         if instance.question:
-            Question.objects.get_or_create(student=instance.connection.student, role='Student/Parent', question=instance.question, status="UNANSWERED")
+            Question.objects.get_or_create(student=instance.connection.student, role='Student/Parent', question=instance.question, status="UNANSWERED", source='Student/Parent Feedback')
         else:
             pass
 
@@ -299,4 +309,95 @@ def post_save_topic_registration(sender, instance, **kwargs):
         pass
 
 m2m_changed.connect(post_save_topic_registration, sender=Session.topic.through)
+
+
+
+
+@receiver(post_save, sender=Parentsession)
+def post_save_urgent_check_session(sender, instance, created, **kwargs):
+
+    if not created:
+
+        session_generated_pk = str(instance.pk)
+
+        email_list = []
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
+        email_list.extend(program_manager_email_list)
+
+
+        student_first_name = instance.connection.student.first_name
+        student_last_name = instance.connection.student.last_name
+        student_email = instance.connection.student.email
+        question = instance.question
+        link = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/parent-session/"
+
+        if instance.urgent_check == True:
+
+            html_content = render_to_string("choice/parent-session-urgent-check-email.html", {'student_first_name': student_first_name, 'student_last_name': student_last_name, 'student_email': student_email, 'question': question, 'link': link})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "[URGENT] Support Needed - Student",
+                text_context,
+                'Choice Program',
+                email_list,
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        else:
+            pass
+
+
+
+@receiver(post_save, sender=Session)
+def post_save_urgent_check_mentor_session(sender, instance, created, **kwargs):
+
+    if not created:
+
+        session_generated_pk = str(instance.pk)
+
+        email_list = []
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
+        email_list.extend(program_manager_email_list)
+
+
+        mentor_first_name = instance.connection.mentor.first_name
+        mentor_last_name = instance.connection.mentor.last_name
+        mentor_email = instance.connection.mentor.email
+        elaborate = instance.elaborate
+        link = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/session/"
+
+        if instance.urgent_check == True:
+
+            html_content = render_to_string("choice/session-urgent-check-email.html", {'mentor_first_name': mentor_first_name, 'mentor_last_name': mentor_last_name, 'mentor_email': mentor_email, 'elaborate': elaborate, 'link': link})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "[URGENT] Support Needed - Mentor",
+                text_context,
+                'Choice Program',
+                email_list,
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+        else:
+            pass
+
+
+
+
+
+
+
+@receiver(post_save, sender=Session)
+def post_save_session_update_submit_status(sender, instance, created, **kwargs):
+
+    if not created:
+        Session.objects.filter(pk=instance.id).update(submit_status=True)
+    else:
+        pass
+
+
 

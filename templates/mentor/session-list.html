@@ -6,6 +6,24 @@
 {% block content %}
 
 
+<style>
+
+.lines{
+   word-break: break-word;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   line-height: 16px; /* fallback */
+   max-height: 100px; /* fallback */
+   -webkit-line-clamp: 4; /* number of lines to show */
+   -webkit-box-orient: vertical;
+}
+
+
+
+</style>
+
+
 <div class="row">
     <div class="col-auto mr-auto">
         <h3>Sessions</h3>
@@ -29,9 +47,9 @@
                 <th scope="col">Date</th>
                 <th scope="col">Student</th>
                 <th scope="col">Mentor</th>
-                <th scope="col">Length</th>
-                <th scope="col">Supports</th>
-                <th scope="col">Question</th>
+                <th scope="col">Engagement</th>
+                <th scope="col" style="width:25%">General Feedback</th>
+                <th scope="col">Support</th>
                 <th scope="col">Action</th>
                 <th scope="col">Flag</th>
             </tr>
@@ -42,9 +60,9 @@
                 <th>Date</th>
                 <th>Student</th>
                 <th>Mentor</th>
-                <th>Length</th>
-                <th>Supports</th>
-                <th>Quesstion</th>
+                <th>Engagement</th>
+                <th style="width:25%;">General Feedback</th>
+                <th>Support</th>
                 <th>Action</th>
                 <th>Flag</th>
             </tr>
@@ -59,9 +77,9 @@
                         {{obj.connection.student.last_name}}</a></td>
                 <td><a href="{{obj.connection.mentor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
                         {{obj.connection.mentor.last_name}}</a></td>
-                <td>{{obj.length}} hr</td>
-                <td>{% for support in obj.get_supports %}<li>{{support}} </li>{% endfor %}</td>
-                <td>{{obj.question}}</td>
+                <td>{{obj.rate}}</td>
+                <td class="lines shown">{{obj.summary}}</td>
+                <td>{{obj.support}}</td>
                 <td>
                     {% if obj.flag == True %}
                     <a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-danger">View Full
@@ -168,6 +186,9 @@
       document.getElementById("Mentor").parentElement.innerHTML = ""
       document.getElementById("Action").parentElement.innerHTML = ""
       document.getElementById("Flag").parentElement.innerHTML = ""
+      document.getElementById("Support").parentElement.innerHTML = ""
+      document.getElementById("General-Feedback").parentElement.innerHTML = ""
+
     });
 
 
@@ -207,6 +228,30 @@
     for (let element of document.getElementsByClassName("flag")){
     element.style.display="none";
     }
+
+
+    $('.lines').hover(
+
+       function(){ $(this).toggleClass('lines') },
+
+    )
+
+
+
+
+    $(document).ready(function() {
+        var colorOrig=$(".shown").css('background');
+        $(".shown").hover(
+        function() {
+            //mouse over
+            $(this).css('background', '#ff0')
+        }, function() {
+            //mouse out
+            $(this).css('background', colorOrig)
+        });
+    });
+
+
 
 </script>
 {% endblock scripts %}

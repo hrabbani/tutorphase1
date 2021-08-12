@@ -40,6 +40,13 @@
             <p>School:<p>
             <p>{{profile.school}}</p>
         </div>
+
+        <div class="col-sm">
+            <p>Interests:<p>
+            {% for interest in profile.get_interests %}
+            <li>{{interest}}</li>
+            {% endfor %}
+        </div>
     </div>
 </div>
 
@@ -54,6 +61,8 @@
                 <th scope="col">Name</th>
                 <th scope="col">Grade</th>
                 <th scope="col">Subjects</th>
+                <th scope="col">Interests</th>
+                <th scope="col">School</th>
                 <th scope="col">Student</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -67,6 +76,8 @@
                 <th>Name</th>
                 <th>Grade</th>
                 <th>Subjects</th>
+                <th>Interests</th>
+                <th>School</th>
                 <th>Student</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -79,8 +90,9 @@
             <tr>
                 <td>{{tutor.first_name}} {{tutor.last_name}}</td>
                 <td>{{tutor.grade}}</td>
-
                 <td>{% for subject in tutor.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
+                <td>{% for interest in tutor.get_interests %}<li>{{interest}} </li>{% endfor %}</td>
+                <td>{{tutor.school}}</td>
                 <td>{% for friend in tutor.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
                     {% for friend in tutor.get_friends %}

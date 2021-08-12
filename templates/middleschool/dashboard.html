@@ -1,0 +1,541 @@
+{% extends 'middleschoolbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Dashboard{% endblock title %}
+
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{num_session}}</h1>
+                <p class="card-text">Tutoring Sessions in 30 Days</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{inactive_conn}}</h1>
+                <p class="card-text">Inactive Connections</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{y}}</h1>
+                <p class="card-text">Unmatched Students</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">
+                    {% for key, value in hour_session.items %}
+                    {{ value }}
+                    {% endfor %}
+                </h1>
+                <p class="card-text">Hours of Tutoring in 30 Days</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{num_tutor}}</h1>
+                <p class="card-text">Total Tutors</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{connected_conn}}</h1>
+                <p class="card-text">Active Connections</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{x}}</h1>
+                <p class="card-text">Unmatched Tutors</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{unanswered_question_num}}</h1>
+                <p class="card-text"><a href="{% url 'middleschool:question-list-view' %}">Unanswered Questions</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</br>
+</br>
+
+
+
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Top Tutors</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="toptutorChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Tutoring Sessions</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="sessionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Tutoring Breakdown - 30 days</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">New Students & Tutors</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="signupChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Engagement and Productivity</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="eng_prod_Chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-6 mb-4">
+        <div class="col-12 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-body d-flex flex-row align-items-center flex-0 border-bottom">
+                    <div class="d-block">
+                        <div class="h5 font-weight-normal text-gray mb-2">Tutoring Breakdown - Year</div>
+                    </div>
+                </div>
+                <div class="card-body p-2">
+                    <canvas id="tutor_breakdown_yearChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<h3>Recent Sessions</h3>
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Student</th>
+                <th scope="col">Tutor</th>
+                <th scope="col">Length</th>
+                <th scope="col">Subjects</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in recent_session %}
+            <tr>
+                <td>{{obj.updated|date:"d M Y"}}</td>
+                <td><a href="{{obj.connection.student.get_absolute_url}}">{{obj.connection.student.first_name}}
+                        {{obj.connection.student.last_name}}</a></td>
+                <td><a href="{{obj.connection.tutor.get_absolute_url}}">{{obj.connection.tutor.first_name}}
+                        {{obj.connection.tutor.last_name}}</a></td>
+                <td>{{obj.length}} hr</td>
+                <td>
+                    {% for subject in obj.get_subjects %}
+                    <li>{{subject}}</li>
+                    {% endfor %}
+                </td>
+                <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                            Form</button></a></td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+{% block scripts %}
+
+<script>
+$(document).ready(function () {
+    var ctx = document.getElementById('subjectChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels:[{% for key, value in unique_counts.items %}'{{ key }}',{% endfor %}],
+            datasets: [{
+                label: '# of Votes',
+                data: [{% for key, value in unique_counts.items %}{{ value }},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('sessionChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for x in month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
+            datasets: [{
+                label: 'Tutoring Session Per Month',
+                fill: false,
+                data: [{% for x in month %}{{x.total}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('toptutorChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for key, value in top_tutor.items %}'{{ key }}',{% endfor %}],
+            datasets: [{
+                label: 'Top Tutors',
+                fill: false,
+                data: [{% for key, value in top_tutor.items %}{{ value }},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1 
+                    }
+                }]
+            },
+            legend: {
+                display: false
+            },
+        }
+    });
+
+});
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('signupChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for x in tutor_student_month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
+            datasets: [{
+                label: 'Number of Tutors Added Each Month',
+                fill: false,
+                data: [{% for x in tutor_month %}{{x.total}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                  ],
+                borderWidth: 1
+            },
+            
+            {
+                label: 'Number of Students Added Each Month',
+                fill: false,
+                data: [{% for x in student_month %}{{x.total}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1 
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('eng_prod_Chart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for x in avg_eng_prod_month %}'{{x.month|date:"M, Y"}}',{% endfor %}],
+            datasets: [{
+                label: 'Average Engagement by Month',
+                fill: false,
+                data: [{% for x in avg_eng_prod_month %}{{x.rate}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                  ],
+                borderWidth: 1
+            },
+            
+            {
+                label: 'Average Productivity by Month',
+                fill: false,
+                data: [{% for x in avg_eng_prod_month %}{{x.prod}},{% endfor %}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+
+
+$(document).ready(function () {
+    var ctx = document.getElementById('tutor_breakdown_yearChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for key, value in ela_dict.items %}'{{ key }}',{% endfor %}],
+            datasets: [
+            {
+                label: 'English Language Arts (ELA)',
+                data: [{% for key, value in ela_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'blue',
+                borderColor: 'blue',
+                borderWidth: 0.5,
+                fill: false,
+
+            },
+            {
+                label: 'Science',
+                data: [{% for key, value in sc_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'red',
+                borderColor: 'red',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'Math',
+                data: [{% for key, value in math_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'purple',
+                borderColor: 'purple',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'Homework Completion',
+                data: [{% for key, value in hc_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'yellow',
+                borderColor: 'yellow',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'History/Social Studies',
+                data: [{% for key, value in his_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'orange',
+                borderColor: 'orange',
+                borderWidth: 0.5,
+                fill: false,
+            },
+            {
+                label: 'Writing',
+                data: [{% for key, value in wr_dict.items %}{{ value }},{% endfor %}],
+                backgroundColor: 'green',
+                borderColor: 'green',
+                borderWidth: 0.5,
+                fill: false,    
+            },
+            
+        ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+});
+</script>
+{% endblock scripts %}

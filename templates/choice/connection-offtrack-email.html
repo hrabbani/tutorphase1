@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Email</title>
+</head>
+<body>
+
+
+
+<p><b>Mentor:</b> {{connection.mentor.first_name}} {{connection.mentor.last_name}} | {{connection.mentor.email}} | {{connection.mentor.phone}}</p>
+<p><b>Student:</b> {{connection.student.first_name}} {{connection.student.last_name}}</p>
+<p><b>Parent:</b> {{connection.student.parent1_first_name}} {{connection.student.parent1_last_name}}| {{connection.student.parent1_email}} | {{connection.student.parent1_phone}} </p>
+
+<p>Due to missed deadlines, the connection between {{connection.mentor.first_name}} {{connection.mentor.last_name}} and {{connection.student.first_name}} {{connection.student.last_name}} has been marked as Off Track. You can view their <a href={{form_link}}>connection profile</a> for more detailed information.</p>
+
+
+</body>
+</html>

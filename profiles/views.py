@@ -2,7 +2,7 @@ from functools import total_ordering
 from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Connection, Session, Subject, Subjectcalculation, Question
-from .forms import SessionModelForm, TutorModelForm, StudentModelForm
+from .forms import SessionModelForm, TutorModelForm, StudentModelForm, ProfileNoteModelForm, ConnectionNoteModelForm
 from django.views.generic import ListView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -1045,3 +1045,38 @@ def export_tutoring_session_list(request):
 
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+class ProfileNoteUpdateView(UpdateView):
+    form_class = ProfileNoteModelForm
+    model = Profile
+    template_name = 'tutor/note-update.html'
+
+    def get_success_url(self):
+        return reverse("profiles:profile-detail-view", kwargs={"slug": self.object.slug})
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+class ConnectionNoteUpdateView(UpdateView):
+    form_class = ConnectionNoteModelForm
+    model = Connection
+    template_name = 'tutor/note-update.html'
+
+    def get_success_url(self):
+        return reverse("profiles:connection-detail-view", kwargs={"pk": self.object.pk})
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
+def search_question(request):
+    if request.method == 'POST':
+        source = request.POST.get('status')
+        qs = Question.objects.all().order_by('-created').filter(source=source)
+
+    context = {'qs':qs}
+
+    return render(request, 'tutor/question-list-search.html', context)

@@ -17,8 +17,9 @@
                 <th scope="col">Date</th>
                 <th scope="col">Student</th>
                 <th scope="col">Mentor</th>
-                <th scope="col">Length</th>
+                <th scope="col">Meeting</th>
                 <th scope="col">Topics</th>
+                <th scope="col">Support</th>
                 <th scope="col">Action</th>
                 <th scope="col">Flag</th>
             </tr>
@@ -29,8 +30,9 @@
                 <th>Date</th>
                 <th>Student</th>
                 <th>Mentor</th>
-                <th>Length</th>
+                <th>Meetings</th>
                 <th>Topics</th>
+                <th>Support</th>
                 <th>Action</th>
                 <th>Flag</th>
             </tr>
@@ -45,8 +47,9 @@
                         {{obj.connection.student.last_name}}</a></td>
                 <td><a href="{{obj.connection.mentor.get_absolute_url}}">{{obj.connection.mentor.first_name}}
                         {{obj.connection.mentor.last_name}}</a></td>
-                <td>{{obj.length}} hr</td>
+                <td>{{obj.meet}}</td>
                 <td>{% for topic in obj.get_topics %}<li>{{topic}} </li>{% endfor %}</td>
+                <td>{{obj.question}}</td>
                 <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full Form</button></a></td>
                 <td>
                     <form action="{% url 'cprofiles:flag-parent-session' %}" method="POST" class='like-form' id='{{obj.id}}'>

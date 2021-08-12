@@ -130,19 +130,24 @@ def post_save_flag_session(sender, instance, created, **kwargs):
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='mentor').values_list('email', flat=True))
         email_list.extend(program_manager_email_list)
 
-        content = "http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/session/"
+        form_link = "http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/session/"
 
         if instance.urgent_check == True:
-            send_mail('[URGENT] Feedback Form Submitted',
-            content,
-            'Mentor Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("mentor/session-urgent-support-email.html", {'session': instance, 'form_link': form_link})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "[URGENT] Feedback Form Submitted",
+                text_context,
+                'Mentor Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
         else:
             send_mail('Feedback Form Submitted',
-            content,
+            form_link,
             'Mentor Program',
             email_list,
             fail_silently=False
@@ -171,14 +176,14 @@ def post_save_session_question_registration(sender, instance, created, **kwargs)
 
 
 
-@receiver(post_save, sender=Session)
-def post_save_session_support_registration(sender, instance, created, **kwargs):
+# @receiver(post_save, sender=Session)
+# def post_save_session_support_registration(sender, instance, created, **kwargs):
 
-    if not created:
-        if instance.support:
-            Question.objects.get_or_create(mentor=instance.connection.mentor, question=instance.support, status="UNANSWERED", source="Feedback Form")
-        else:
-            pass
+#     if not created:
+#         if instance.support:
+#             Question.objects.get_or_create(mentor=instance.connection.mentor, question=instance.support, status="UNANSWERED", source="Feedback Form")
+#         else:
+#             pass
 
 
 
