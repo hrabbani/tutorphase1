@@ -5,6 +5,23 @@
 
 {% block content %}
 
+<style>
+
+table{
+  table-layout:fixed;
+}
+
+th.tutor-column {
+  width: 12%;
+}
+
+th.subject-column{
+  width: 15%;
+}
+
+
+</style>
+
 <div class="row">
     <div class="col-auto mr-auto">
         <h3>Students</h3>
@@ -26,9 +43,9 @@
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Grade</th>
-                <th scope="col">Subjects</th>
+                <th class="subject-column" scope="col">Subjects</th>
                 <th scope="col">Parent Phone</th>
-                <th scope="col">Tutor</th>
+                <th class="tutor-column" scope="col">Tutor</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
                 <th scope="col">Date Added</th>

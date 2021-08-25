@@ -7,6 +7,35 @@
 
 {% block content %}
 
+<style>
+
+table{
+  table-layout:fixed;
+}
+
+th.subject-column, th.student-column{
+  width: 10%;
+}
+
+th.email-column{
+  width: 15%;
+}
+
+th.status-column{
+  width: 8%;
+}
+
+th.flag-column{
+  width: 3%;
+}
+
+td.capacity {
+    text-align: center;
+}
+
+
+</style>
+
 
 <div class="row">
     <div class="col-auto mr-auto">
@@ -31,16 +60,16 @@
         <table id="myTable" class="table">
             <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Grade</th>
-                    <th scope="col">Subjects</th>
-                    <th scope="col">Student</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                    <th scope="col">Capacity</th>
-                    <th scope="col">Date Added</th>
-                    <th scope="col">Flag</th>
+                    <th class="name" scope="col">Name</th>
+                    <th class="email-column" scope="col">Email</th>
+                    <th class="name" scope="col">Grade</th>
+                    <th class="subject-column" scope="col">Subjects</th>
+                    <th class="student-column" scope="col">Student</th>
+                    <th class="status-column" scope="col">Status</th>
+                    <th class="action-column" scope="col">Action</th>
+                    <th class="name" scope="col">Capacity</th>
+                    <th class="name" scope="col">Date Added</th>
+                    <th class="flag-column" scope="col">Flag</th>
                 </tr>
             </thead>
 
@@ -93,7 +122,7 @@
                     <td><a href="{% url 'middleschool:tutor-detail-view' obj.slug %}"><button type="submit"
                                 class="btn btn-info" disabled>Connect Student</button></a></td>
                     {% endif %}
-                    <td>{{ obj.student_capacity }}</td>
+                    <td class="capacity">{{ obj.student_capacity }}</td>
                     <td>{{ obj.created |date:"d M Y"  }}</td>
                     <td>
                         <form action="{% url 'middleschool:flag-tutor' %}" method="POST" class='like-form' id='{{obj.id}}'>

@@ -35,7 +35,7 @@ import csv
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class TutorProfileDetailView(DetailView):
     model = Profile
     template_name = 'middleschool/tutor-connect.html'
@@ -57,7 +57,7 @@ class TutorProfileDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class StudentProfileDetailView(DetailView):
     model = Profile
     template_name = 'middleschool/student-connect.html'
@@ -79,7 +79,7 @@ class StudentProfileDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class ProfileDetailView(DetailView):
     model = Profile
     template_name = 'middleschool/profile-detail.html'
@@ -103,7 +103,7 @@ class ProfileDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class TutorUpdateView(UpdateView):
     form_class = TutorModelForm
     model = Profile
@@ -115,7 +115,7 @@ class TutorUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class StudentUpdateView(UpdateView):
     form_class = StudentModelForm
     model = Profile
@@ -127,7 +127,7 @@ class StudentUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class TutorProfileListView(ListView):
     model = Profile
     template_name = 'middleschool/tutor-profile-list.html'
@@ -146,7 +146,7 @@ class TutorProfileListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class StudentProfileListView(ListView):
     model = Profile
     template_name = 'middleschool/student-profile-list.html'
@@ -157,7 +157,7 @@ class StudentProfileListView(ListView):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def tutor_connect(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
@@ -177,7 +177,7 @@ def tutor_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
-            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
@@ -200,7 +200,7 @@ def tutor_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
-            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
@@ -221,7 +221,7 @@ def tutor_connect(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def student_connect(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
@@ -241,7 +241,7 @@ def student_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
-            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
@@ -265,7 +265,7 @@ def student_connect(request):
             email_list.append(tutor.email)
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
-            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
@@ -287,7 +287,7 @@ def student_connect(request):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class ConnectionListView(ListView):
     model = Connection
     template_name = 'middleschool/connection-list.html'
@@ -300,7 +300,7 @@ class ConnectionListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class ConnectionDetailView(DetailView):
     model = Connection
     template_name = 'middleschool/connection-detail.html'
@@ -324,7 +324,7 @@ class ConnectionDetailView(DetailView):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def remove_connection(request):
     if request.method=='POST':
         student_pk = request.POST.get('student_pk')
@@ -342,7 +342,7 @@ def remove_connection(request):
         email_list.append(student.parent1_email)
         email_list.append(student.academic_advisor_email)
 
-        program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
 
         email_list.extend(program_manager_email_list)
 
@@ -365,7 +365,7 @@ def remove_connection(request):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class SessionListView(ListView):
     model = Session
     template_name = 'middleschool/session-list.html'
@@ -378,7 +378,7 @@ class SessionListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class SessionDetailView(DetailView):
     model = Session
     template_name = 'middleschool/session-detail.html'
@@ -390,7 +390,7 @@ class SessionDetailView(DetailView):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def generate_session_form(request):
     
     active_connection = Connection.objects.filter(status='connected')
@@ -426,7 +426,7 @@ def generate_session_form(request):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class SessionUpdateView(UpdateView):
     form_class = SessionModelForm
     model = Session
@@ -445,7 +445,7 @@ class SessionUpdateView(UpdateView):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def session_submitted(request):
 
     return render(request, 'tutor/session-submitted.html')
@@ -453,7 +453,7 @@ def session_submitted(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def tutor_profile_form(request):
 
     form = TutorModelForm()
@@ -465,7 +465,7 @@ def tutor_profile_form(request):
             new_role.role = 'tutor'
             new_role.save()
             form.save_m2m()
-            return HttpResponse('Tutor Profile Added')
+            return HttpResponse('Thank you for your interest in becoming a tutor! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
     context = {'form':form}
 
@@ -473,7 +473,7 @@ def tutor_profile_form(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def student_profile_form(request):
 
     form = StudentModelForm()
@@ -485,7 +485,7 @@ def student_profile_form(request):
             new_role.role = 'student'
             new_role.save()
             form.save_m2m()
-            return HttpResponse('Student Profile Added')
+            return HttpResponse('Thank you for your interest in tutoring! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
     context = {'form':form}
 
@@ -494,7 +494,7 @@ def student_profile_form(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def dashboard(request):
 
     todays_date = timezone.now()
@@ -728,7 +728,7 @@ def dashboard(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def like_unlike_post(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -752,7 +752,7 @@ def like_unlike_post(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def flag_unflag_connection(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -775,7 +775,7 @@ def flag_unflag_connection(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def flag_unflag_tutor(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -798,7 +798,7 @@ def flag_unflag_tutor(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def flag_unflag_session(request):
     if request.method == 'POST':
         post_id = request.POST.get('post_id')
@@ -822,7 +822,7 @@ def flag_unflag_session(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def search_connection(request):
     if request.method == 'POST':
         status = request.POST.get('status')
@@ -835,7 +835,7 @@ def search_connection(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def check_connection_status(request):
 
     todays_date = timezone.now()
@@ -856,7 +856,7 @@ def check_connection_status(request):
                 email_list = []
                 email_list.append(x.student.parent1_email)
                 email_list.append(x.student.academic_advisor_email)
-                program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+                program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
                 email_list.extend(program_manager_email_list)
                 student = x.student
                 tutor = x.tutor
@@ -887,7 +887,7 @@ def check_connection_status(request):
             email_list = []
             email_list.append(x.student.parent1_email)
             email_list.append(x.student.academic_advisor_email)
-            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
             student = x.student
@@ -911,7 +911,7 @@ def check_connection_status(request):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class QuestionListView(ListView):
     model = Question
     template_name = 'middleschool/question-list.html'
@@ -923,7 +923,7 @@ class QuestionListView(ListView):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def action_question(request):
     if request.method == 'POST':
 
@@ -962,7 +962,7 @@ def action_question(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])
+@allowed_users(allowed_roles=['middletutor', 'admin'])
 def export_tutoring_tutor_list(request):
 
     tutors = Profile.objects.filter(role='tutor')
@@ -979,7 +979,7 @@ def export_tutoring_tutor_list(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])
+@allowed_users(allowed_roles=['middletutor', 'admin'])
 def export_tutoring_student_list(request):
 
     students = Profile.objects.filter(role='student')
@@ -1000,7 +1000,7 @@ def export_tutoring_student_list(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])
+@allowed_users(allowed_roles=['middletutor', 'admin'])
 def export_tutoring_connection_list(request):
 
     connections = Connection.objects.all()
@@ -1018,7 +1018,7 @@ def export_tutoring_connection_list(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])
+@allowed_users(allowed_roles=['middletutor', 'admin'])
 def export_tutoring_session_list(request):
 
     sessions = Session.objects.all()
@@ -1038,7 +1038,7 @@ def export_tutoring_session_list(request):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class ProfileNoteUpdateView(UpdateView):
     form_class = ProfileNoteModelForm
     model = Profile
@@ -1050,7 +1050,7 @@ class ProfileNoteUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['tutor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class ConnectionNoteUpdateView(UpdateView):
     form_class = ConnectionNoteModelForm
     model = Connection
@@ -1063,7 +1063,7 @@ class ConnectionNoteUpdateView(UpdateView):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['tutor', 'admin'])	
+@allowed_users(allowed_roles=['middletutor', 'admin'])	
 def search_question(request):
     if request.method == 'POST':
         source = request.POST.get('status')

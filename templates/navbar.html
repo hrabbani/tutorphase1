@@ -34,12 +34,13 @@
                 <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:student-profile-form' %}"
                     target="_blank">Student Form</a>
             </li>
+            {% ifequal user.groups.all.0.name "admin" %}
+
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:generate-session-form' %}">Generate
                     Session Form</a>
             </li>
 
-            {% ifequal user.groups.all.0.name "admin" %}
             <div class="dropdown show">
                 <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -54,18 +55,6 @@
             </div>
             {% endifequal %}
 
-            {% ifequal user.groups.all.0.name "tutor" %}
-            <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Programs
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="{% url 'middleschool:dashboard' %}">Tutoring — Middle School</a>
-                    <a class="dropdown-item" href="{% url 'profiles:dashboard' %}">Tutoring — High School</a>
-                </div>
-            </div>
-            {% endifequal %}
 
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold" href="{% url 'logout' %}">Logout</a>

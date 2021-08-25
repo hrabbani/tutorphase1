@@ -65,11 +65,7 @@
                 <td>{% for support in obj.get_supports %}<li>{{support}} </li>{% endfor %}
                 </td>
                 <td>
-                    {% if obj.flag == True %}
-                    <a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-danger">View Full Form</button></a>
-                    {% else %}
                     <a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full Form</button></a>
-                    {% endif %}
                 </td>
                 <td>
                     <form action="{% url 'middleschool:flag-session' %}" method="POST" class='like-form' id='{{obj.id}}'>

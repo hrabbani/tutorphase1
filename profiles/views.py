@@ -473,7 +473,7 @@ def tutor_profile_form(request):
             new_role.role = 'tutor'
             new_role.save()
             form.save_m2m()
-            return HttpResponse('Tutor Profile Added')
+            return HttpResponse('Thank you for your interest in becoming a tutor! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
     context = {'form':form}
 
@@ -493,7 +493,7 @@ def student_profile_form(request):
             new_role.role = 'student'
             new_role.save()
             form.save_m2m()
-            return HttpResponse('Student Profile Added')
+            return HttpResponse('Thank you for your interest in tutoring! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
     context = {'form':form}
 

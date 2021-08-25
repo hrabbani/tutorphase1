@@ -19,3 +19,8 @@ body{
   
   background:#FAFAFA;    
 }
+
+
+.dropdown-menu {
+  left: -50px;
+}

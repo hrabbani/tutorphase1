@@ -19,6 +19,7 @@ def login_page(request):
         if next_url in ['/', None]:
             if user is not None:
                 login(request, user)
+                print(request.user.groups.all()[0].name)
                 if request.user.groups.all()[0].name == 'tutor':
                     return redirect('profiles:dashboard') 
                 if request.user.groups.all()[0].name == 'choice':
@@ -27,6 +28,8 @@ def login_page(request):
                     return redirect('profiles:dashboard')
                 if request.user.groups.all()[0].name == 'mentor':
                     return redirect('mprofiles:dashboard') 
+                if request.user.groups.all()[0].name == 'middletutor':
+                    return redirect('middleschool:dashboard') 
             else:
                 messages.info(request, 'Username or password is incorrect')
 
@@ -54,8 +57,8 @@ def home_view(request):
         return redirect('profiles:dashboard') 
     if request.user.groups.all()[0].name == 'mentor':
         return redirect('mprofiles:dashboard') 
-
-
+    if request.user.groups.all()[0].name == 'middletutor':
+        return redirect('middleschool:dashboard') 
 
 
 def logout_user(request):

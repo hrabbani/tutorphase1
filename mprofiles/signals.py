@@ -118,7 +118,6 @@ def post_save_mentor_form_background_check(sender, instance, created, **kwargs):
             email.send()
 
 
-
 @receiver(post_save, sender=Session)
 def post_save_flag_session(sender, instance, created, **kwargs):
 
@@ -146,12 +145,17 @@ def post_save_flag_session(sender, instance, created, **kwargs):
             email.send()
 
         else:
-            send_mail('Feedback Form Submitted',
-            form_link,
-            'Mentor Program',
-            email_list,
-            fail_silently=False
+            html_content = render_to_string("mentor/feedback-session-email.html", {'session': instance, 'form_link': form_link})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "Feedback Form Submitted",
+                text_context,
+                'Mentor Program',
+                email_list,
             )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
 
 
 @receiver(post_save, sender=Mentor)

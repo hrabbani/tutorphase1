@@ -416,7 +416,6 @@ def remove_connection(request):
         email_list.append(student.email)
         email_list.append(mentor.email)
         email_list.append(student.parent1_email)
-        email_list.append(student.academic_advisor_email)
 
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
 
@@ -607,7 +606,7 @@ def mentor_profile_form(request):
         form = MentorModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
-            return HttpResponse('Mentor Profile Added')
+            return HttpResponse('Thank you for your interest in the Peninsula Bridge Choice Program! We will reach out to you over email when you are connected with a student.')
   
     context = {'form':form}
 
@@ -624,7 +623,7 @@ def student_profile_form(request):
         form = StudentModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
-            return HttpResponse('Student Profile Added')
+            return HttpResponse('Thank you for your interest in the Peninsula Bridge Choice Program! We will reach out to you over email when you are connected with a mentor. ')
   
     context = {'form':form}
 

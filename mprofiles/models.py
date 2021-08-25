@@ -46,10 +46,11 @@ QUESTION_CHOICES = (
 
 
 GEOGRAPHICAL_CHOICES = (
-    ('EPA/MV', 'EPA/MV'),
-    ('MP/RC', 'MP/RC'),
-    ('SM', 'SM'),
+    ('East Palo Alto/Mountain View', 'East Palo Alto/Mountain View'),
+    ('Menlo Park/Redwood City', 'Menlo Park/Redwood City'),
+    ('San Mateo', 'San Mateo'),
     ('No preference', 'No preference')
+
 )
 
 

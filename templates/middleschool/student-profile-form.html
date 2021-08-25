@@ -1,7 +1,7 @@
 {% extends 'form-base.html' %}
 {% load static %}
 {% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
-{% block title %}Student Submission Form{% endblock title %}
+{% block title %}Student - Tutoring Sign-Up Form{% endblock title %}
 
 {% block content %}
 
@@ -12,9 +12,8 @@
             <div class="col-sm-6">
 
                 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
-                    <div class="card-header">
-                        <h2>Student Submission Form</h2>
-                    </div>
+                    
+                    <h2>Peninsula Bridge: Student Tutoring Sign-Up Form</h2>
 
                     <label for="id_first_name">First name:</label>
                     {{form.first_name}}
@@ -32,7 +31,7 @@
                     {{form.academic_advisor}}
 
                     <label for="id_subjects">What subjects would you like tutoring in? (Hold the “Control” or
-                        “Command” key to select multiple subjects.) (this is “Subjects:” field)</label>
+                        “Command” key to select multiple subjects.)</label>
                     {{form.subjects}}
 
                     <label for="id_interest">What are your interests? (Hold the Command/Control key to select multiple options.)</label>

@@ -47,7 +47,7 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
             email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
 
-            program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
             html_content = render_to_string("tutor/disconnection-email.html", {'student': student, 'tutor': tutor })
@@ -151,7 +151,7 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
         session_generated_pk = str(instance.pk)
 
         email_list = []
-        program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+        program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
         email_list.extend(program_manager_email_list)
 
 

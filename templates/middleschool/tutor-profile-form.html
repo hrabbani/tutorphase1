@@ -1,7 +1,7 @@
 {% extends 'form-base.html' %}
 {% load static %}
 {% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
-{% block title %}Tutor Submission Form{% endblock title %}
+{% block title %}Tutoring Sign-Up Form{% endblock title %}
 
 {% block content %}
 
@@ -12,9 +12,8 @@
             <div class="col-sm-6">
 
                 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
-                    <div class="card-header">
-                        <h2>Tutor Submission Form</h2>
-                    </div>
+                    
+                    <h2>Peninsula Bridge: Tutoring Sign-Up Form</h2>
 
                     <label for="id_first_name">First name:</label>
                     {{form.first_name}}

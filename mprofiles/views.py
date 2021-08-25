@@ -383,7 +383,7 @@ def student_profile_form(request):
         form = StudentModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
-            return HttpResponse('Student Profile Added')
+            return HttpResponse('Thank you for signing up for this year’s mentoring program! We will contact you over email once you have been paired with a mentor.')
   
     context = {'form':form}
 
@@ -550,6 +550,9 @@ def dashboard(request):
         if student.get_friends_no() == 0:
             y = y + 1
 
+    avg_engagement = thirty_days_session.aggregate(Avg('rate'))
+
+
     # 2nd Row
 
     unanswered_question_num = Question.objects.filter(status="UNANSWERED").count()
@@ -581,7 +584,7 @@ def dashboard(request):
                 'connected_conn': connected_conn,
                 'unanswered_question_num': unanswered_question_num,
                 'avg_eng_meaning_month': avg_eng_meaning_month,
-
+                'avg_engagement': avg_engagement,
                 }
 
     return render(request, 'mentor/dashboard.html', context)
