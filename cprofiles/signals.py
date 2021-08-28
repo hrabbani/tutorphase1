@@ -41,7 +41,7 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
         email = EmailMultiAlternatives(
             content,
             text_context,
-            'Choice Program',
+            'Choice Program - Peninsula Bridge',
             email_list,
         )
 
@@ -65,7 +65,6 @@ def post_save_update_session(sender, instance, created, **kwargs):
 
         try:
             session = Session.objects.filter(connection=connection).latest('updated')
-            print(session.id)
         except:
             pass
 
@@ -338,7 +337,7 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Student",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -375,7 +374,7 @@ def post_save_urgent_check_mentor_session(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Mentor",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_list,
             )
 

@@ -110,7 +110,7 @@ def post_save_mentor_form_background_check(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "PB Mentoring Program Background Check",
                 text_context,
-                'Mentor Program',
+                'Mentor Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -137,7 +137,7 @@ def post_save_flag_session(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "[URGENT] Feedback Form Submitted",
                 text_context,
-                'Mentor Program',
+                'Mentor Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -150,7 +150,7 @@ def post_save_flag_session(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "Feedback Form Submitted",
                 text_context,
-                'Mentor Program',
+                'Mentor Program - Peninsula Bridge',
                 email_list,
             )
 

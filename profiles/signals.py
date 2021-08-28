@@ -55,7 +55,7 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Disconnection",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -163,7 +163,7 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Tutoring",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 

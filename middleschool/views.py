@@ -185,7 +185,7 @@ def tutor_connect(request):
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -208,7 +208,7 @@ def tutor_connect(request):
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -249,7 +249,7 @@ def student_connect(request):
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -273,7 +273,7 @@ def student_connect(request):
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -351,7 +351,7 @@ def remove_connection(request):
         email = EmailMultiAlternatives(
             "Peninsula Bridge: Tutoring Disconnection",
             text_context,
-            'Tutoring Program',
+            'Tutoring Program - Peninsula Bridge',
             email_list,
         )
 
@@ -411,7 +411,7 @@ def generate_session_form(request):
         email = EmailMultiAlternatives(
             "Peninsula Bridge Tutoring: Required Weekly Feedback Form",
             text_context,
-            'Tutoring Program',
+            'Tutoring Program - Peninsula Bridge',
             [email],
         )
 
@@ -867,7 +867,7 @@ def check_connection_status(request):
                 email = EmailMultiAlternatives(
                     subject,
                     text_context,
-                    'Tutoring Program',
+                    'Tutoring Program - Peninsula Bridge',
                     email_list,
                 )
 
@@ -899,7 +899,7 @@ def check_connection_status(request):
             email = EmailMultiAlternatives(
                 subject,
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 

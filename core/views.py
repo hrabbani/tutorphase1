@@ -19,7 +19,6 @@ def login_page(request):
         if next_url in ['/', None]:
             if user is not None:
                 login(request, user)
-                print(request.user.groups.all()[0].name)
                 if request.user.groups.all()[0].name == 'tutor':
                     return redirect('profiles:dashboard') 
                 if request.user.groups.all()[0].name == 'choice':

@@ -55,7 +55,7 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Disconnection",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -92,15 +92,11 @@ m2m_changed.connect(post_save_flag_session, sender=Session.support.through)
 
 def post_save_subject_registration(sender, instance, **kwargs):
 
-    print('A')
     if instance.get_subjects():
-        print('B')
 
         for x in instance.get_subjects():
-            print('C')
 
             Subjectcalculation.objects.create(name=x)
-            print('D')
 
     else:
         pass
@@ -170,7 +166,7 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Tutoring",
                 text_context,
-                'Tutoring Program',
+                'Tutoring Program - Peninsula Bridge',
                 email_list,
             )
 

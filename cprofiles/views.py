@@ -205,7 +205,7 @@ def mentor_connect(request):
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -222,7 +222,7 @@ def mentor_connect(request):
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_mentor,
             )
 
@@ -242,7 +242,7 @@ def mentor_connect(request):
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -259,7 +259,7 @@ def mentor_connect(request):
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_mentor,
             )
 
@@ -297,7 +297,7 @@ def student_connect(request):
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -314,7 +314,7 @@ def student_connect(request):
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_mentor,
             )
 
@@ -333,7 +333,7 @@ def student_connect(request):
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_list,
             )
 
@@ -350,7 +350,7 @@ def student_connect(request):
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_mentor,
             )
 
@@ -426,7 +426,7 @@ def remove_connection(request):
         email = EmailMultiAlternatives(
             "Mentor/Student Disconnection ",
             text_context,
-            'Choice Program',
+            'Choice Program - Peninsula Bridge',
             email_list,
         )
 
@@ -495,7 +495,7 @@ def generate_session_form(request):
         email = EmailMultiAlternatives(
             "Choice Mentor Feedback Form",
             text_context,
-            'Choice Program',
+            'Choice Program - Peninsula Bridge',
             email_list,
         )
 
@@ -519,7 +519,7 @@ def generate_session_form(request):
         email = EmailMultiAlternatives(
             "Feedback Form // Forma de Comentarios",
             text_context,
-            'Choice Program',
+            'Choice Program - Peninsula Bridge',
             email_list,
         )
 
@@ -885,7 +885,7 @@ def check_connection_status(request):
                 email = EmailMultiAlternatives(
                     "Choice Program: Inactive Mentor/Student Relationship",
                     text_context,
-                    'Choice Program',
+                    'Choice Program - Peninsula Bridge',
                     email_list,
                 )
 
@@ -914,7 +914,7 @@ def check_connection_status(request):
             email = EmailMultiAlternatives(
                 "Choice Program: Inactive Mentor/Student Relationship",
                 text_context,
-                'Choice Program',
+                'Choice Program - Peninsula Bridge',
                 email_list,
             )
 

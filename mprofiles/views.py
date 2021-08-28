@@ -177,7 +177,7 @@ def mentor_connect(request):
 
             send_mail('Connection Established',
             content,
-            'Mentor Program',
+            'Mentor Program - Peninsula Bridge',
             email_list,
             fail_silently=False
             )
@@ -195,7 +195,7 @@ def mentor_connect(request):
 
             send_mail('Connection Established',
             content,
-            'Mentor Program',
+            'Mentor Program - Peninsula Bridge',
             email_list,
             fail_silently=False
             )
@@ -231,7 +231,7 @@ def student_connect(request):
 
             send_mail('Connection Established',
             content,
-            'Mentor Program',
+            'Mentor Program - Peninsula Bridge',
             email_list,
             fail_silently=False
             )
@@ -248,7 +248,7 @@ def student_connect(request):
 
             send_mail('Connection Established',
             content,
-            'Mentor Program',
+            'Mentor Program - Peninsula Bridge',
             email_list,
             fail_silently=False
             )
@@ -409,7 +409,7 @@ def generate_session_form(request):
 
         send_mail('Please fill in the Session Feedback Form',
         content,
-        'Mentor Program',
+        'Mentor Program - Peninsula Bridge',
         [email],
         fail_silently=False
         )
@@ -620,7 +620,7 @@ def check_connection_status(request):
 
                 send_mail('Connection Inactive',
                 content,
-                'Mentor Program',
+                'Mentor Program - Peninsula Bridge',
                 email_list,
                 fail_silently=False
                 )
@@ -644,7 +644,7 @@ def check_connection_status(request):
 
             send_mail('Connection Inactive',
             content,
-            'Mentor Program',
+            'Mentor Program - Peninsula Bridge',
             email_list,
             fail_silently=False
             )
