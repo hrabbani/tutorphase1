@@ -9,7 +9,9 @@
 <h3>Create Connection</h3>
 <div>Create a connection between a Student and Tutor</div>
 </br>
-<h3>Student: {{profile.first_name}} {{profile.last_name}}</h3>
+
+<h3>Student: <a href="{{profile.get_absolute_url}}">{{profile.first_name}} {{profile.last_name}}</a></h3>
+
 
 </br>
 
@@ -88,7 +90,7 @@
 
             {% for tutor in tutors %}
             <tr>
-                <td>{{tutor.first_name}} {{tutor.last_name}}</td>
+                <td><a href="{{tutor.get_absolute_url}}">{{tutor.first_name}} {{tutor.last_name}}</a></td>
                 <td>{{tutor.grade}}</td>
                 <td>{% for subject in tutor.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
                 <td>{% for interest in tutor.get_interests %}<li>{{interest}} </li>{% endfor %}</td>

@@ -354,8 +354,7 @@ def remove_connection(request):
 
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['mentor', 'admin'])
+
 def mentor_profile_form(request):
 
     form = MentorModelForm()
@@ -373,8 +372,6 @@ def mentor_profile_form(request):
 
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['mentor', 'admin'])
 def student_profile_form(request):
 
     form = StudentModelForm()
@@ -395,17 +392,17 @@ def student_profile_form(request):
 @allowed_users(allowed_roles=['mentor', 'admin'])
 def generate_session_form(request):
     
-    active_connection = Connection.objects.filter(status='connected')
+    active_connection = Connection.objects.exclude(status='disconnected')
 
     z = []
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
         session_generated_pk = str(session_generated.pk)
-        z.append("http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/submit-feedback/")
+        z.append("https://www.admin.peninsulabridge.org/mentoring/" + session_generated_pk + "/submit-feedback/")
 
         email = x.mentor.email
 
-        content = "http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/submit-feedback/"
+        content = "https://www.admin.peninsulabridge.org/mentoring/" + session_generated_pk + "/submit-feedback/"
 
         send_mail('Please fill in the Session Feedback Form',
         content,
@@ -421,8 +418,6 @@ def generate_session_form(request):
 
 
 
-@method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
 class SessionUpdateView(UpdateView):
     form_class = SessionModelForm
     model = Session
@@ -438,6 +433,7 @@ class SessionUpdateView(UpdateView):
         self.object.submit_status = True
         self.object = form.save()
         return redirect('profiles:session-submitted') 
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -626,7 +622,7 @@ def check_connection_status(request):
                 )
 
                 break
-  
+
         list_meet = []
         for y in x.get_all_sessions_two():
             list_meet.append(y.meet)

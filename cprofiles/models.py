@@ -28,6 +28,8 @@ class Socialstrength(models.Model):
 GENDER_CHOICES = (
     ('male', 'male'),
     ('female', 'female'),
+    ('No preference', 'No preference'),
+
 )
 
 GRADE_CHOICES = (

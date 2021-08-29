@@ -393,18 +393,18 @@ class SessionDetailView(DetailView):
 @allowed_users(allowed_roles=['middletutor', 'admin'])	
 def generate_session_form(request):
     
-    active_connection = Connection.objects.filter(status='connected')
+    active_connection = Connection.objects.exclude(status='disconnected')
 
     z = []
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
         session_generated_pk = str(session_generated.pk)
-        z.append("http://127.0.0.1:8000/middleschool/" + session_generated_pk + "/submit-feedback/")
+        z.append("https://www.admin.peninsulabridge.org/middleschool/" + session_generated_pk + "/submit-feedback/")
 
         tutor = x.tutor
         email = x.tutor.email
 
-        form_link = "http://127.0.0.1:8000/middleschool/" + session_generated_pk + "/submit-feedback/"
+        form_link = "https://www.admin.peninsulabridge.org/middleschool/" + session_generated_pk + "/submit-feedback/"
 
         html_content = render_to_string("tutor/weekly-feedback-email.html", {'tutor': tutor, 'form_link': form_link })
         text_context = strip_tags(html_content)
@@ -425,8 +425,6 @@ def generate_session_form(request):
     
 
 
-@method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
 class SessionUpdateView(UpdateView):
     form_class = SessionModelForm
     model = Session
@@ -444,16 +442,13 @@ class SessionUpdateView(UpdateView):
         return redirect('middleschool:session-submitted')
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['middletutor', 'admin'])	
+
 def session_submitted(request):
 
     return render(request, 'tutor/session-submitted.html')
 
 
-
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['middletutor', 'admin'])	
+	
 def tutor_profile_form(request):
 
     form = TutorModelForm()
@@ -472,8 +467,8 @@ def tutor_profile_form(request):
     return render(request, 'middleschool/tutor-profile-form.html', context)
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['middletutor', 'admin'])	
+
+	
 def student_profile_form(request):
 
     form = StudentModelForm()

@@ -156,7 +156,7 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
         date = instance.updated
         tutor_email = instance.connection.tutor.email
         question = instance.question
-        link = "http://127.0.0.1:8000/middleschool/" + session_generated_pk + "/session/"
+        link = "https://www.admin.peninsulabridge.org/middleschool/" + session_generated_pk + "/session/"
 
         if instance.urgent_check == True:
 

@@ -129,7 +129,7 @@ def post_save_flag_session(sender, instance, created, **kwargs):
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='mentor').values_list('email', flat=True))
         email_list.extend(program_manager_email_list)
 
-        form_link = "http://127.0.0.1:8000/mentoring/" + session_generated_pk + "/session/"
+        form_link = "https://www.admin.peninsulabridge.org/mentoring/" + session_generated_pk + "/session/"
 
         if instance.urgent_check == True:
             html_content = render_to_string("mentor/session-urgent-support-email.html", {'session': instance, 'form_link': form_link})

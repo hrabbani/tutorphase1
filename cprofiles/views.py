@@ -454,8 +454,7 @@ def show_task_form(request, pk):
 
 
 
-@method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+
 class TaskUpdateView(UpdateView):
 
     form_class = TaskModelForm
@@ -477,18 +476,18 @@ class TaskUpdateView(UpdateView):
 @allowed_users(allowed_roles=['choice', 'admin'])
 def generate_session_form(request):
     
-    active_connection = Connection.objects.filter(status='connected')
+    active_connection = Connection.objects.exclude(status='disconnected')
 
     z = []
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
         session_generated_pk = str(session_generated.pk)
-        z.append("http://127.0.0.1:8000/choice/" + session_generated_pk + "/submit-feedback/")
+        z.append("https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/submit-feedback/")
 
         email_list = []
         email_list.append(x.mentor.email)
 
-        form_link = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/submit-feedback/"
+        form_link = "https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/submit-feedback/"
 
         html_content = render_to_string("choice/choice-mentor-feedback-form.email.html", {'connection': x, 'form_link': form_link})
         text_context = strip_tags(html_content)
@@ -507,12 +506,12 @@ def generate_session_form(request):
     for y in active_connection:
         parentsession_generated = Parentsession.objects.create(connection=y)
         parentsession_generated_pk = str(parentsession_generated.pk)
-        g.append("http://127.0.0.1:8000/choice/" + parentsession_generated_pk + "/submit-parent-feedback/")
+        g.append("https://www.admin.peninsulabridge.org/choice/" + parentsession_generated_pk + "/submit-parent-feedback/")
 
         email_list = []
         email_list.append(x.student.parent1_email)
 
-        form_link = "http://127.0.0.1:8000/choice/" + parentsession_generated_pk + "/submit-parent-feedback/"
+        form_link = "https://www.admin.peninsulabridge.org/choice/" + parentsession_generated_pk + "/submit-parent-feedback/"
 
         html_content = render_to_string("choice/choice-parent-feedback-form.html", {'connection': x, 'form_link': form_link})
         text_context = strip_tags(html_content)
@@ -534,8 +533,6 @@ def generate_session_form(request):
 
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['choice', 'admin'])
 def update_session(request, pk):
 
     session = Session.objects.get(pk=pk)
@@ -596,8 +593,6 @@ class SessionDetailView(DetailView):
 
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['choice', 'admin'])
 def mentor_profile_form(request):
 
     form = MentorModelForm()
@@ -613,8 +608,7 @@ def mentor_profile_form(request):
     return render(request, 'choice/mentor-profile-form.html', context)
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['choice', 'admin'])
+
 def student_profile_form(request):
 
     form = StudentModelForm()
@@ -1110,8 +1104,6 @@ class ParentSessionDetailView(DetailView):
 
 
 
-@method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class ParentSessionUpdateView(UpdateView):
     form_class = ParentSessionModelForm
     model = Parentsession

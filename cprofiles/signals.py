@@ -34,7 +34,7 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
 
         pk = instance.pk
 
-        link = "http://127.0.0.1:8000/choice/" + str(pk) + "/connection-detail"
+        link = "https://www.admin.peninsulabridge.org/choice/" + str(pk) + "/connection-detail"
 
         html_content = render_to_string("choice/connection-offtrack-email.html", {'connection': instance, 'form_link': link})
         text_context = strip_tags(html_content)
@@ -328,7 +328,7 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
         student_last_name = instance.connection.student.last_name
         student_email = instance.connection.student.email
         question = instance.question
-        link = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/parent-session/"
+        link = "https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/parent-session/"
 
         if instance.urgent_check == True:
 
@@ -365,7 +365,7 @@ def post_save_urgent_check_mentor_session(sender, instance, created, **kwargs):
         mentor_last_name = instance.connection.mentor.last_name
         mentor_email = instance.connection.mentor.email
         elaborate = instance.elaborate
-        link = "http://127.0.0.1:8000/choice/" + session_generated_pk + "/session/"
+        link = "https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/session/"
 
         if instance.urgent_check == True:
 

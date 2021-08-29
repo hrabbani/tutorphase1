@@ -22,5 +22,6 @@ body{
 
 
 .dropdown-menu {
+  position: absolute;
   left: -50px;
 }
