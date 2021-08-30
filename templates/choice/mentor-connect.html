@@ -39,7 +39,7 @@
 
         <div class="col-sm">
             <p>About:<p>
-                    <p>{{mentor.share}}</p>
+                    <p>{{mentor.hobby}}</p>
         </div>
 
         <div class="col-sm">
@@ -97,7 +97,7 @@
                 <td>{{student.grade}}</td>
                 <td>{{student.gender}}</td>
                 <td>{{student.school}}</td>
-                <td>{{student.activity}}</td>
+                <td>{{student.hobby}}</td>
                 <td>{{student.language_preference}}</td>
                 <td>{% for friend in student.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>
                     {% endfor %}</td>
