@@ -38,8 +38,8 @@
         </div>
 
         <div class="col-sm">
-            <p>Hobbies:<p>
-                    <p>{{mentor.hobby}}</p>
+            <p>About:<p>
+                    <p>{{mentor.share}}</p>
         </div>
 
         <div class="col-sm">
@@ -67,9 +67,9 @@
                 <th scope="col">Grade</th>
                 <th scope="col">Gender</th>
                 <th scope="col">School</th>
-                <th scope="col">Hobbies</th>
+                <th scope="col">Hobbies/Activity</th>
                 <th scope="col">Prefer Language</th>
-                <th scope="col">Tutor</th>
+                <th scope="col">Mentor</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
             </tr>
@@ -81,9 +81,9 @@
                 <th>Grade</th>
                 <th>Gender</th>
                 <th>School</th>
-                <th>Hobbies</th>
+                <th>Hobbies/Activity</th>
                 <th>Prefer Language</th>
-                <th>Tutor</th>
+                <th>Mentor</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -97,7 +97,7 @@
                 <td>{{student.grade}}</td>
                 <td>{{student.gender}}</td>
                 <td>{{student.school}}</td>
-                <td>{{student.hobby}}</td>
+                <td>{{student.activity}}</td>
                 <td>{{student.language_preference}}</td>
                 <td>{% for friend in student.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>
                     {% endfor %}</td>
