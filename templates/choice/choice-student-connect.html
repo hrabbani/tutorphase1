@@ -1,10 +1,32 @@
 {% extends 'cbase.html' %}
 {% load static %}
-{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
 {% block title %}Create Connection{% endblock title %}
 
 
 {% block content %}
+
+
+
+<style>
+
+
+table{
+    table-layout:fixed;
+}
+
+.lines{
+    word-break: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 16px; /* fallback */
+    max-height: 100px; /* fallback */
+    -webkit-line-clamp: 4; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+    
+</style>
 
 <h3>Create Connection</h3>
 <div>Create a connection between a Student and Mentor</div>
@@ -29,7 +51,7 @@
 
                 <div class="col-sm">
             <p>Hobbies/Activity:<p>
-                    <p>{{student.hobby}}</p>
+                    <p>{{student.activity}}</p>
         </div>
 
                         <div class="col-sm">
@@ -51,14 +73,14 @@
 
 
 <div class="table-responsive-lg">
-    <table id="myTable" class="table">
+    <table id="myTable" class="table table-fixed">
         <thead>
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Pref Grade</th>
                 <th scope="col">Pref Gender</th>
                 <th scope="col">Languages spoken</th>
-                <th scope="col">About</th>               
+                <th scope="col" style="width:25%">About</th>
                 <th scope="col">Student</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -71,7 +93,7 @@
                 <th>Pref Grade</th>
                 <th>Pref Gender</th>
                 <th>Languages spoken</th>
-                <th>About</th>  
+                <th style="width:25%;">About</th>  
                 <th>Student</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -87,7 +109,7 @@
                 <td>{{mentor.prefer_grade}}</td>
                 <td>{{mentor.prefer_gender}}</td>
                 <td>{% for language in mentor.get_languages %}<li>{{language}}</li>{% endfor %}</td>
-                <td>{{mentor.hobby}}</td>
+                <td class="lines shown">{{mentor.share}}</td>
                 <td>{% for friend in mentor.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
                     {% for friend in mentor.get_friends %}
@@ -189,9 +211,30 @@
       document.getElementById("Status").parentElement.innerHTML = ""
       document.getElementById("Action").parentElement.innerHTML = ""
       document.getElementById("Name").parentElement.innerHTML = ""
+      document.getElementById("About").parentElement.innerHTML = ""
 
 
 
+    });
+
+
+    $('.lines').hover(
+
+       function(){ $(this).toggleClass('lines') },
+
+    )
+
+
+    $(document).ready(function() {
+        var colorOrig=$(".shown").css('background');
+        $(".shown").hover(
+        function() {
+            //mouse over
+            $(this).css('background', '#ff0')
+        }, function() {
+            //mouse out
+            $(this).css('background', colorOrig)
+        });
     });
 
 </script>

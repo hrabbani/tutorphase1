@@ -6,6 +6,27 @@
 
 {% block content %}
 
+
+<style>
+
+
+table{
+        table-layout:fixed;
+    }
+    
+.lines{
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-height: 16px; /* fallback */
+        max-height: 100px; /* fallback */
+        -webkit-line-clamp: 4; /* number of lines to show */
+        -webkit-box-orient: vertical;
+    }
+        
+</style>
+
 <h3>Create Connection</h3>
 <div>Create a connection between a Student and Mentor</div>
 </br>
@@ -39,7 +60,7 @@
 
         <div class="col-sm">
             <p>About:<p>
-                    <p>{{mentor.hobby}}</p>
+                    <p>{{mentor.share}}</p>
         </div>
 
         <div class="col-sm">
@@ -60,14 +81,14 @@
 
 
 <div class="table-responsive-lg">
-    <table id="myTable" class="table">
+    <table id="myTable" class="table table-fixed">
         <thead>
             <tr>
                 <th scope="col">Name</th>
                 <th scope="col">Grade</th>
                 <th scope="col">Gender</th>
                 <th scope="col">School</th>
-                <th scope="col">Hobbies/Activity</th>
+                <th scope="col" style="width:25%">Hobbies/Activity</th>
                 <th scope="col">Prefer Language</th>
                 <th scope="col">Mentor</th>
                 <th scope="col">Status</th>
@@ -81,11 +102,11 @@
                 <th>Grade</th>
                 <th>Gender</th>
                 <th>School</th>
-                <th>Hobbies/Activity</th>
+                <th style="width:25%;">Hobbies/Activity</th>
                 <th>Prefer Language</th>
                 <th>Mentor</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th style = "width: 25%;">Status</th>
+                <th style = "width: 25%;">Action</th>
             </tr>
         </tfoot>
 
@@ -97,7 +118,7 @@
                 <td>{{student.grade}}</td>
                 <td>{{student.gender}}</td>
                 <td>{{student.school}}</td>
-                <td>{{student.hobby}}</td>
+                <td class="lines shown">{{student.activity}}</td>
                 <td>{{student.language_preference}}</td>
                 <td>{% for friend in student.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>
                     {% endfor %}</td>
@@ -200,9 +221,32 @@
         document.getElementById("Status").parentElement.innerHTML = ""
         document.getElementById("Action").parentElement.innerHTML = ""
         document.getElementById("Name").parentElement.innerHTML = ""
+        document.getElementById("Hobbies-Activity").parentElement.innerHTML = ""
 
 
 
     });
+
+
+    $('.lines').hover(
+
+       function(){ $(this).toggleClass('lines') },
+
+    )
+
+
+    $(document).ready(function() {
+        var colorOrig=$(".shown").css('background');
+        $(".shown").hover(
+        function() {
+            //mouse over
+            $(this).css('background', '#ff0')
+        }, function() {
+            //mouse out
+            $(this).css('background', colorOrig)
+        });
+    });
+
+
 </script>
 {% endblock scripts %}
