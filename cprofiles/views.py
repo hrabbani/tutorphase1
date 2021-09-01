@@ -1256,7 +1256,7 @@ class StudentNoteUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
 class ConnectionNoteUpdateView(UpdateView):
     form_class = ConnectionNoteModelForm
     model = Connection

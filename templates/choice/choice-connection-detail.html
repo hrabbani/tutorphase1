@@ -86,12 +86,12 @@
     {% elif connection.status == 'disconnected' %}
     <a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
             class="btn btn-info">Connect
-            Tutor</button></a>
+            Mentor</button></a>
 
     {% elif connection.status == 'inactive' %}
     <a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
             class="btn btn-info">Connect
-            Tutor</button></a>
+            Mentor</button></a>
     <form action="{% url 'profiles:remove-connect' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="student_pk" value={{connection.student.pk}}>
