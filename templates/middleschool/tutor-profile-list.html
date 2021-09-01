@@ -93,7 +93,7 @@ td.capacity {
                 <tr>
                     <td><a href="{{obj.get_absolute_url}}">{{obj.first_name}} {{obj.last_name}}</a></td>
                     <td style="word-break:break-all;">{{obj.email}}</td>
-                    <td>{{obj.student_grade}}</td>
+                    <td>{{obj.grade}}</td>
 
                     <td>
                         {% for subject in obj.get_subjects %}<li>{{subject}} </li>{% endfor %}
