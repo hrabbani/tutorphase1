@@ -60,7 +60,7 @@ table{
 
         <div class="col-sm">
             <p>About:<p>
-                    <p>{{mentor.hobby}}</p>
+                    <p>{{mentor.share}}</p>
         </div>
 
         <div class="col-sm">
@@ -88,11 +88,11 @@ table{
                 <th scope="col">Grade</th>
                 <th scope="col">Gender</th>
                 <th scope="col">School</th>
-                <th scope="col" style="width:25%">Hobbies/Activity</th>
+                <th scope="col" style="width:20%">Hobbies/Activity</th>
                 <th scope="col">Prefer Language</th>
                 <th scope="col">Mentor</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
+                <th scope="col" style="width:8%">Status</th>
+                <th scope="col" style="width:8%">Action</th>
             </tr>
         </thead>
 
@@ -102,11 +102,11 @@ table{
                 <th>Grade</th>
                 <th>Gender</th>
                 <th>School</th>
-                <th style="width:25%;">Hobbies/Activity</th>
+                <th style="width:20%;">Hobbies/Activity</th>
                 <th>Prefer Language</th>
                 <th>Mentor</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th style = "width: 8%;">Status</th>
+                <th style = "width: 8%;">Action</th>
             </tr>
         </tfoot>
 
@@ -118,7 +118,7 @@ table{
                 <td>{{student.grade}}</td>
                 <td>{{student.gender}}</td>
                 <td>{{student.school}}</td>
-                <td class="lines shown">{{student.hobby}}</td>
+                <td class="lines shown">{{student.activity}}</td>
                 <td>{{student.language_preference}}</td>
                 <td>{% for friend in student.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>
                     {% endfor %}</td>

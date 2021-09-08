@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disconnection Email</title>
+</head>
+<body>
+
+<p>This is an automatic email to notify you that {{tutor.first_name}} {{tutor.last_name}} (tutor) has indicated that they are going to stop their tutoring with {{student.first_name}} {{student.last_name}} (student).</p>
+
+<p><b>Reason for disconnection:</b> {{session.reason_disconnect}}</p>
+
+<p>You can visit their <a href={{connection_link}}>connection profile</a> to confirm the disconnection or contact {{tutor.first_name}} (tutor) at {{tutor.email}} and {{student.first_name}} (student) at {{student.email}} for more information.</p>
+
+
+</body>
+</html>
+
+

@@ -7,6 +7,8 @@
 {% block content %}
 
 
+
+
 <div class="profile-page tx-13">
     <div class="row">
         <div class="col-12 grid-margin">
@@ -48,10 +50,12 @@
             <thead>
                 <tr>
                     <th scope="col">Date</th>
-                    <th scope="col">Student</th>
-                    <th scope="col">Tutor</th>
+                    <th scope="col">{% if profile.role == 'student' %}Tutor{% else %}Student{% endif %}</th>
                     <th scope="col">Length</th>
                     <th scope="col">Subjects</th>
+                    <th scope="col">Productivity</th>
+                    <th scope="col">Engagement</th>
+                    <th scope="col">Support</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -60,16 +64,21 @@
                 {% for session in sessions %}
                 <tr>
                     <td>{{session.created|date:"d M Y"}}</td>
-                    <td><a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}}
-                            {{session.connection.student.last_name}}</a></td>
-                    <td><a href="{{session.connection.tutor.get_absolute_url}}">{{session.connection.tutor.first_name}}
-                            {{session.connection.tutor.last_name}}</a></td>
+                    <td>{% if profile.role == 'student' %}
+                        <a href="{{session.connection.tutor.get_absolute_url}}">{{session.connection.tutor.first_name}} {{session.connection.tutor.last_name}}</a>
+                        {% else %}
+                        <a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}} {{session.connection.student.last_name}}</a>
+                        {% endif %}
+                    </td>
                     <td>{{session.length}} hr</td>
                     <td>
                         {% for subject in session.get_subjects %}
                         <li>{{subject}}</li>
                         {% endfor %}
                     </td>
+                    <td>{{session.productivity}}</td>
+                    <td>{{session.rate}}</td>
+                    <td>{% for support in session.get_supports %}<li>{{support}} </li>{% endfor %}
                     <td><a href="{{session.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
                                 Form</button></a></td>
 

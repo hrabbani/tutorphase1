@@ -31,6 +31,13 @@
         </div>
 
         <div class="col-sm">
+            <p>Interests:<p>
+            {% for interest in profile.get_interests %}
+            <li>{{interest}}</li>
+            {% endfor %}
+        </div>
+
+        <div class="col-sm">
             <p>School:<p>
             <p>{{profile.school}}</p>
         </div>
@@ -43,12 +50,7 @@
             {% endfor %}
         </div>
 
-        <div class="col-sm">
-            <p>Interests:<p>
-            {% for interest in profile.get_interests %}
-            <li>{{interest}}</li>
-            {% endfor %}
-        </div>
+        
     </div>
 </div>
 
@@ -90,7 +92,7 @@
             {% for student in students %}
             <tr>
                 <td><a href="{{student.get_absolute_url}}">{{student.first_name}} {{student.last_name}}</a></td>
-                <td>{{student.grade}}</td>
+                <td>{{student.student_grade}}</td>
                 <td>{% for subject in student.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
                 <td>{% for interest in student.get_interests %}<li>{{interest}} </li>{% endfor %}</td>
                 <td>{{student.school}}</td>

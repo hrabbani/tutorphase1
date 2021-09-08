@@ -1,0 +1,114 @@
+{% extends 'form-base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Student - Tutoring Sign-Up Form{% endblock title %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="fade-in">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-6">
+
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
+                    
+                    <div class="row">
+                        <div class="col-auto mr-auto">
+                            <h2>Peninsula Bridge: Student Tutoring Sign-Up Form</h2>
+                        </div>
+                        <div class="col-auto ml-auto">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a class="btn btn-primary"
+                                    href="{% url 'middleschool:student-profile-form' %}">English</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <label for="id_first_name">Nombre de pila:</label>
+                    {{form.first_name}}
+
+                    <label for="id_last_name">Apellido:</label>
+                    {{form.last_name}}
+
+                    <label for="id_email">Correo electrónico:</label>
+                    {{form.email}}
+
+                    <label for="id_student_grade">Calificación:</label>
+                    {{form.student_grade}}
+
+                    <label for="id_academic_advisor">Asesor académico:</label>
+                    {{form.academic_advisor}}
+
+                    <label for="id_subjects">¿En qué asignaturas le gustaría recibir tutoría? (Mantenga presionado el "Control" o
+                        Tecla "Comando" para seleccionar varios temas).</label>
+                    {{form.subjects}}
+
+                    <label for="id_interest">¿Cuales son tus intereses? (Mantenga presionada la tecla Comando / Control para seleccionar varias opciones).</label>
+                    {{form.interest}}
+
+                    <label for="id_school">Colegio:</label>
+                    {{form.school}}
+
+                    <label for="id_parent1_first_name">Nombre del padre / tutor:</label>
+                    {{form.parent1_first_name}}
+
+                    <label for="id_parent1_last_name">Apellido del padre / tutor:</label>
+                    {{form.parent1_last_name}}
+
+                    <label for="id_parent1_email">Padre / Tutor Correo electrónico:</label>
+                    {{form.parent1_email}}
+
+                    <label for="id_parent1_phone">Número de teléfono del padre / tutor:</label>
+                    {{form.parent1_phone}}
+
+                    <label for="id_parent_languages">Preferencias de idioma de los padres:</label>
+                    {{form.parent_languages}}
+
+                    <label for="id_comfortable_share_phone">¿Se siente cómodo con que compartamos su número de teléfono con el tutor?</label>
+                    {{form.comfortable_share_phone}}
+
+                    <label for="id_permission_share_grade">¿Nos da permiso para compartir sus calificaciones con el tutor?</label>
+                    {{form.permission_share_grade}}
+
+                    <label for="id_optional_school_loop_profile_link">(Opcional) Enlace del perfil del perfil de la escuela:</label>
+                    {{form.optional_school_loop_profile_link}}
+
+                    <label for="id_optional_school_loop_username">(Opcional) Nombre de usuario del perfil de la escuela:</label>
+                    {{form.optional_school_loop_username}}
+
+                    <label for="id_optional_school_loop_password">(Opcional) Contraseña del perfil de la escuela:</label>
+                    {{form.optional_school_loop_password}}
+
+
+                    <div class="card-footer">
+                        <button class="btn btn-sm btn-success" type="submit"> Submit</button>
+                    </div>
+                    {% csrf_token %}
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script>
+
+    var grade_list = ["9", "10", "11", "12"];
+    $('#id_student_grade').on('change', function () {
+        if(jQuery.inArray(this.value, grade_list) !== -1)
+            $('label[for=id_academic_advisor], #id_academic_advisor').show('normal');
+        else
+            $('label[for=id_academic_advisor], #id_academic_advisor').hide('normal');
+    }).trigger("change");
+</script>
+
+
+{% endblock scripts %}

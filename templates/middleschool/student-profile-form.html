@@ -13,7 +13,18 @@
 
                 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" autocomplete="off">
                     
-                    <h2>Peninsula Bridge: Student Tutoring Sign-Up Form</h2>
+                    <div class="row">
+                        <div class="col-auto mr-auto">
+                            <h2>Peninsula Bridge: Student Tutoring Sign-Up Form</h2>
+                        </div>
+                        <div class="col-auto ml-auto">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a class="btn btn-primary"
+                                    href="{% url 'middleschool:spanish-student-profile-form' %}">En Español</a>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <label for="id_first_name">First name:</label>
                     {{form.first_name}}

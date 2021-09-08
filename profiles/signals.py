@@ -37,23 +37,27 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
     
     if not created:
         if instance.disconnect == 'no':
-            connection_.status = 'disconnected'
             student = connection_.student
             tutor = connection_.tutor
 
             email_list = []
-            email_list.append(student.email)
-            email_list.append(tutor.email)
-            email_list.append(student.parent1_email)
+            # email_list.append(student.email)
+            # email_list.append(tutor.email)
+            # email_list.append(student.parent1_email)
             email_list.append(student.academic_advisor_email)
-
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
-            html_content = render_to_string("tutor/disconnection-email.html", {'student': student, 'tutor': tutor })
+            content = "Tutoring Disconnection Requested - " + tutor.first_name  + " and " + student.first_name
+
+            connection_pk = str(connection_.pk)
+            connection_link = "https://www.admin.peninsulabridge.org/tutoring/" + connection_pk + "/connection-detail/"
+
+
+            html_content = render_to_string("tutor/feedback-disconnection-email.html", {'student': student, 'tutor': tutor, 'connection_link': connection_link, 'session': instance  })
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "Peninsula Bridge: Tutoring Disconnection",
+                content,
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
@@ -62,7 +66,6 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-            connection_.save()
 
 
 

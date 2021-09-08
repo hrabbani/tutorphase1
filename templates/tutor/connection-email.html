@@ -19,6 +19,13 @@
 <li>{{subject}}</li>
 {% endfor %}
 
+
+<p>{{tutor.first_name}} can provide tutoring in:</p>
+{% for subject in tutor.get_subjects %}
+<li>{{subject}}</li>
+{% endfor %}
+
+
 <p><b>Parent Information</b> - {{student.parent1_first_name}} {{student.parent1_last_name}}, {{student.parent1_email}}, {{student.parent1_phone}}</p>
 <p><b>Parent Language Preference</b>: {{student.parent_languages}} | <b>{{tutor.first_name}}: If you need to contact your student’s parent, please do so in their preferred language.</b></p>
 
@@ -31,7 +38,7 @@
 <li>Tutoring will be <b>one hour per week.</b> A tutor and student can plan on more than that if both the tutor and student are interested and able to do so. Tutoring cannot take place during the hours of Peninsula Bridge programming.</li>
 <li>If a student needs to reschedule, please email the tutor at least <span style="color:red;"><b>24 hours in advance.</b></span> Also, plan a new day and time to reschedule the session. <i>Tutors, please do the same if you need to reschedule.</i></li>
 
-<p>Thank you in advance to families and tutors for your teamwork and flexibility as we support our Bridge students. Please be in touch if you have any major concerns or challenges.</p>
+<p>Thank you in advance to families and tutors for your teamwork and flexibility as we support our Bridge students. Please be in touch if you have any major concerns or challenges.  Please be in touch with us at hstutoring@peninsulabridge.org if you have any major concerns or challenges.</p>
 
 <p>Warmly,</p>
 
@@ -50,7 +57,7 @@
 <li>La tutoría será de <b>una hora por semana.</b> El tutor y el alumno pueden planificar más que eso si tanto el tutor como el alumno están interesados y pueden hacerlo. La tutoría no puede tener lugar durante el horario de verano del programa Península Bridge.</li>
 <li>Si un estudiante necesita reprogramar, envíe la notificación del tutor por correo electrónico con <span style="color:red;"><b>al menos 24 horas de anticipación.</b></span> Además, planifique un nuevo día y hora para reprogramar la sesión. <i>Tutores, hagan lo mismo si necesitan reprogramar.</i></li>
 
-<p>Gracias de antemano a las familias y tutores por su trabajo en equipo y flexibilidad mientras apoyamos a nuestros estudiantes de Bridge. Póngase en contacto si tiene alguna pregunta o duda.</p>
+<p>Gracias de antemano a las familias y tutores por su trabajo en equipo y flexibilidad mientras apoyamos a nuestros estudiantes de Bridge. Póngase en contacto si tiene alguna pregunta o duda. Póngase en contacto a hstutoring@peninsulabridge.org si tiene alguna pregunta o duda.</p>
 
 <p>Mejor,</p>
 

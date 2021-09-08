@@ -367,7 +367,7 @@
             <div class="card-body">
                 <h5 class="card-title">Check the top THREE phrases that describe your child’s strengths in
                         your
-                        opinion. (Hold the Control or Command key to select multiple)</h5>
+                        opinion. (Hold the Control or Command key to select multiple options or deselect)</h5>
                 {% for strength in student.get_child_strengths %}
                 <li>{{strength}}</li>
                 {% endfor %}
@@ -379,7 +379,7 @@
             <div class="card-body">
                 <h5 class="card-title">Check the top THREE phrases that best describe your child’s social
                         strengths in your opinion. (Hold the Control or Command key to select
-                        multiple options)</h5>
+                        multiple options or deselect)</h5>
                 {% for strength in student.get_social_strengths %}
                 <li>{{strength}}</li>
                 {% endfor %}

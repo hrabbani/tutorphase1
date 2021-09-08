@@ -138,7 +138,13 @@ class TutorProfileListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        recipients = list(i for i in Profile.objects.filter(role='tutor').values_list('email', flat=True))
+        recipients = []
+        active_conn = Connection.objects.filter(status='connected')
+
+        for i in active_conn:
+            recipients.append(i.tutor.email)
+
+        recipients = list(set(recipients))
         recipients = ("; ".join(recipients))
         context["recipients"] = recipients
         return context
@@ -555,7 +561,7 @@ def dashboard(request):
     for k, v in zip(tutor_list, hour_list):
         my_dict[k].append(v)
 
-    top_tutor = {k: sum(v) for (k, v) in my_dict.items()}
+    top_tutor = {k: sum(filter(None, v)) for (k, v) in my_dict.items()}
     top_tutor = dict(sorted(top_tutor.items(), key=lambda item: item[1], reverse=False))
     top_tutor = list(top_tutor.items())[:25]
     top_tutor = dict(top_tutor)
