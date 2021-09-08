@@ -1252,7 +1252,7 @@ class StudentNoteUpdateView(UpdateView):
         return reverse("cprofiles:student-profiles-detail", kwargs={"slug": self.object.slug})
 
 
-#changed mentor to choice line 1259
+
 
 
 @method_decorator(login_required, name='dispatch')

@@ -135,7 +135,7 @@ def post_save_flag_session(sender, instance, created, **kwargs):
             html_content = render_to_string("mentor/session-urgent-support-email.html", {'session': instance, 'form_link': form_link})
             text_context = strip_tags(html_content)
             email = EmailMultiAlternatives(
-                "(URGENT) Feedback Form Submitted",
+                "[URGENT] Feedback Form Submitted",
                 text_context,
                 'Mentor Program - Peninsula Bridge',
                 email_list,

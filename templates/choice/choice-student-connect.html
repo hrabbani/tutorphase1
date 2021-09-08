@@ -51,7 +51,7 @@ table{
 
                 <div class="col-sm">
             <p>Hobbies/Activity:<p>
-                    <p>{{student.activity}}</p>
+                    <p>{{student.hobby}}</p>
         </div>
 
                         <div class="col-sm">
@@ -109,7 +109,7 @@ table{
                 <td>{{mentor.prefer_grade}}</td>
                 <td>{{mentor.prefer_gender}}</td>
                 <td>{% for language in mentor.get_languages %}<li>{{language}}</li>{% endfor %}</td>
-                <td class="lines shown">{{mentor.share}}</td>
+                <td class="lines shown">{{mentor.hobby}}</td>
                 <td>{% for friend in mentor.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
                     {% for friend in mentor.get_friends %}

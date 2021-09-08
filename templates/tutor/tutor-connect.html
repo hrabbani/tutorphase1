@@ -32,13 +32,6 @@
         </div>
 
         <div class="col-sm">
-            <p>Interests:<p>
-            {% for interest in profile.get_interests %}
-            <li>{{interest}}</li>
-            {% endfor %}
-        </div>
-
-        <div class="col-sm">
             <p>School:<p>
             <p>{{profile.school}}</p>
         </div>
@@ -51,7 +44,12 @@
             {% endfor %}
         </div>
 
-        
+        <div class="col-sm">
+            <p>Interests:<p>
+            {% for interest in profile.get_interests %}
+            <li>{{interest}}</li>
+            {% endfor %}
+        </div>
     </div>
 </div>
 

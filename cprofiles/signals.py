@@ -30,7 +30,7 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
         email_list.extend(program_manager_email_list)
 
-        content = "Choice Program: Off-Track Progress - " + mentor_.first_name + " " + mentor_.last_name + " and " + student_.first_name + " " + student_.last_name
+        content = "Choice Program: Off-Track Progress -" + mentor_.first_name + " " + mentor_.last_name + " and " + student_.first_name + " " + student_.last_name
 
         pk = instance.pk
 
@@ -140,6 +140,7 @@ def post_save_update_connection(sender, instance, created, **kwargs):
         today_date = datetime.date.today()
 
         instance.connection.flag = False
+        instance.connection.save()
         instance.connection.progress = 'on track'
         instance.connection.status = 'connected'
         instance.connection.save()
