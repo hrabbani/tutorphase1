@@ -138,13 +138,17 @@ class TutorProfileListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        recipients = []
+        active_recipients = []
         active_conn = Connection.objects.filter(status='connected')
 
         for i in active_conn:
-            recipients.append(i.tutor.email)
+            active_recipients.append(i.tutor.email)
 
-        recipients = list(set(recipients))
+        active_recipients = list(set(active_recipients))
+        active_recipients = ("; ".join(active_recipients))
+        context["active_recipients"] = active_recipients
+
+        recipients = list(i for i in Profile.objects.filter(role='tutor').values_list('email', flat=True))
         recipients = ("; ".join(recipients))
         context["recipients"] = recipients
         return context
