@@ -55,6 +55,23 @@
             </div>
             {% endifequal %}
 
+           {% ifequal user.groups.all.0.name "tutor" %}
+           {% ifequal user.groups.all.1.name "mentor" %}
+
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Programs
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'profiles:dashboard' %}">Tutoring (High School)</a>
+                    <a class="dropdown-item" href="{% url 'mprofiles:dashboard' %}">Mentor Program</a>
+                </div>
+            </div>
+            {% endifequal %}
+            {% endifequal %}
+
+
 
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold" href="{% url 'logout' %}">Logout</a>

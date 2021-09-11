@@ -857,7 +857,7 @@ def check_connection_status(request):
 
     active_connection = Connection.objects.filter(status='connected')
 
-    inactive_list = [0, 0, 0, 0]
+    inactive_list = [0, 0]
 
     for x in active_connection:
         for y in x.get_all_sessions():
@@ -889,7 +889,7 @@ def check_connection_status(request):
                 break
   
         list_meet = []
-        for y in x.get_all_sessions_four():
+        for y in x.get_all_sessions_two():
             list_meet.append(y.meet)
 
         if list_meet == inactive_list:

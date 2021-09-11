@@ -354,27 +354,27 @@ def remove_connection(request):
         rel.status = 'disconnected'
         rel.save()
 
-        email_list = []
-        email_list.append(student.email)
-        email_list.append(tutor.email)
-        email_list.append(student.parent1_email)
-        email_list.append(student.academic_advisor_email)
+        # email_list = []
+        # email_list.append(student.email)
+        # email_list.append(tutor.email)
+        # email_list.append(student.parent1_email)
+        # email_list.append(student.academic_advisor_email)
 
-        program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
+        # program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
 
-        email_list.extend(program_manager_email_list)
+        # email_list.extend(program_manager_email_list)
 
-        html_content = render_to_string("tutor/disconnection-email.html", {'student': student, 'tutor': tutor })
-        text_context = strip_tags(html_content)
-        email = EmailMultiAlternatives(
-            "Peninsula Bridge: Tutoring Disconnection",
-            text_context,
-            'Tutoring Program - Peninsula Bridge',
-            email_list,
-        )
+        # html_content = render_to_string("tutor/disconnection-email.html", {'student': student, 'tutor': tutor })
+        # text_context = strip_tags(html_content)
+        # email = EmailMultiAlternatives(
+        #     "Peninsula Bridge: Tutoring Disconnection",
+        #     text_context,
+        #     'Tutoring Program - Peninsula Bridge',
+        #     email_list,
+        # )
 
-        email.attach_alternative(html_content, "text/html")
-        email.send()
+        # email.attach_alternative(html_content, "text/html")
+        # email.send()
         
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('profiles:my-profile-view')
