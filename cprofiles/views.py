@@ -509,11 +509,11 @@ def generate_session_form(request):
         g.append("https://www.admin.peninsulabridge.org/choice/" + parentsession_generated_pk + "/submit-parent-feedback/")
 
         email_list = []
-        email_list.append(x.student.parent1_email)
+        email_list.append(y.student.parent1_email)
 
         form_link = "https://www.admin.peninsulabridge.org/choice/" + parentsession_generated_pk + "/submit-parent-feedback/"
 
-        html_content = render_to_string("choice/choice-parent-feedback-form.html", {'connection': x, 'form_link': form_link})
+        html_content = render_to_string("choice/choice-parent-feedback-form.html", {'connection': y, 'form_link': form_link})
         text_context = strip_tags(html_content)
         email = EmailMultiAlternatives(
             "Feedback Form // Forma de Comentarios",
