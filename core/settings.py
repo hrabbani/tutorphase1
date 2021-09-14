@@ -76,6 +76,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'profiles.context_processors.high_school_question',
+                'middleschool.context_processors.middle_school_question',
+                'cprofiles.context_processors.choice_question',
+                'mprofiles.context_processors.mentor_question',
 
             ],
         },
@@ -157,20 +161,20 @@ MEDIA_URL = '/media/'
 
 
 # Email Settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'penbridgedashboard@gmail.com'
-EMAIL_HOST_PASSWORD = 'u32UaD&*oeQJ'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'penbridgedashboard@gmail.com'
+# EMAIL_HOST_PASSWORD = 'u32UaD&*oeQJ'
 
 
 
 
 # Email Settings
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'lbpcontrol.sg@gmail.com'
-# EMAIL_HOST_PASSWORD = 'malim2020.'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'lbpcontrol.sg@gmail.com'
+EMAIL_HOST_PASSWORD = 'malim2020.'

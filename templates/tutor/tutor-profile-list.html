@@ -107,7 +107,6 @@ p { margin: 0; }
                     </td>
                     <td>
 
-
                         {% for friend in obj.get_friends %}
                         <div><span class="badge badge-success">Connected</span></div>
                         {% empty %}
@@ -115,6 +114,7 @@ p { margin: 0; }
                         {% endfor %}
 
                     </td>
+
 
 
                     {% if obj.student_capacity > obj.get_friends_no or obj.student_capacity == None %}
@@ -125,6 +125,8 @@ p { margin: 0; }
                     <td><a href="{% url 'profiles:tutor-detail-view' obj.slug %}"><button type="submit"
                                 class="btn btn-info" disabled>Connect Student</button></a></td>
                     {% endif %}
+
+
                     <td class="capacity">{{ obj.student_capacity }}</td>
                     <td>{{ obj.created |date:"d M Y"  }}</td>
                     <td>
