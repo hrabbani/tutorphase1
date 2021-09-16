@@ -480,28 +480,28 @@ def generate_session_form(request):
     active_connection = Connection.objects.exclude(status='disconnected')
 
     z = []
-    # for x in active_connection:
-    #     session_generated = Session.objects.create(connection=x)
-    #     session_generated_pk = str(session_generated.pk)
-    #     z.append("https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/submit-feedback/")
+    for x in active_connection:
+        session_generated = Session.objects.create(connection=x)
+        session_generated_pk = str(session_generated.pk)
+        z.append("https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/submit-feedback/")
 
-    #     email_list = []
-    #     email_list.append(x.mentor.email)
+        email_list = []
+        email_list.append(x.mentor.email)
 
-    #     form_link = "https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/submit-feedback/"
+        form_link = "https://www.admin.peninsulabridge.org/choice/" + session_generated_pk + "/submit-feedback/"
 
-    #     html_content = render_to_string("choice/choice-mentor-feedback-form.email.html", {'connection': x, 'form_link': form_link})
-    #     text_context = strip_tags(html_content)
-    #     email = EmailMultiAlternatives(
-    #         "Choice Mentor Feedback Form",
-    #         text_context,
-    #         'Choice Program - Peninsula Bridge',
-    #         email_list,
-    #     )
+        html_content = render_to_string("choice/choice-mentor-feedback-form.email.html", {'connection': x, 'form_link': form_link})
+        text_context = strip_tags(html_content)
+        email = EmailMultiAlternatives(
+            "Choice Mentor Feedback Form",
+            text_context,
+            'Choice Program - Peninsula Bridge',
+            email_list,
+        )
 
-    #     email.attach_alternative(html_content, "text/html")
-    #     email.send()
-    #     time.sleep(5)
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+        time.sleep(5)
 
 
     g = []
