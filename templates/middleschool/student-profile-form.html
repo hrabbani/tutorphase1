@@ -38,9 +38,6 @@
                     <label for="id_student_grade">Grade:</label>
                     {{form.student_grade}}
 
-                    <label for="id_academic_advisor">Academic advisor:</label>
-                    {{form.academic_advisor}}
-
                     <label for="id_subjects">What subjects would you like tutoring in? (Hold the “Control” or
                         “Command” key to select multiple subjects.)</label>
                     {{form.subjects}}
@@ -98,17 +95,6 @@
 
 
 {% block scripts %}
-
-<script>
-
-    var grade_list = ["9", "10", "11", "12"];
-    $('#id_student_grade').on('change', function () {
-        if(jQuery.inArray(this.value, grade_list) !== -1)
-            $('label[for=id_academic_advisor], #id_academic_advisor').show('normal');
-        else
-            $('label[for=id_academic_advisor], #id_academic_advisor').hide('normal');
-    }).trigger("change");
-</script>
 
 
 {% endblock scripts %}

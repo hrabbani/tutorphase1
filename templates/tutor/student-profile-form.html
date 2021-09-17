@@ -88,16 +88,6 @@
 
 {% block scripts %}
 
-<script>
-
-    var grade_list = ["9", "10", "11", "12"];
-    $('#id_student_grade').on('change', function () {
-        if(jQuery.inArray(this.value, grade_list) !== -1)
-            $('label[for=id_academic_advisor], #id_academic_advisor').show('normal');
-        else
-            $('label[for=id_academic_advisor], #id_academic_advisor').hide('normal');
-    }).trigger("change");
-</script>
 
 
 {% endblock scripts %}

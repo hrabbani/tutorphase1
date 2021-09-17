@@ -63,6 +63,7 @@ LANGUAGE_CHOICES = (
 )
 
 STUDENT_GRADE_CHOICES = (
+    ('4', '4'),
     ('5', '5'),
     ('6', '6'),
     ('7', '7'),
@@ -87,6 +88,12 @@ ETHNIC_CHOICES = (
     ('Hispanic or Latino', 'Hispanic or Latino'),
     ('Native Hawaiian or Other Pacific Islander', 'Native Hawaiian or Other Pacific Islander'),
     ('I prefer not to say', 'I prefer not to say')
+)
+
+
+YES_NO = (
+    ('yes', 'yes'),
+    ('no', 'no'),
 )
         
 class Profile(models.Model):
@@ -124,6 +131,8 @@ class Profile(models.Model):
     ethnic = models.CharField(null=True, blank=True, max_length=200, choices=ETHNIC_CHOICES)
     note = models.TextField(null=True, blank=True, max_length=1000)
     interest = models.ManyToManyField(Interest, blank=True, related_name='interest')
+    check = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+
 
 
     

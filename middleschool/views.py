@@ -467,10 +467,27 @@ def tutor_profile_form(request):
     if request.method == 'POST':
         form = TutorModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
+            tutor_email = form.cleaned_data.get('email')
+            tutor_name = form.cleaned_data.get('first_name')
             new_role = form.save(commit=False)
             new_role.role = 'tutor'
             new_role.save()
             form.save_m2m()
+
+            email_list = []
+            email_list.append(tutor_email)
+            html_content = render_to_string("middleschool/tutor-signup-email.html", {'tutor_name': tutor_name})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                'Tutor Sign Up Confirmation Email',
+                text_context,
+                'Tutoring Program - Peninsula Bridge',
+                email_list,
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
             return HttpResponse('Thank you for your interest in becoming a tutor! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
     context = {'form':form}
@@ -487,10 +504,32 @@ def student_profile_form(request):
     if request.method == 'POST':
         form = StudentModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
+            student_email = form.cleaned_data.get('email')
+            parent_email = form.cleaned_data.get('parent1_email')
+            student_name = form.cleaned_data.get('first_name')
+            parent_name = form.cleaned_data.get('parent1_first_name')
+
             new_role = form.save(commit=False)
             new_role.role = 'student'
             new_role.save()
             form.save_m2m()
+
+            email_list = []
+            email_list.append(student_email)
+            email_list.append(parent_email)
+
+            html_content = render_to_string("middleschool/student-signup-email.html", {'student_name': student_name, 'parent_name': parent_name})
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                'Student Tutoring Sign Up Confirmation Email// Confirmación de registro de tutoría para estudiantes',
+                text_context,
+                'Tutoring Program - Peninsula Bridge',
+                email_list,
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
             return HttpResponse('Thank you for your interest in tutoring! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
     context = {'form':form}

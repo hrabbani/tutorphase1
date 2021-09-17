@@ -51,9 +51,6 @@
                     <label for="id_grade">Grade:</label>
                     {{form.grade}}
 
-                    <label for="id_academic_advisor">Academic advisor:</label>
-                    {{form.academic_advisor}}
-
                     <label for="id_age">Age:</label>
                     {{form.age}}
 
@@ -82,15 +79,5 @@
 
 {% block scripts %}
 
-<script>
 
-    $('#id_grade').on('change', function () {
-        if (this.value == 'Not in grade school')
-            $('label[for=id_age], #id_age').show('normal');
-        else
-            $('label[for=id_age], #id_age').hide('normal');
-    }).trigger("change");
-
-    
-</script>
 {% endblock scripts %}

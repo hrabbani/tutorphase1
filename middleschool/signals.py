@@ -178,3 +178,25 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
 
         else:
             pass
+
+
+
+@receiver(post_save, sender=Profile)
+def post_save_tutor_form_background_check(sender, instance, created, **kwargs):
+
+    if created:
+        if instance.check == 'yes':
+            email_list = []
+            email_list.append(instance.email)
+
+            html_content = render_to_string("middleschool/background-check-email.html", {'tutor': instance })
+            text_context = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                "PB Tutoring Program Background Check",
+                text_context,
+                'Tutoring Program - Peninsula Bridge',
+                email_list,
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
