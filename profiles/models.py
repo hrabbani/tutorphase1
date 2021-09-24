@@ -88,6 +88,12 @@ ETHNIC_CHOICES = (
     ('Native Hawaiian or Other Pacific Islander', 'Native Hawaiian or Other Pacific Islander'),
     ('I prefer not to say', 'I prefer not to say')
 )
+
+
+YES_NO = (
+    ('yes', 'yes'),
+    ('no', 'no'),
+)
         
 class Profile(models.Model):
     role = models.CharField(max_length=200, choices=ROLE_CHOICES_PROFILE, null=True)
@@ -124,9 +130,9 @@ class Profile(models.Model):
     ethnic = models.CharField(null=True, blank=True, max_length=200, choices=ETHNIC_CHOICES)
     note = models.TextField(null=True, blank=True, max_length=1000)
     interest = models.ManyToManyField(Interest, blank=True, related_name='interest')
+    check = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
 
 
-    
     def __str__(self):
         return f"{self.first_name}-{self.role}"
 

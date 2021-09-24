@@ -381,6 +381,8 @@ def post_save_urgent_check_mentor_session(sender, instance, created, **kwargs):
             email.attach_alternative(html_content, "text/html")
             email.send()
 
+            Session.objects.filter(pk=instance.id).update(flag=True)
+
         else:
             pass
 
@@ -398,5 +400,28 @@ def post_save_session_update_submit_status(sender, instance, created, **kwargs):
     else:
         pass
 
+
+
+def post_save_flag_session(sender, instance, **kwargs):
+
+    list_a = list((instance.get_supports().values('name')))
+    list_a = list(map(lambda x: x['name'], list_a))
+
+    list_b = ['My student didn’t show up to our session', 'Scheduling and communication issues', 'Engaging with student during session', 'Tech issues', 'My student is unmotivated', 'My student isn’t completing assigned tasks in between sessions', 'Other']
+
+    def common_member(a, b):
+        a_set = set(a)
+        b_set = set(b)
+        if (a_set & b_set):
+            return True 
+        else:
+            return False
+          
+    if common_member(list_a, list_b) is True:
+        Session.objects.filter(pk=instance.id).update(flag=True)
+    else:
+        pass
+
+m2m_changed.connect(post_save_flag_session, sender=Session.support.through)
 
 
