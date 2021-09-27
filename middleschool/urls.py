@@ -38,6 +38,8 @@ from .views import (
     ConnectionNoteUpdateView,
     search_question,
     spanish_student_profile_form,
+    change_status_tutor,
+
         
 
 )
@@ -81,6 +83,7 @@ urlpatterns = [
     path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
     path('search-question/', search_question, name='search-question'),
     path('spanish-student-profile-input/', spanish_student_profile_form, name='spanish-student-profile-form'),
+    path('change-status-tutor/', change_status_tutor, name='change-status-tutor'),
 
 
    

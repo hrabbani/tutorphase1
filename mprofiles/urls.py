@@ -39,6 +39,8 @@ from .views import (
     search_question,
     change_check_mentor,
     change_uncheck_mentor,
+    change_status_mentor,
+    change_status_student,
    
 )
 
@@ -84,6 +86,8 @@ urlpatterns = [
     path('search-question/', search_question, name='search-question'),
     path('change-check-mentor/', change_check_mentor, name='change-check-mentor'),
     path('change-uncheck-mentor/', change_uncheck_mentor, name='change-uncheck-mentor'),
+    path('change-status-mentor/', change_status_mentor, name='change-status-mentor'),
+    path('change-status-student/', change_status_student, name='change-status-student'),
 
 
     

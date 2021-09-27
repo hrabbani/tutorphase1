@@ -43,6 +43,8 @@ from .views import (
     StudentNoteUpdateView,
     ConnectionNoteUpdateView,
     feedback_form_status,
+    change_status_mentor,
+    change_status_student,
    
 )
 
@@ -93,6 +95,8 @@ urlpatterns = [
     path('<slug>/student-note-update-profile', StudentNoteUpdateView.as_view(), name='student-note-update-profile'),
     path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
     path('feedback-form-status/', feedback_form_status, name='feedback-form-status'),
+    path('change-status-mentor/', change_status_mentor, name='change-status-mentor'),
+    path('change-status-student/', change_status_student, name='change-status-student'),
 
     
 ]

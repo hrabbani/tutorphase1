@@ -150,7 +150,7 @@ class MentorProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        students = Student.objects.all()
+        students = Student.objects.filter(status='active')
         students_ = []
         for item in students:
             students_.append(item)
@@ -172,7 +172,7 @@ class StudentProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        mentors = Mentor.objects.all()
+        mentors = Mentor.objects.filter(status='active')
         mentors_ = []
         for item in mentors:
             mentors_.append(item)
@@ -1302,3 +1302,56 @@ def feedback_form_status(request):
                 }
 
     return render(request, 'choice/feedback-form-status.html', context)
+
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def change_status_mentor(request):
+    if request.method == 'POST':
+        mentor_id = request.POST.get('mentor_id')
+        mentor_obj = Mentor.objects.get(id=mentor_id)
+
+        if mentor_obj.status == 'active':
+            Mentor.objects.filter(id=mentor_id).update(status='deactivated')
+
+        else:
+            Mentor.objects.filter(id=mentor_id).update(status='active')
+
+        status = Mentor.objects.filter(id=mentor_id).values('status')
+        status = status[0]['status']
+
+        data = {
+            'status': status,
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('cprofiles:dashboard')
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def change_status_student(request):
+    if request.method == 'POST':
+        student_id = request.POST.get('student_id')
+        student_obj = Student.objects.get(id=student_id)
+
+        if student_obj.status == 'active':
+            Student.objects.filter(id=student_id).update(status='deactivated')
+
+        else:
+            Student.objects.filter(id=student_id).update(status='active')
+
+        status = Student.objects.filter(id=student_id).values('status')
+        status = status[0]['status']
+
+        data = {
+            'status': status,
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('cprofiles:dashboard')

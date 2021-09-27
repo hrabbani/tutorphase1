@@ -29,7 +29,19 @@
                                     {% csrf_token %}
                                     Background Check: {% if mentor.check == 'yes' %}<span onClick="changeUncheck({{mentor.id}})" title="Click to Not Complete" class="badge badge-success" style="cursor:pointer">Completed</span>{% else %}<span title="Click to Complete" class="badge badge-danger" onClick="changeCheck({{mentor.id}})" style="cursor:pointer">Not Completed</span>{% endif %}</div>
                             </div>
-                            <div class="col-6">
+                           <div class="col-3">
+                            </div>
+                            <div class="col-3">
+                                <form action="{% url 'mprofiles:change-status-mentor' %}" method="POST" class='status-form' id='{{mentor.id}}'>
+                                    {% csrf_token %}
+                                        <div class='status-button'>
+                                        {% if mentor.status == 'active' %}
+                                        <button type="submit" class="btn btn-success pull-right">Active</button>                         
+                                        {% else %}
+                                        <button type="submit" class="btn btn-danger pull-right">Deactivated</button>                         
+                                        {% endif %}
+                                        </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -475,6 +487,40 @@
     }
 
 
+
+    $('.status-form').submit(function (e) {
+        e.preventDefault()
+
+        const mentor_id = $(this).attr('id')
+        const url = $(this).attr('action')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'mentor_id': mentor_id,
+            },
+            success: function (response) {
+
+                console.log(response.status)
+
+                if (response.status === 'active') {
+                    $(".status-button").html("<button type='submit' class='btn btn-success pull-right'>Active</button>");
+                } else {
+                    $(".status-button").html("<button type='submit' class='btn btn-danger pull-right'>Deactivated</button>");
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
 </script>
 
 {% endblock scripts %}
+
+

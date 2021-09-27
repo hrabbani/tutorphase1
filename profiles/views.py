@@ -29,6 +29,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import csv
+import time
+
 
 
 
@@ -47,7 +49,7 @@ class TutorProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        students = Profile.objects.filter(role='student')
+        students = Profile.objects.filter(role='student', status='active')
         students_ = []
         for item in students:
             students_.append(item)
@@ -69,7 +71,7 @@ class StudentProfileDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tutors = Profile.objects.filter(role='tutor')
+        tutors = Profile.objects.filter(role='tutor', status='active')
         tutors_ = []
         for item in tutors:
             tutors_.append(item)
@@ -435,6 +437,8 @@ def generate_session_form(request):
 
         email.attach_alternative(html_content, "text/html")
         email.send()
+        time.sleep(5)
+
 
     context = {'z':z}
 
@@ -1086,3 +1090,28 @@ def search_question(request):
     context = {'qs':qs}
 
     return render(request, 'tutor/question-list-search.html', context)
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
+def change_status_tutor(request):
+    if request.method == 'POST':
+        tutor_id = request.POST.get('tutor_id')
+        tutor_obj = Profile.objects.get(id=tutor_id)
+
+        if tutor_obj.status == 'active':
+            Profile.objects.filter(id=tutor_id).update(status='deactivated')
+
+        else:
+            Profile.objects.filter(id=tutor_id).update(status='active')
+
+        status = Profile.objects.filter(id=tutor_id).values('status')
+        status = status[0]['status']
+
+        data = {
+            'status': status,
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')

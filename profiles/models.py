@@ -94,6 +94,13 @@ YES_NO = (
     ('yes', 'yes'),
     ('no', 'no'),
 )
+
+
+
+PROFILE_STATUS = (
+    ('active', 'active'),
+    ('deactivated', 'deactivated'),
+)
         
 class Profile(models.Model):
     role = models.CharField(max_length=200, choices=ROLE_CHOICES_PROFILE, null=True)
@@ -131,6 +138,7 @@ class Profile(models.Model):
     note = models.TextField(null=True, blank=True, max_length=1000)
     interest = models.ManyToManyField(Interest, blank=True, related_name='interest')
     check = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
+    status = models.CharField(null=True, blank=True, max_length=200, choices=PROFILE_STATUS, default='active')
 
 
     def __str__(self):

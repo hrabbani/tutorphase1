@@ -62,15 +62,31 @@
                 <td>{{obj.school}}</td>
                 <td>{% for friend in obj.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
-                    {% for friend in obj.get_friends %}
-                    <div><span class="badge badge-success">Connected</span></div>
-                    {% empty %}
-                    <div><span class="badge badge-danger">Not Connected</div>
-                    {% endfor %}
+
+                    {% if obj.status == 'deactivated' %}
+                        <div><span class="badge badge-secondary">Deactivated</span></div>
+
+                    {% else %}
+                        {% for friend in obj.get_friends %}
+                        <div><span class="badge badge-success">Connected</span></div>
+                        {% empty %}
+                        <div><span class="badge badge-danger">Not Connected</div>
+                        {% endfor %}
+                    {% endif %}
+
                 </td>
+                {% if obj.status == 'deactivated' %}
+
+                <td><a href="{% url 'cprofiles:student-connect-detail' obj.slug %}"><button type="submit"
+                            class="btn btn-info" disabled>Connect Mentor</button></a></td>
+
+                {% else %}
 
                 <td><a href="{% url 'cprofiles:student-connect-detail' obj.slug %}"><button type="submit"
                             class="btn btn-info">Connect Mentor</button></a></td>
+
+                {% endif %}
+
                 <td>{{ obj.created |date:"d M Y"  }}</td>
                 <td>
                     <form action="{% url 'cprofiles:flag-student' %}" method="POST" class='like-form' id='{{obj.id}}'>

@@ -24,7 +24,19 @@
                                     {{student.first_name}}
                                     {{student.last_name}}</div>
                             </div>
-                            <div class="col-6">
+                          <div class="col-3">
+                            </div>
+                            <div class="col-3">
+                                <form action="{% url 'cprofiles:change-status-student' %}" method="POST" class='status-form' id='{{student.id}}'>
+                                    {% csrf_token %}
+                                        <div class='status-button'>
+                                        {% if student.status == 'active' %}
+                                        <button type="submit" class="btn btn-success pull-right">Active</button>                         
+                                        {% else %}
+                                        <button type="submit" class="btn btn-danger pull-right">Deactivated</button>                         
+                                        {% endif %}
+                                        </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -413,3 +425,43 @@
 </br>
 
 {% endblock content %}
+
+
+
+
+{% block scripts %}
+    <script>
+
+
+    $('.status-form').submit(function (e) {
+        e.preventDefault()
+
+        const student_id = $(this).attr('id')
+        const url = $(this).attr('action')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'student_id': student_id,
+            },
+            success: function (response) {
+
+
+                if (response.status === 'active') {
+                    $(".status-button").html("<button type='submit' class='btn btn-success pull-right'>Active</button>");
+                } else {
+                    $(".status-button").html("<button type='submit' class='btn btn-danger pull-right'>Deactivated</button>");
+                }
+
+            },
+            error: function (response) {
+                console.log('error', response)
+            }
+        })
+
+    })
+
+    </script>
+{% endblock scripts %}

@@ -107,17 +107,28 @@ p { margin: 0; }
                     </td>
                     <td>
 
+                    {% if obj.status == 'deactivated' %}
+                        <div><span class="badge badge-secondary">Deactivated</span></div>
+
+                    {% else %}
+
                         {% for friend in obj.get_friends %}
                         <div><span class="badge badge-success">Connected</span></div>
                         {% empty %}
                         <div><span class="badge badge-danger">Not Connected</div>
                         {% endfor %}
 
+                    {% endif %}
+
+
                     </td>
 
 
+                    {% if obj.status == 'deactivated' %}
+                    <td><a href="{% url 'profiles:tutor-detail-view' obj.slug %}"><button type="submit"
+                                class="btn btn-info" disabled>Connect Student</button></a></td>
 
-                    {% if obj.student_capacity > obj.get_friends_no or obj.student_capacity == None %}
+                    {% elif obj.student_capacity > obj.get_friends_no or obj.student_capacity == None %}
                     <td><a href="{% url 'profiles:tutor-detail-view' obj.slug %}"><button type="submit"
                                 class="btn btn-info">Connect Student</button></a></td>
 

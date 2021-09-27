@@ -64,6 +64,11 @@ QUESTION_CHOICES = (
 )
 
 
+PROFILE_STATUS = (
+    ('active', 'active'),
+    ('deactivated', 'deactivated'),
+)
+
         
 class Student(models.Model):
     avatar = models.ImageField(default='avatar.png', upload_to='avatars/')
@@ -104,6 +109,7 @@ class Student(models.Model):
     answer1 = models.TextField(null=True, blank=True, max_length=1000)
     question2 = models.CharField(null=True, blank=True, max_length=200, choices=QUESTION_CHOICES)
     answer2 = models.TextField(null=True, blank=True, max_length=1000)
+    status = models.CharField(null=True, blank=True, max_length=200, choices=PROFILE_STATUS, default='active')
 
    
     def __str__(self):
@@ -218,6 +224,7 @@ class Mentor(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     flag = models.BooleanField(default=False)
     ethnic = models.CharField(null=True, blank=True, max_length=200, choices=ETHNIC_CHOICES)
+    status = models.CharField(null=True, blank=True, max_length=200, choices=PROFILE_STATUS, default='active')
 
 
     

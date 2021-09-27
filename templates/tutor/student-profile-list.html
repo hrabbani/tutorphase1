@@ -77,15 +77,28 @@ th.subject-column{
                 <td>{{obj.parent1_phone}}</td>
                 <td>{% for friend in obj.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
                 <td>
-                    {% for friend in obj.get_friends %}
-                    <div><span class="badge badge-success">Connected</span></div>
-                    {% empty %}
-                    <div><span class="badge badge-danger">Not Connected</div>
-                    {% endfor %}
+                    {% if obj.status == 'deactivated' %}
+                        <div><span class="badge badge-secondary">Deactivated</span></div>
+
+                    {% else %}
+                        {% for friend in obj.get_friends %}
+                        <div><span class="badge badge-success">Connected</span></div>
+                        {% empty %}
+                        <div><span class="badge badge-danger">Not Connected</div>
+                        {% endfor %}
+
+                    {% endif %}
+
                 </td>
 
-                <td><a href="{% url 'profiles:student-detail-view' obj.slug %}"><button type="submit"
-                            class="btn btn-info">Connect Tutor</button></a></td>
+                <td>
+                    {% if obj.status == 'deactivated' %}
+                    <a href="{% url 'profiles:student-detail-view' obj.slug %}"><button type="submit" class="btn btn-info" disabled>Connect Tutor</button></a>
+                    {% else %}
+                    <a href="{% url 'profiles:student-detail-view' obj.slug %}"><button type="submit" class="btn btn-info">Connect Tutor</button></a>
+                    {% endif %}
+
+                </td>
 
                 <td>{{ obj.created |date:"d M Y"  }}</td>
                 <td>

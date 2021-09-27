@@ -37,6 +37,7 @@ from .views import (
     ProfileNoteUpdateView,
     ConnectionNoteUpdateView,
     search_question,
+    change_status_tutor,
         
 
 )
@@ -79,6 +80,7 @@ urlpatterns = [
     path('<slug>/profile-note-update-profile', ProfileNoteUpdateView.as_view(), name='profile-note-update-profile'),
     path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
     path('search-question/', search_question, name='search-question'),
+    path('change-status-tutor/', change_status_tutor, name='change-status-tutor'),
 
 
    
