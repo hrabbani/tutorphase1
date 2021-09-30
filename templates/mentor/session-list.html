@@ -120,6 +120,8 @@
                 'excel', 'pdf', 'print'
             ],
             "pageLength": 10,
+            "columnDefs": [ { type: 'date', 'targets': [0] } ],
+            "order": [[ 0, "desc" ]],
 
             initComplete: function () {
                 count = 0;
