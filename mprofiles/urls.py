@@ -41,6 +41,8 @@ from .views import (
     change_uncheck_mentor,
     change_status_mentor,
     change_status_student,
+    MentorProfileDeleteView,
+    StudentProfileDeleteView,
    
 )
 
@@ -88,6 +90,8 @@ urlpatterns = [
     path('change-uncheck-mentor/', change_uncheck_mentor, name='change-uncheck-mentor'),
     path('change-status-mentor/', change_status_mentor, name='change-status-mentor'),
     path('change-status-student/', change_status_student, name='change-status-student'),
+    path('<pk>/mentor-delete/', MentorProfileDeleteView.as_view(), name='mentor-profile-delete'),
+    path('<pk>/student-delete/', StudentProfileDeleteView.as_view(), name='student-profile-delete'),
 
 
     

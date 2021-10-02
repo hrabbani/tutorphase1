@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/profile.css' %}{% endblock %}
+{% block title %}Delete Profile{% endblock title %}
+
+
+{% block content %}
+
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <p>Are you sure you would like to delete <b>{{object.first_name}} {{object.last_name}}</b>? This cannot be undone.</p>
+
+
+    <button type="submit" class="btn btn-danger">Confirm</button>                         
+
+
+</form>
+
+{% endblock content %}

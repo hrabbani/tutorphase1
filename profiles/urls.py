@@ -38,6 +38,8 @@ from .views import (
     ConnectionNoteUpdateView,
     search_question,
     change_status_tutor,
+    TutorProfileDeleteView,
+    StudentProfileDeleteView,
         
 
 )
@@ -81,6 +83,8 @@ urlpatterns = [
     path('<pk>/connection-note-update-profile', ConnectionNoteUpdateView.as_view(), name='connection-note-update-profile'),
     path('search-question/', search_question, name='search-question'),
     path('change-status-tutor/', change_status_tutor, name='change-status-tutor'),
+    path('<pk>/tutor-delete/', TutorProfileDeleteView.as_view(), name='tutor-profile-delete'),
+    path('<pk>/student-delete/', StudentProfileDeleteView.as_view(), name='student-profile-delete'),
 
 
    

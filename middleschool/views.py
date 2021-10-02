@@ -3,7 +3,7 @@ from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile, Connection, Session, Subject, Subjectcalculation, Question
 from .forms import SessionModelForm, TutorModelForm, StudentModelForm, ProfileNoteModelForm, ConnectionNoteModelForm
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -1164,3 +1164,34 @@ def change_status_tutor(request):
 
         return JsonResponse(data, safe=False)
     return redirect('middleschool:dashboard')
+
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
+class TutorProfileDeleteView(DeleteView):
+    model = Profile
+    template_name = 'middleschool/tutor-confirm-delete.html'
+    success_url = reverse_lazy('middleschool:tutor-profiles-view')
+
+    def get_object(self, *args, **kwargs):
+        id = self.kwargs.get('pk')
+        obj = Profile.objects.get(id=id)
+        return obj
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['middletutor', 'admin']), name='dispatch')
+class StudentProfileDeleteView(DeleteView):
+    model = Profile
+    template_name = 'middleschool/student-confirm-delete.html'
+    success_url = reverse_lazy('middleschool:student-profiles-view')
+
+    def get_object(self, *args, **kwargs):
+        id = self.kwargs.get('pk')
+        obj = Profile.objects.get(id=id)
+        return obj

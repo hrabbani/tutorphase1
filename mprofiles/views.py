@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Mentor, Student, Connection, Session, Question
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from core.decorators import unauthenticated_user, allowed_users
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -962,3 +962,32 @@ def change_status_student(request):
 
         return JsonResponse(data, safe=False)
     return redirect('mprofiles:dashboard')
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+class MentorProfileDeleteView(DeleteView):
+    model = Mentor
+    template_name = 'mentor/mentor-confirm-delete.html'
+    success_url = reverse_lazy('mprofiles:mentor-profiles-list')
+
+    def get_object(self, *args, **kwargs):
+        id = self.kwargs.get('pk')
+        obj = Mentor.objects.get(id=id)
+        return obj
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['mentor', 'admin']), name='dispatch')
+class StudentProfileDeleteView(DeleteView):
+    model = Student
+    template_name = 'mentor/student-confirm-delete.html'
+    success_url = reverse_lazy('mprofiles:student-profiles-list')
+
+    def get_object(self, *args, **kwargs):
+        id = self.kwargs.get('pk')
+        obj = Student.objects.get(id=id)
+        return obj

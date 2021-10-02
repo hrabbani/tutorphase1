@@ -6,7 +6,7 @@ from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Mentor, Student
 from .forms import TaskModelForm, SessionModelForm, MentorModelForm, StudentModelForm, ParentSessionModelForm, StudentNoteModelForm, ConnectionNoteModelForm
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
@@ -1355,3 +1355,32 @@ def change_status_student(request):
 
         return JsonResponse(data, safe=False)
     return redirect('cprofiles:dashboard')
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class MentorProfileDeleteView(DeleteView):
+    model = Mentor
+    template_name = 'choice/mentor-confirm-delete.html'
+    success_url = reverse_lazy('cprofiles:mentor-profiles-list')
+
+    def get_object(self, *args, **kwargs):
+        id = self.kwargs.get('pk')
+        obj = Mentor.objects.get(id=id)
+        return obj
+
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(allowed_users(allowed_roles=['choice', 'admin']), name='dispatch')
+class StudentProfileDeleteView(DeleteView):
+    model = Student
+    template_name = 'choice/student-confirm-delete.html'
+    success_url = reverse_lazy('cprofiles:student-profiles-list')
+
+    def get_object(self, *args, **kwargs):
+        id = self.kwargs.get('pk')
+        obj = Student.objects.get(id=id)
+        return obj
