@@ -504,6 +504,19 @@ def generate_session_form(request):
         time.sleep(5)
 
 
+    context = {'z':z}
+
+    return render(request, 'choice/choice-session-form-link.html', context)
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])
+def generate_session_form_parent(request):
+    
+    active_connection = Connection.objects.exclude(status='disconnected')
+
     g = []
     for y in active_connection:
         parentsession_generated = Parentsession.objects.create(connection=y)
@@ -528,11 +541,9 @@ def generate_session_form(request):
         email.send()
         time.sleep(5)
 
-    context = {'z':z,
-               'g':g}
+    context = {'g':g}
 
     return render(request, 'choice/choice-session-form-link.html', context)
-
 
 
 

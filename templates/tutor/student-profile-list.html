@@ -72,7 +72,7 @@ th.subject-column{
             {% for obj in object_list %}
             <tr>
                 <td><a href="{{obj.get_absolute_url}}">{{obj.first_name}} {{obj.last_name}}</a></td>
-                <td>{{obj.grade}}</td>
+                <td>{{obj.student_grade}}</td>
                 <td>{% for subject in obj.get_subjects %}<li>{{subject}} </li>{% endfor %}</td>
                 <td>{{obj.parent1_phone}}</td>
                 <td>{% for friend in obj.get_friends %}<li>{{friend.first_name}} {{friend.last_name}} </li>{% endfor %}</td>
