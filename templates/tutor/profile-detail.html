@@ -33,20 +33,24 @@
                             </div>
                             <div class="col-3">
                                 {% if profile.role == 'tutor' %}
-                                <a href="{% url 'profiles:tutor-profile-delete' profile.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button>                         
-                                {% else %}
-                                <a href="{% url 'profiles:student-profile-delete' profile.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button>                         
-                                {% endif %}
-                                <form action="{% url 'profiles:change-status-tutor' %}" method="POST" class='status-form' id='{{profile.id}}'>
-                                    {% csrf_token %}
-                                        <div class='status-button'>
-                                        {% if profile.status == 'active' %}
-                                        <button type="submit" class="btn btn-success pull-right">Active</button>                         
-                                        {% else %}
-                                        <button type="submit" class="btn btn-danger pull-right">Deactivated</button>                         
+                                <a href="{% url 'profiles:tutor-profile-delete' profile.id %}"><button type="submit"
+                                        class="btn btn-warning pull-right">Delete</button></a>
+                                    {% else %}
+                                    <a href="{% url 'profiles:student-profile-delete' profile.id %}"><button
+                                            type="submit" class="btn btn-warning pull-right">Delete</button></a>
                                         {% endif %}
-                                        </div>
-                                </form>
+                                        <form action="{% url 'profiles:change-status-tutor' %}" method="POST"
+                                            class='status-form' id='{{profile.id}}'>
+                                            {% csrf_token %}
+                                            <div class='status-button'>
+                                                {% if profile.status == 'active' %}
+                                                <button type="submit" class="btn btn-success pull-right">Active</button>
+                                                {% else %}
+                                                <button type="submit"
+                                                    class="btn btn-danger pull-right">Deactivated</button>
+                                                {% endif %}
+                                            </div>
+                                        </form>
                             </div>
                         </div>
                     </div>
@@ -82,9 +86,11 @@
                 <tr>
                     <td>{{session.created|date:"d M Y"}}</td>
                     <td>{% if profile.role == 'student' %}
-                        <a href="{{session.connection.tutor.get_absolute_url}}">{{session.connection.tutor.first_name}} {{session.connection.tutor.last_name}}</a>
+                        <a href="{{session.connection.tutor.get_absolute_url}}">{{session.connection.tutor.first_name}}
+                            {{session.connection.tutor.last_name}}</a>
                         {% else %}
-                        <a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}} {{session.connection.student.last_name}}</a>
+                        <a href="{{session.connection.student.get_absolute_url}}">{{session.connection.student.first_name}}
+                            {{session.connection.student.last_name}}</a>
                         {% endif %}
                     </td>
                     <td>{{session.length}} hr</td>
@@ -534,9 +540,7 @@
 
 
 {% block scripts %}
-    <script>
-
-
+<script>
     $('.status-form').submit(function (e) {
         e.preventDefault()
 
@@ -555,9 +559,13 @@
                 console.log(response.status)
 
                 if (response.status === 'active') {
-                    $(".status-button").html("<button type='submit' class='btn btn-success pull-right'>Active</button>");
+                    $(".status-button").html(
+                        "<button type='submit' class='btn btn-success pull-right'>Active</button>"
+                        );
                 } else {
-                    $(".status-button").html("<button type='submit' class='btn btn-danger pull-right'>Deactivated</button>");
+                    $(".status-button").html(
+                        "<button type='submit' class='btn btn-danger pull-right'>Deactivated</button>"
+                        );
                 }
 
             },
@@ -567,6 +575,5 @@
         })
 
     })
-
-    </script>
+</script>
 {% endblock scripts %}

@@ -1288,7 +1288,7 @@ from datetime import datetime, timedelta
 @allowed_users(allowed_roles=['choice', 'admin'])
 def feedback_form_status(request):
 
-    active_connection = Connection.objects.filter(status='connected')
+    active_connection = Connection.objects.exclude(status='disconnected')
 
     try:
         latest_session = Session.objects.latest('created')

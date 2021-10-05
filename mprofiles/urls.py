@@ -43,6 +43,8 @@ from .views import (
     change_status_student,
     MentorProfileDeleteView,
     StudentProfileDeleteView,
+    feedback_form_status,
+
    
 )
 
@@ -92,6 +94,7 @@ urlpatterns = [
     path('change-status-student/', change_status_student, name='change-status-student'),
     path('<pk>/mentor-delete/', MentorProfileDeleteView.as_view(), name='mentor-profile-delete'),
     path('<pk>/student-delete/', StudentProfileDeleteView.as_view(), name='student-profile-delete'),
+    path('feedback-form-status/', feedback_form_status, name='feedback-form-status'),
 
 
     

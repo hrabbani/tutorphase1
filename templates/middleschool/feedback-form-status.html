@@ -1,0 +1,205 @@
+{% extends 'middleschoolbase.html' %}
+{% load static %}
+{% block stylesheet %}{% static '/css/my_invites.css' %}{% endblock %}
+{% block title %}Feedback Form Status{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-auto mr-auto">
+        <h3>Feedback Form Status</h3>
+    </div>
+</div>
+
+
+<div class="table-responsive-lg">
+    <table id="myTable" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Connection</th>
+                <th scope="col">Student</th>
+                <th scope="col">Tutor</th>
+                <th scope="col">{{monday|date:"n/d/y"}}</th>
+                <th scope="col">{{last_monday|date:"n/d/y"}}</th>
+                <th scope="col">{{last_last_monday|date:"n/d/y"}}</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <th>Connection</th>
+                <th>Student</th>
+                <th>Tutor</th>
+                <th>{{monday|date:"n/d/y"}}</th>
+                <th>{{last_monday|date:"n/d/y"}}</th>
+                <th>{{last_last_monday|date:"n/d/y"}}</th>
+            </tr>
+        </tfoot>
+
+        <tbody>
+            {% for connection in active_connection %}
+
+
+
+            <tr>
+                <td><a href="{{connection.get_absolute_url}}"><i class="fa fa-info-circle"></i></a></td>
+
+                <td>{{connection.student.first_name}} {{connection.student.last_name}}</td>
+                <td>{{connection.tutor.first_name}} {{connection.tutor.last_name}}</td>
+
+
+                {% if connection.get_all_sessions_three_feedback_status.count == 1 %}
+                {% for session in connection.get_all_sessions_three_feedback_status %}
+
+                {% if session.submit_status == False %}
+                <td><a href="{{session.get_absolute_url}}"><button type="button" class="btn btn-danger">Not
+                            Submitted</button></a></td>
+                {% else %}
+                <td><a href="{{session.get_absolute_url}}"><button type="button"
+                            class="btn btn-success">Submitted</button></a></td>
+                {% endif %}
+
+                <td></td>
+                <td></td>
+                {% endfor %}
+                {% endif %}
+
+
+                {% if connection.get_all_sessions_three_feedback_status.count == 2 %}
+                {% for session in connection.get_all_sessions_three_feedback_status %}
+
+                {% if session.submit_status == False %}
+                <td><a href="{{session.get_absolute_url}}"><button type="button" class="btn btn-danger">Not
+                            Submitted</button></a></td>
+                {% else %}
+                <td><a href="{{session.get_absolute_url}}"><button type="button"
+                            class="btn btn-success">Submitted</button></a></td>
+                {% endif %}
+
+                {% endfor %}
+                <td></td>
+
+                {% endif %}
+
+                {% if connection.get_all_sessions_three_feedback_status.count == 3 %}
+                {% for session in connection.get_all_sessions_three_feedback_status %}
+
+                {% if session.submit_status == False %}
+                <td><a href="{{session.get_absolute_url}}"><button type="button" class="btn btn-danger">Not
+                            Submitted</button></a></td>
+                {% else %}
+                <td><a href="{{session.get_absolute_url}}"><button type="button"
+                            class="btn btn-success">Submitted</button></a></td>
+                {% endif %}
+
+                {% endfor %}
+                {% endif %}
+
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}
+
+
+
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#myTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'excel', 'pdf', 'print'
+            ],
+            "pageLength": 10,
+
+            initComplete: function () {
+                count = 0;
+                this.api().columns().every(function () {
+                    var title = this.header();
+                    //replace spaces with dashes
+                    title = $(title).html().replace(/[\W]/g, '-');
+                    var column = this;
+                    var select = $('<select id="' + title +
+                            '" class="select2" ></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            //Get the "text" property from each selected data 
+                            //regex escape the value and store in array
+                            var data = $.map($(this).select2('data'), function (
+                                value,
+                                key) {
+                                return value.text ? '^' + $.fn.dataTable
+                                    .util
+                                    .escapeRegex(value.text) + '$' : null;
+                            });
+
+                            //if no data selected use ""
+                            if (data.length === 0) {
+                                data = [""];
+                            }
+
+                            //join array into string with regex or (|)
+                            var val = data.join('|');
+
+                            //search for the option(s) selected
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d +
+                            '</option>');
+                    });
+
+                    //use column title as selector and placeholder
+                    $('#' + title).select2({
+                        multiple: true,
+                        closeOnSelect: false,
+                        placeholder: "Select a " + title
+                    });
+
+                    //initially clear select otherwise first option is selected
+                    $('.select2').val(null).trigger('change');
+                });
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+
+      document.getElementById("Connection").parentElement.innerHTML = ""
+      document.getElementById("{{monday|date:"n-d-y"}}").parentElement.innerHTML = ""
+      document.getElementById("{{last_monday|date:"n-d-y"}}").parentElement.innerHTML = ""
+      document.getElementById("{{last_last_monday|date:"n-d-y"}}").parentElement.innerHTML = ""
+
+    });
+
+
+</script>
+
+{% comment %} <script>
+    function fun1() {
+        jQuery.each($("table tr"), function () {
+            $(this).children(":eq(4)").after($(this).children(":eq(3)"));
+        });
+    }
+
+    $(function () {
+        jQuery.each($("table tr"), function () {
+            $(this).children(":eq(5)").after($(this).children(":eq(3)"));
+        });
+        fun1()
+    });
+</script> {% endcomment %}
+
+{% endblock scripts %}

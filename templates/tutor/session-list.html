@@ -20,6 +20,7 @@
     </div>
 </div>
 
+<a href="{% url 'profiles:feedback-form-status'%}"><button style="float: right" type="button" class="btn btn-link btn-sm">Full Feedback Form Status</button></a>
 
 <div class="table-responsive-lg">
     <table id="myTable" class="table">
@@ -206,6 +207,8 @@
     for (let element of document.getElementsByClassName("flag")) {
         element.style.display = "none";
     }
+
+
 
 </script>
 {% endblock scripts %}

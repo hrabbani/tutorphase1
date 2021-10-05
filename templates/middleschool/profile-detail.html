@@ -31,9 +31,9 @@
                             </div>
                             <div class="col-3">
                                 {% if profile.role == 'tutor' %}
-                                <a href="{% url 'middleschool:tutor-profile-delete' profile.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button>                         
+                                <a href="{% url 'middleschool:tutor-profile-delete' profile.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button></a>                         
                                 {% else %}
-                                <a href="{% url 'middleschool:student-profile-delete' profile.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button>                         
+                                <a href="{% url 'middleschool:student-profile-delete' profile.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button></a>                         
                                 {% endif %}
                                 <form action="{% url 'middleschool:change-status-tutor' %}" method="POST" class='status-form' id='{{profile.id}}'>
                                     {% csrf_token %}

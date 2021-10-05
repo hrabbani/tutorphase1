@@ -228,6 +228,9 @@ class Connection(models.Model):
     def get_all_sessions_three(self):
         return self.session_set.filter(submit_status=True).order_by('-updated')[:3]
 
+    def get_all_sessions_three_feedback_status(self):
+        return self.session_set.filter().order_by('-created')[:3]
+
 
 CONT_STATUS_CHOICES = (
     ('yes', 'yes'),

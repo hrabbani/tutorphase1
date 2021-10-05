@@ -29,7 +29,7 @@
                           <div class="col-3">
                             </div>
                             <div class="col-3">
-                                <a href="{% url 'mprofiles:student-profile-delete' student.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button>                         
+                                <a href="{% url 'mprofiles:student-profile-delete' student.id %}"><button type="submit" class="btn btn-warning pull-right">Delete</button></a>                         
                                 <form action="{% url 'mprofiles:change-status-student' %}" method="POST" class='status-form' id='{{student.id}}'>
                                     {% csrf_token %}
                                         <div class='status-button'>

@@ -991,3 +991,35 @@ class StudentProfileDeleteView(DeleteView):
         id = self.kwargs.get('pk')
         obj = Student.objects.get(id=id)
         return obj
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['mentor', 'admin'])
+def feedback_form_status(request):
+
+    active_connection = Connection.objects.exclude(status='disconnected')
+
+    try:
+        latest_session = Session.objects.latest('created')
+    except Session.DoesNotExist:
+        latest_session = None
+
+    if latest_session:
+        now = latest_session.created
+        monday = now - timedelta(days = now.weekday())
+        last_monday = monday - timedelta(days=14)
+        last_last_monday = monday - timedelta(days=28)
+
+    else:
+        monday = None
+        last_monday = None
+        last_last_monday = None
+
+    context = {'active_connection':active_connection,
+                'monday': monday,
+                'last_monday': last_monday,
+                'last_last_monday': last_last_monday,
+                }
+
+    return render(request, 'mentor/feedback-form-status.html', context)
