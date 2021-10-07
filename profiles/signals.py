@@ -3,13 +3,18 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Academicadvisor, Profile, Connection, Session, Subjectcalculation, Question
 from django.core.mail import send_mail
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models.signals import m2m_changed
 
 
 
+connection = get_connection(host='smtp.gmail.com', 
+                                port=587, 
+                                username='hstutoring@peninsulabridge.org', 
+                                password='bridge89', 
+                                use_tls=True)
 
 
 
@@ -34,6 +39,8 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Session, dispatch_uid="my_unique_identifier")
 def post_save_disconnect_connection(sender, instance, created, **kwargs):
     connection_ = instance.connection
+
+    global connection
     
     if not created:
         if instance.disconnect == 'no':
@@ -56,16 +63,21 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
 
             html_content = render_to_string("tutor/feedback-disconnection-email.html", {'student': student, 'tutor': tutor, 'connection_link': connection_link, 'session': instance  })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 content,
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
 
+            connection.close()
 
 
 
@@ -142,6 +154,8 @@ def post_save_tutor_form_academic_advisor_email_registration(sender, instance, c
 @receiver(post_save, sender=Session)
 def post_save_urgent_check_session(sender, instance, created, **kwargs):
 
+    global connection
+
     if not created:
 
         session_generated_pk = str(instance.pk)
@@ -163,15 +177,20 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
             html_content = render_to_string("tutor/session-urgent-check-email.html", {'tutor_first_name': tutor_first_name, 'tutor_last_name': tutor_last_name,
              'date': date, 'tutor_email': tutor_email, 'question': question, 'link': link})
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Tutoring",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+            connection.close()
 
         else:
             pass
@@ -180,6 +199,8 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Profile)
 def post_save_tutor_form_background_check(sender, instance, created, **kwargs):
 
+    global connection
+
     if created:
         if instance.check == 'yes':
             email_list = []
@@ -187,12 +208,18 @@ def post_save_tutor_form_background_check(sender, instance, created, **kwargs):
 
             html_content = render_to_string("tutor/background-check-email.html", {'tutor': instance })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "PB Tutoring Program Background Check",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()

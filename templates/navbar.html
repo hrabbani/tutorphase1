@@ -22,7 +22,7 @@
                     href="{% url 'profiles:connection-view' %}">Connections</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:session-view' %}">Sessions</a>
+                <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:session-view' %}">Sessions <span class="badge badge-danger">{{high_school_session_flag_num}}</span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold" href="{% url 'profiles:question-list-view' %}">Questions <span class="badge badge-success">{{high_school_unanswered_question_num}}</span></a>

@@ -23,7 +23,7 @@
                     href="{% url 'mprofiles:connection-list' %}">Connections</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" style="font-weight: bold" href="{% url 'mprofiles:session-list' %}">Sessions</a>
+                <a class="nav-link" style="font-weight: bold" href="{% url 'mprofiles:session-list' %}">Sessions <span class="badge badge-danger">{{mentor_session_flag_num}}</span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" style="font-weight: bold" href="{% url 'mprofiles:question-list-view' %}">Questions <span class="badge badge-warning">{{mentor_unanswered_question_num}}</span></a>

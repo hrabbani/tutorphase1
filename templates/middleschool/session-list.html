@@ -29,6 +29,7 @@
                 <th scope="col">Date</th>
                 <th scope="col">Student</th>
                 <th scope="col">Tutor</th>
+                <th scope="col">Phone</th>
                 <th scope="col">Length</th>
                 <th scope="col">Subjects</th>
                 <th scope="col">Support</th>
@@ -42,6 +43,7 @@
                 <th>Date</th>
                 <th>Student</th>
                 <th>Tutor</th>
+                <th>Phone</th>
                 <th>Length</th>
                 <th>Subjects</th>
                 <th>Support</th>
@@ -60,6 +62,7 @@
                         {{obj.connection.student.last_name}}</a></td>
                 <td><a href="{{obj.connection.tutor.get_absolute_url}}">{{obj.connection.tutor.first_name}}
                         {{obj.connection.tutor.last_name}}</a></td>
+                <td>{{obj.connection.tutor.phone}}</td>
                 <td>{{obj.length}} hr</td>
                 <td>{% for subject in obj.get_subjects %}<li>{{subject}} </li>{% endfor %}
                 </td>
@@ -103,7 +106,7 @@
                 ],
                 "pageLength": 10,
                 "columnDefs": [ { type: 'date', 'targets': [0] } ],
-                "order": [[ 0, "desc" ]],
+                "order": [[8, "desc"], [ 0, "desc" ]],
 
                 initComplete: function () {
                     count = 0;
@@ -167,6 +170,7 @@
       document.getElementById("Student").parentElement.innerHTML = ""
       document.getElementById("Tutor").parentElement.innerHTML = ""
       document.getElementById("Flag").parentElement.innerHTML = ""
+      document.getElementById("Phone").parentElement.innerHTML = ""
 
     });
 
@@ -207,6 +211,9 @@
     for (let element of document.getElementsByClassName("flag")) {
         element.style.display = "none";
     }
+
+    $('td:nth-child(4),th:nth-child(4)').hide()
+
 
 </script>
 {% endblock scripts %}

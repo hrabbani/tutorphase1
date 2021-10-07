@@ -115,7 +115,8 @@ $('.like-form').submit(function (e) {
                     'excel', 'pdf', 'print'
                 ],
                 "pageLength": 10,
-                "order": [[ 5, "desc" ]],
+                "columnDefs": [ { type: 'date', 'targets': [0] } ],
+                "order": [[ 5, "desc" ], [ 0, "desc" ]],
 
 
             });
