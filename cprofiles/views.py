@@ -29,14 +29,18 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from datetime import datetime
 import csv
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import time
 
 
 
-
+connection = get_connection(host='smtp.gmail.com', 
+                                port=587, 
+                                username='karen@peninsulabridge.org', 
+                                password='PBridge1989', 
+                                use_tls=True)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -190,6 +194,8 @@ def mentor_connect(request):
         student = Student.objects.get(pk=student_pk)
         mentor = Mentor.objects.get(pk=mentor_pk)
 
+        global connection
+
         exist_connection = Connection.objects.filter(student=student).filter(mentor=mentor)
 
         if exist_connection.exists():
@@ -203,15 +209,23 @@ def mentor_connect(request):
 
             html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
+
 
             #Email to Mentor
 
@@ -220,16 +234,22 @@ def mentor_connect(request):
 
             html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_mentor,
+                connection=connection,
+
             )
 
             email_to_mentor.attach_alternative(html_content, "text/html")
             email_to_mentor.send()
 
+            connection.close()
 
         else:
             rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
@@ -240,15 +260,23 @@ def mentor_connect(request):
 
             html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
+
 
             #Email to Mentor
 
@@ -257,15 +285,23 @@ def mentor_connect(request):
 
             html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_mentor,
+                connection=connection,
+
             )
 
             email_to_mentor.attach_alternative(html_content, "text/html")
             email_to_mentor.send()
+
+            connection.close()
+
  
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -282,6 +318,8 @@ def student_connect(request):
         student = Student.objects.get(pk=student_pk)
         mentor = Mentor.objects.get(pk=mentor_pk)
 
+        global connection
+
         exist_connection = Connection.objects.filter(student=student).filter(mentor=mentor)
 
         if exist_connection.exists():
@@ -295,15 +333,21 @@ def student_connect(request):
 
             html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
 
             #Email to Mentor
 
@@ -312,15 +356,20 @@ def student_connect(request):
 
             html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_mentor,
+                connection=connection
             )
 
             email_to_mentor.attach_alternative(html_content, "text/html")
             email_to_mentor.send()
+            connection.close()
             
         else:
             rel = Connection.objects.create(student=student, mentor=mentor, status='connected')
@@ -331,15 +380,19 @@ def student_connect(request):
 
             html_content = render_to_string("choice/connection-email.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
             email = EmailMultiAlternatives(
                 "Mentor Connection for Choice Program",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+            connection.close()
 
             #Email to Mentor
 
@@ -348,15 +401,19 @@ def student_connect(request):
 
             html_content = render_to_string("choice/connection-email-to-mentor.html", {'student': student, 'mentor': mentor })
             text_context = strip_tags(html_content)
+
+            connection.open()
             email_to_mentor = EmailMultiAlternatives(
                 "Mentor Pairing - Choice Program 2021",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_mentor,
+                connection=connection,
             )
 
             email_to_mentor.attach_alternative(html_content, "text/html")
             email_to_mentor.send()
+            connection.close()
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -413,6 +470,8 @@ def remove_connection(request):
         rel.status = 'disconnected'
         rel.save()
 
+        global connection
+
         email_list = []
         email_list.append(student.email)
         email_list.append(mentor.email)
@@ -424,15 +483,21 @@ def remove_connection(request):
 
         html_content = render_to_string("choice/disconnection-email.html", {'student': student, 'mentor': mentor })
         text_context = strip_tags(html_content)
+
+        connection.open()
+
         email = EmailMultiAlternatives(
             "Mentor/Student Disconnection ",
             text_context,
             'Choice Program - Peninsula Bridge',
             email_list,
+            connection=connection,
         )
 
         email.attach_alternative(html_content, "text/html")
         email.send()
+
+        connection.close()
         
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('cprofiles:mentor-profiles-list')
@@ -479,6 +544,8 @@ def generate_session_form(request):
     
     active_connection = Connection.objects.exclude(status='disconnected')
 
+    global connection
+
     z = []
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
@@ -492,15 +559,21 @@ def generate_session_form(request):
 
         html_content = render_to_string("choice/choice-mentor-feedback-form.email.html", {'connection': x, 'form_link': form_link})
         text_context = strip_tags(html_content)
+
+        connection.open()
+
         email = EmailMultiAlternatives(
             "Choice Mentor Feedback Form",
             text_context,
             'Choice Program - Peninsula Bridge',
             email_list,
+            connection=connection,
         )
 
         email.attach_alternative(html_content, "text/html")
         email.send()
+
+        connection.close()
         time.sleep(5)
 
 
@@ -517,6 +590,8 @@ def generate_session_form_parent(request):
     
     active_connection = Connection.objects.exclude(status='disconnected')
 
+    global connection
+
     g = []
     for y in active_connection:
         parentsession_generated = Parentsession.objects.create(connection=y)
@@ -530,15 +605,21 @@ def generate_session_form_parent(request):
 
         html_content = render_to_string("choice/choice-parent-feedback-form.html", {'connection': y, 'form_link': form_link})
         text_context = strip_tags(html_content)
+
+        connection.open()
+
         email = EmailMultiAlternatives(
             "Feedback Form // Forma de Comentarios",
             text_context,
             'Choice Program - Peninsula Bridge',
             email_list,
+            connection=connection,
         )
 
         email.attach_alternative(html_content, "text/html")
         email.send()
+
+        connection.close()
         time.sleep(5)
 
     context = {'g':g}
@@ -873,6 +954,8 @@ def check_connection_status(request):
 
     inactive_list = [0, 0]
 
+    global connection
+
     for x in active_connection:
         for y in x.get_all_sessions():
             if y.updated >= four_weeks_ago:
@@ -890,15 +973,20 @@ def check_connection_status(request):
 
                 html_content = render_to_string("choice/connection-inactive-email.html", {'connection': x})
                 text_context = strip_tags(html_content)
+
+                connection.open()
                 email = EmailMultiAlternatives(
                     "Choice Program: Inactive Mentor/Student Relationship",
                     text_context,
                     'Choice Program - Peninsula Bridge',
                     email_list,
+                    connection=connection,
                 )
 
                 email.attach_alternative(html_content, "text/html")
                 email.send()
+
+                connection.close()
 
                 break
   
@@ -919,15 +1007,20 @@ def check_connection_status(request):
 
             html_content = render_to_string("choice/connection-inactive-email.html", {'connection': x})
             text_context = strip_tags(html_content)
+
+            connection.open()
             email = EmailMultiAlternatives(
                 "Choice Program: Inactive Mentor/Student Relationship",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
 
     return HttpResponse("Connection Status Checked")
 

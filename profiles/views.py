@@ -476,7 +476,6 @@ def generate_session_form(request):
 
         email.attach_alternative(html_content, "text/html")
         email.send()
-
         connection.close()
         time.sleep(5)
 

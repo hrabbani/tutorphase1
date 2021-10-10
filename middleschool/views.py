@@ -25,13 +25,19 @@ from django.contrib import messages
 from collections import defaultdict
 from datetime import datetime
 from django.utils.timezone import now
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import csv
 import time
 
 
+
+connection = get_connection(host='smtp.gmail.com', 
+                                port=587, 
+                                username='tutoring@peninsulabridge.org', 
+                                password='tutoring2020', 
+                                use_tls=True)
 
 
 
@@ -178,6 +184,8 @@ def tutor_connect(request):
         student = Profile.objects.get(pk=student_pk)
         tutor = Profile.objects.get(pk=tutor_pk)
 
+        global connection
+
         exist_connection = Connection.objects.filter(student=student).filter(tutor=tutor)
 
         if exist_connection.exists():
@@ -195,15 +203,22 @@ def tutor_connect(request):
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
 
         else:
             rel = Connection.objects.create(student=student, tutor=tutor, status='connected')
@@ -218,15 +233,22 @@ def tutor_connect(request):
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
 
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('middleschool:all-profiles-view')
@@ -242,6 +264,8 @@ def student_connect(request):
         student = Profile.objects.get(pk=student_pk)
         tutor = Profile.objects.get(pk=tutor_pk)
 
+        global connection
+
         exist_connection = Connection.objects.filter(student=student).filter(tutor=tutor)
 
         if exist_connection.exists():
@@ -259,16 +283,22 @@ def student_connect(request):
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
 
+            connection.close()
 
         else:
             rel = Connection.objects.create(student=student, tutor=tutor, status='connected')
@@ -283,15 +313,22 @@ def student_connect(request):
 
             html_content = render_to_string("middleschool/connection-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "Peninsula Bridge: Tutoring Connection Established | Conexión de Tutoría!",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
 
 
         return redirect(request.META.get('HTTP_REFERER'))
@@ -408,6 +445,8 @@ def generate_session_form(request):
     
     active_connection = Connection.objects.exclude(status='disconnected')
 
+    global connection
+
     z = []
     for x in active_connection:
         session_generated = Session.objects.create(connection=x)
@@ -421,15 +460,22 @@ def generate_session_form(request):
 
         html_content = render_to_string("tutor/weekly-feedback-email.html", {'tutor': tutor, 'form_link': form_link })
         text_context = strip_tags(html_content)
+
+        connection.open()
+
         email = EmailMultiAlternatives(
             "Peninsula Bridge Tutoring: Required Weekly Feedback Form",
             text_context,
             'Tutoring Program - Peninsula Bridge',
             [email],
+            connection=connection,
+
         )
 
         email.attach_alternative(html_content, "text/html")
         email.send()
+
+        connection.close()
         time.sleep(5)
 
 
@@ -468,6 +514,8 @@ def tutor_profile_form(request):
 
     form = TutorModelForm()
 
+    global connection
+
     if request.method == 'POST':
         form = TutorModelForm(request.POST or None, request.FILES or None)
         if form.is_valid():
@@ -482,15 +530,22 @@ def tutor_profile_form(request):
             email_list.append(tutor_email)
             html_content = render_to_string("middleschool/tutor-signup-email.html", {'tutor_name': tutor_name})
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 'Tutor Sign Up Confirmation Email',
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
 
             return HttpResponse('Thank you for your interest in becoming a tutor! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
@@ -504,6 +559,9 @@ def tutor_profile_form(request):
 def student_profile_form(request):
 
     form = StudentModelForm()
+
+    global connection
+
 
     if request.method == 'POST':
         form = StudentModelForm(request.POST or None, request.FILES or None)
@@ -524,15 +582,23 @@ def student_profile_form(request):
 
             html_content = render_to_string("middleschool/student-signup-email.html", {'student_name': student_name, 'parent_name': parent_name})
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 'Student Tutoring Sign Up Confirmation Email// Confirmación de registro de tutoría para estudiantes',
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
+
 
             return HttpResponse('Thank you for your interest in tutoring! We will contact you through email once you have been connected with a student. In the meantime, feel free to reach out to us at tutoring@peninsulabridge.org with any questions.')
   
@@ -911,6 +977,8 @@ def check_connection_status(request):
 
     inactive_list = [0, 0, 0]
 
+    global connection
+
     for x in active_connection:
         for y in x.get_all_sessions():
             if y.updated >= three_weeks_ago:
@@ -930,15 +998,22 @@ def check_connection_status(request):
                
                 html_content = render_to_string("middleschool/connection-inactive-email.html", {'student': student, 'tutor': tutor })
                 text_context = strip_tags(html_content)
+
+                connection.open()
+
                 email = EmailMultiAlternatives(
                     subject,
                     text_context,
                     'Tutoring Program - Peninsula Bridge',
                     email_list,
+                    connection=connection,
+
                 )
 
                 email.attach_alternative(html_content, "text/html")
                 email.send()
+
+                connection.close()
 
                 break
   
@@ -962,15 +1037,23 @@ def check_connection_status(request):
 
             html_content = render_to_string("middleschool/connection-inactive-email.html", {'student': student, 'tutor': tutor })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 subject,
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
+
 
     return HttpResponse("Connection Status Checked")
 

@@ -3,13 +3,18 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from .models import Academicadvisor, Profile, Connection, Session, Subjectcalculation, Question
 from django.core.mail import send_mail
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models.signals import m2m_changed
 
 
 
+connection = get_connection(host='smtp.gmail.com', 
+                                port=587, 
+                                username='tutoring@peninsulabridge.org', 
+                                password='tutoring2020', 
+                                use_tls=True)
 
 
 
@@ -34,6 +39,8 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Session, dispatch_uid="my_unique_identifier")
 def post_save_disconnect_connection(sender, instance, created, **kwargs):
     connection_ = instance.connection
+
+    global connection
     
     if not created:
         if instance.disconnect == 'no':
@@ -48,25 +55,28 @@ def post_save_disconnect_connection(sender, instance, created, **kwargs):
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
-            print(email_list)
-
             content = "Tutoring Disconnection Requested - " + tutor.first_name  + " and " + student.first_name
             connection_pk = str(connection_.pk)
             connection_link = "https://www.admin.peninsulabridge.org/middleschool/" + connection_pk + "/connection-detail/"
            
             html_content = render_to_string("middleschool/feedback-disconnection-email.html", {'student': student, 'tutor': tutor, 'connection_link': connection_link, 'session': instance  })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 content,
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
 
-
+            connection.close()
 
 
 def post_save_flag_session(sender, instance, **kwargs):
@@ -145,6 +155,8 @@ def post_save_tutor_form_academic_advisor_email_registration(sender, instance, c
 @receiver(post_save, sender=Session)
 def post_save_urgent_check_session(sender, instance, created, **kwargs):
 
+    global connection
+
     if not created:
 
         session_generated_pk = str(instance.pk)
@@ -152,7 +164,6 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
         email_list = []
         program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
         email_list.extend(program_manager_email_list)
-
 
         tutor_first_name = instance.connection.tutor.first_name
         tutor_last_name = instance.connection.tutor.last_name
@@ -166,15 +177,23 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
             html_content = render_to_string("tutor/session-urgent-check-email.html", {'tutor_first_name': tutor_first_name, 'tutor_last_name': tutor_last_name,
              'date': date, 'tutor_email': tutor_email, 'question': question, 'link': link})
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Tutoring",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
+
 
         else:
             pass
@@ -184,6 +203,8 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Profile)
 def post_save_tutor_form_background_check(sender, instance, created, **kwargs):
 
+    global connection
+
     if created:
         if instance.check == 'yes':
             email_list = []
@@ -191,12 +212,19 @@ def post_save_tutor_form_background_check(sender, instance, created, **kwargs):
 
             html_content = render_to_string("middleschool/background-check-email.html", {'tutor': instance })
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "PB Tutoring Program Background Check",
                 text_context,
                 'Tutoring Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
+
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()

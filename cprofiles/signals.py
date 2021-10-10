@@ -6,18 +6,26 @@ from .models import Connection, Session, Task, Tasksubject, Copytask, Student, M
 import datetime
 from django.core.mail import send_mail
 from django.db.models.signals import m2m_changed
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 
 
+connection = get_connection(host='smtp.gmail.com', 
+                                port=587, 
+                                username='karen@peninsulabridge.org', 
+                                password='PBridge1989', 
+                                use_tls=True)
 
 
 @receiver(post_save, sender=Connection)
 def post_save_add_to_friends(sender, instance, created, **kwargs):
     student_ = instance.student
     mentor_ = instance.mentor
+
+    global connection
+
     if instance.status == 'connected':
         mentor_.friends.add(student_)
         mentor_.save()
@@ -38,15 +46,21 @@ def post_save_add_to_friends(sender, instance, created, **kwargs):
 
         html_content = render_to_string("choice/connection-offtrack-email.html", {'connection': instance, 'form_link': link})
         text_context = strip_tags(html_content)
+
+        connection.open()
+
         email = EmailMultiAlternatives(
             content,
             text_context,
             'Choice Program - Peninsula Bridge',
             email_list,
+            connection=connection,
         )
 
         email.attach_alternative(html_content, "text/html")
         email.send()
+
+        connection.close()
 
 
 @receiver(post_save, sender=Connection)
@@ -315,6 +329,8 @@ m2m_changed.connect(post_save_topic_registration, sender=Session.topic.through)
 @receiver(post_save, sender=Parentsession)
 def post_save_urgent_check_session(sender, instance, created, **kwargs):
 
+    global connection
+
     if not created:
 
         session_generated_pk = str(instance.pk)
@@ -334,15 +350,21 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
 
             html_content = render_to_string("choice/parent-session-urgent-check-email.html", {'student_first_name': student_first_name, 'student_last_name': student_last_name, 'student_email': student_email, 'question': question, 'link': link})
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Student",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_list,
+                connection=connection
+                
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+            connection.close()        
 
         else:
             pass
@@ -351,6 +373,8 @@ def post_save_urgent_check_session(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Session)
 def post_save_urgent_check_mentor_session(sender, instance, created, **kwargs):
+
+    global connection
 
     if not created:
 
@@ -371,15 +395,21 @@ def post_save_urgent_check_mentor_session(sender, instance, created, **kwargs):
 
             html_content = render_to_string("choice/session-urgent-check-email.html", {'mentor_first_name': mentor_first_name, 'mentor_last_name': mentor_last_name, 'mentor_email': mentor_email, 'elaborate': elaborate, 'link': link})
             text_context = strip_tags(html_content)
+
+            connection.open()
+
             email = EmailMultiAlternatives(
                 "[URGENT] Support Needed - Mentor",
                 text_context,
                 'Choice Program - Peninsula Bridge',
                 email_list,
+                connection=connection,
             )
 
             email.attach_alternative(html_content, "text/html")
             email.send()
+
+            connection.close()
 
             Session.objects.filter(pk=instance.id).update(flag=True)
 
