@@ -977,45 +977,49 @@ def check_connection_status(request):
 
     inactive_list = [0, 0, 0]
 
+    inactive_submit_status_list = [False, False, False]
+
     global connection
 
     for x in active_connection:
-        for y in x.get_all_sessions():
-            if y.updated >= three_weeks_ago:
-                break
-            else:
-                x.status = 'inactive'
-                x.flag = True
-                x.save()
-                email_list = []
-                email_list.append(x.student.parent1_email)
-                email_list.append(x.student.academic_advisor_email)
-                program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
-                email_list.extend(program_manager_email_list)
-                student = x.student
-                tutor = x.tutor
-                subject = "Inactive Tutoring Connection " + "| " + student.first_name + " and " + tutor.first_name
-               
-                html_content = render_to_string("middleschool/connection-inactive-email.html", {'student': student, 'tutor': tutor })
-                text_context = strip_tags(html_content)
 
-                connection.open()
+        list_status = []
+        for z in x.get_all_sessions_three_all():
+            list_status.append(z.submit_status)
 
-                email = EmailMultiAlternatives(
-                    subject,
-                    text_context,
-                    'Tutoring Program - Peninsula Bridge',
-                    email_list,
-                    connection=connection,
+        if list_status == inactive_submit_status_list:
 
-                )
+            x.status = 'inactive'
+            x.flag = True
+            x.save()
+            email_list = []
+            email_list.append(x.student.parent1_email)
+            email_list.append(x.student.academic_advisor_email)
+            program_manager_email_list = list(i for i in User.objects.filter(groups__name='middletutor').values_list('email', flat=True))
+            email_list.extend(program_manager_email_list)
+            student = x.student
+            tutor = x.tutor
+            subject = "Inactive Tutoring Connection " + "| " + student.first_name + " and " + tutor.first_name
+            
+            html_content = render_to_string("middleschool/connection-inactive-email.html", {'student': student, 'tutor': tutor })
+            text_context = strip_tags(html_content)
 
-                email.attach_alternative(html_content, "text/html")
-                email.send()
+            connection.open()
 
-                connection.close()
+            email = EmailMultiAlternatives(
+                subject,
+                text_context,
+                'Tutoring Program - Peninsula Bridge',
+                email_list,
+                connection=connection,
 
-                break
+            )
+
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+
+            connection.close()
+
   
         list_meet = []
         for y in x.get_all_sessions_three():

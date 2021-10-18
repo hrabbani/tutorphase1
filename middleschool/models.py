@@ -211,7 +211,6 @@ class Connection(models.Model):
     note = models.TextField(null=True, blank=True, max_length=1000)
 
 
-
     def __str__(self):
         return f"{self.student}-{self.tutor}-{self.status}"
 
@@ -230,7 +229,10 @@ class Connection(models.Model):
     def get_all_sessions_three_feedback_status(self):
         return self.session_set.filter().order_by('-created')[:3]
 
-        
+    def get_all_sessions_three_all(self):
+        return self.session_set.all().order_by('-created')[:3]
+
+
 
 CONT_STATUS_CHOICES = (
     ('yes', 'yes'),
