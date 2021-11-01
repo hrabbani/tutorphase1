@@ -458,7 +458,7 @@ def generate_session_form(request):
 
         form_link = "https://www.admin.peninsulabridge.org/middleschool/" + session_generated_pk + "/submit-feedback/"
 
-        html_content = render_to_string("tutor/weekly-feedback-email.html", {'tutor': tutor, 'form_link': form_link })
+        html_content = render_to_string("middleschool/weekly-feedback-email.html", {'tutor': tutor, 'form_link': form_link })
         text_context = strip_tags(html_content)
 
         connection.open()
