@@ -44,6 +44,8 @@ from .views import (
     MentorProfileDeleteView,
     StudentProfileDeleteView,
     feedback_form_status,
+    reactivate_connection,
+
 
    
 )
@@ -95,6 +97,7 @@ urlpatterns = [
     path('<pk>/mentor-delete/', MentorProfileDeleteView.as_view(), name='mentor-profile-delete'),
     path('<pk>/student-delete/', StudentProfileDeleteView.as_view(), name='student-profile-delete'),
     path('feedback-form-status/', feedback_form_status, name='feedback-form-status'),
+    path('reactivate-connection/', reactivate_connection, name='reactivate-connection'),
 
 
     

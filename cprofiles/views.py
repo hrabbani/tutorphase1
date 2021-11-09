@@ -965,9 +965,6 @@ def check_connection_status(request):
                 x.flag = True
                 x.save()
                 email_list = []
-                email_list.append(x.student.email)
-                email_list.append(x.student.parent1_email)
-                email_list.append(x.mentor.email)
                 program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
                 email_list.extend(program_manager_email_list)
 
@@ -999,9 +996,6 @@ def check_connection_status(request):
             x.flag = True
             x.save()
             email_list = []
-            email_list.append(x.student.email)
-            email_list.append(x.student.parent1_email)
-            email_list.append(x.mentor.email)
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='choice').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
@@ -1488,3 +1482,21 @@ class StudentProfileDeleteView(DeleteView):
         id = self.kwargs.get('pk')
         obj = Student.objects.get(id=id)
         return obj
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['choice', 'admin'])	
+def reactivate_connection(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+
+        Connection.objects.filter(id=post_id).update(status='connected')        
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('cprofiles:dashboard')

@@ -48,6 +48,8 @@ from .views import (
     MentorProfileDeleteView,
     StudentProfileDeleteView,
     generate_session_form_parent,
+    reactivate_connection,
+
    
 )
 
@@ -103,6 +105,7 @@ urlpatterns = [
     path('<pk>/mentor-delete/', MentorProfileDeleteView.as_view(), name='mentor-profile-delete'),
     path('<pk>/student-delete/', StudentProfileDeleteView.as_view(), name='student-profile-delete'),
     path('generate-session-form-parent/', generate_session_form_parent, name='generate-session-form-parent'),
+    path('reactivate-connection/', reactivate_connection, name='reactivate-connection'),
 
     
 ]

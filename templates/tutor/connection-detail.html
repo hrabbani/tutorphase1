@@ -6,14 +6,24 @@
 
 {% block content %}
 
+
+<style>
+
+button.btnSize {
+     width: 12%;
+     height: 100%;
+}
+
+</style>
+
 <h3>Connection</h3>
 
 {% if connection.status == 'connected' %}
-<div><span class="badge badge-success">Connected</div>
+<div class="status_detail"><span class="badge badge-success">Connected</div>
 {% elif connection.status == 'disconnected' %}
-<div><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
+<div class="status_detail"><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'inactive' %}
-<div><span class="badge badge-warning">Inactive</div>
+<div class="status_detail"><span class="badge badge-warning">Inactive</div>
 {% endif %}
 
 
@@ -90,13 +100,18 @@
 
 {% elif connection.status == 'inactive' %}
 <a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
-        class="btn btn-info">Connect
+        class="btnSize btn btn-info">Connect
         Tutor</button></a>
 <form action="{% url 'profiles:remove-connect' %}" method="POST">
     {% csrf_token %}
     <input type="hidden" name="student_pk" value={{connection.student.pk}}>
     <input type="hidden" name="tutor_pk" value={{connection.tutor.pk}}>
-    <button type="submit" class="btn btn-danger">Disconnect</button>
+    <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
+</form>
+<form action="{% url 'profiles:reactivate-connection' %}" method="POST" class='reactivate-form' id='{{connection.id}}'>
+    {% csrf_token %}
+    <input type="hidden" name="post_id" value={{connection.id}}>
+    <button type="submit" class="btnSize btn btn-success">Reactivate</button>
 </form>
 {% endif %}
 
@@ -161,3 +176,35 @@
 
 
 {% endblock content %}
+
+
+
+{% block scripts %}
+<script>
+
+    $('.reactivate-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+                $(`.status_detail`).html("<span class='badge badge-success'>Connected");
+
+            },
+            error: function (response) {
+
+            }
+        })
+
+    })
+    
+</script>
+{% endblock scripts %}

@@ -5,7 +5,15 @@
 
 {% block content %}
 
-aaaa
+
+<style>
+
+button.btnSize {
+     width: 85%;
+     height: 100%;
+}
+
+</style>
 
 <div class="row">
     <div class="col-auto mr-auto">
@@ -68,7 +76,7 @@ aaaa
                 <a href="{% url 'cprofiles:show-task-form' obj.get_task %}">{{obj.progress}}
                 {% endif %}
                 </td>
-                <td>
+                <td class="status{{obj.id}}">
                     {% if obj.status == 'connected' %}
                     <div><span class="badge badge-success">Connected</div>
                     {% elif obj.status == 'disconnected' %}
@@ -85,30 +93,35 @@ aaaa
                         {% csrf_token %}
                         <input type="hidden" name="student_pk" value={{obj.student.pk}}>
                         <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
-                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                        <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
                     </form>
 
                     {% elif obj.status == 'disconnected' %}
                     <a href="{% url 'cprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
-                            class="btn btn-info">Connect Mentor</button></a>
+                            class="btnSize btn btn-info">Connect Mentor</button></a>
 
                     {% elif obj.status == 'inactive' %}
                     <a href="{% url 'cprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
-                            class="btn btn-info">Connect Mentor</button></a>
+                            class="btnSize btn btn-info">Connect Mentor</button></a>
                     <form action="{% url 'cprofiles:remove-connect' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="student_pk" value={{obj.student.pk}}>
                         <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
-                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                        <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
+                    </form>
+                    <form action="{% url 'cprofiles:reactivate-connection' %}" method="POST" class='reactivate-form' id='{{obj.id}}'>
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value={{obj.id}}>
+                        <button type="submit" class="btnSize btn btn-success">Reactivate</button>
                     </form>
                     {% elif obj.status == 'off track' %}
                     <a href="{% url 'cprofiles:student-connect-detail' obj.student.slug %}"><button type="submit"
-                            class="btn btn-info">Connect Mentor</button></a>
+                            class="btnSize btn btn-info">Connect Mentor</button></a>
                     <form action="{% url 'cprofiles:remove-connect' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="student_pk" value={{obj.student.pk}}>
                         <input type="hidden" name="mentor_pk" value={{obj.mentor.pk}}>
-                        <button type="submit" class="btn btn-danger">Disconnect</button>
+                        <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
                     </form>
                     {% endif %}
                 </td>
@@ -179,6 +192,31 @@ $('.like-form').submit(function (e) {
             },
             error: function (response) {
                 console.log('error', response)
+            }
+        })
+
+    })
+
+
+    $('.reactivate-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+                $(`.status${post_id}`).html("<div><span class='badge badge-success'>Connected</div>");
+
+            },
+            error: function (response) {
+
             }
         })
 

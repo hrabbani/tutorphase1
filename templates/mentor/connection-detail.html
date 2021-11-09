@@ -6,14 +6,21 @@
 
 {% block content %}
 
+<style>
+    button.btnSize {
+        width: 15%;
+        height: 100%;
+    }
+</style>
+
 <h3>Connection</h3>
 
 {% if connection.status == 'connected' %}
-<div><span class="badge badge-success">Connected</span><span> on {{connection.created | date:"M d, Y" }}</span></div>
+<div class="status_detail"><span class="badge badge-success">Connected</span><span> on {{connection.created | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'disconnected' %}
-<div><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
+<div class="status_detail"><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'inactive' %}
-<div><span class="badge badge-warning">Inactive</div>
+<div class="status_detail"><span class="badge badge-warning">Inactive</div>
 {% endif %}
 
 
@@ -75,27 +82,32 @@
 
 
 {% if connection.status == 'connected' %}
-<form action="{% url 'profiles:remove-connect' %}" method="POST">
+<form action="{% url 'mprofiles:remove-connect' %}" method="POST">
     {% csrf_token %}
     <input type="hidden" name="student_pk" value={{connection.student.pk}}>
-    <input type="hidden" name="tutor_pk" value={{connection.tutor.pk}}>
-    <button type="submit" class="btn btn-danger">Disconnect</button>
+    <input type="hidden" name="mentor_pk" value={{connection.mentor.pk}}>
+    <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
 </form>
 
 {% elif connection.status == 'disconnected' %}
-<a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
-        class="btn btn-info">Connect
-        Tutor</button></a>
+<a href="{% url 'mprofiles:student-connect-detail' connection.student.slug %}"><button type="submit"
+        class="btnSize btn btn-info">Connect
+        Mentor</button></a>
 
 {% elif connection.status == 'inactive' %}
-<a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
-        class="btn btn-info">Connect
-        Tutor</button></a>
-<form action="{% url 'profiles:remove-connect' %}" method="POST">
+<a href="{% url 'mprofiles:student-connect-detail' connection.student.slug %}"><button type="submit"
+        class="btnSize btn btn-info">Connect
+        Mentor</button></a>
+<form action="{% url 'mprofiles:remove-connect' %}" method="POST">
     {% csrf_token %}
     <input type="hidden" name="student_pk" value={{connection.student.pk}}>
-    <input type="hidden" name="tutor_pk" value={{connection.tutor.pk}}>
-    <button type="submit" class="btn btn-danger">Disconnect</button>
+    <input type="hidden" name="mentor_pk" value={{connection.mentor.pk}}>
+    <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
+</form>
+<form action="{% url 'mprofiles:reactivate-connection' %}" method="POST" class='reactivate-form' id='{{connection.id}}'>
+    {% csrf_token %}
+    <input type="hidden" name="post_id" value={{connection.id}}>
+    <button type="submit" class="btnSize btn btn-success">Reactivate</button>
 </form>
 {% endif %}
 
@@ -204,5 +216,30 @@
     for (let element of document.getElementsByClassName("flag")) {
         element.style.display = "none";
     }
+
+
+    $('.reactivate-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+                $(`.status_detail`).html("<span class='badge badge-success'>Connected");
+
+            },
+            error: function (response) {
+
+            }
+        })
+
+    })
 </script>
 {% endblock scripts %}

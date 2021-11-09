@@ -920,8 +920,6 @@ def check_connection_status(request):
             x.flag = True
             x.save()
             email_list = []
-            email_list.append(x.student.parent1_email)
-            email_list.append(x.student.academic_advisor_email)
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
             student = x.student
@@ -956,8 +954,6 @@ def check_connection_status(request):
             x.flag = True
             x.save()
             email_list = []
-            email_list.append(x.student.parent1_email)
-            email_list.append(x.student.academic_advisor_email)
             program_manager_email_list = list(i for i in User.objects.filter(groups__name='tutor').values_list('email', flat=True))
             email_list.extend(program_manager_email_list)
 
@@ -1235,3 +1231,22 @@ def feedback_form_status(request):
                 }
 
     return render(request, 'tutor/feedback-form-status.html', context)
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['tutor', 'admin'])	
+def reactivate_connection(request):
+    if request.method == 'POST':
+        post_id = request.POST.get('post_id')
+
+        Connection.objects.filter(id=post_id).update(status='connected')        
+
+        data = {
+            # 'value': like.value,
+            # 'likes': post_obj.liked.all().count()
+        }
+
+        return JsonResponse(data, safe=False)
+    return redirect('profiles:dashboard')

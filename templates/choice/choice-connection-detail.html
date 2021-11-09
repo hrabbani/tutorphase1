@@ -6,14 +6,23 @@
 
 {% block content %}
 
+
+<style>
+    button.btnSize {
+        width: 15%;
+        height: 100%;
+    }
+</style>
+
 <h3>Connection</h3>
 
 {% if connection.status == 'connected' %}
-<div><span class="badge badge-success">Connected</div>
+<div class="status_detail"><span class="badge badge-success">Connected</div>
 {% elif connection.status == 'disconnected' %}
-<div><span class="badge badge-danger">Disconnected</span><span> on {{connection.updated | date:"M d, Y" }}</span></div>
+<div class="status_detail"><span class="badge badge-danger">Disconnected</span><span> on
+        {{connection.updated | date:"M d, Y" }}</span></div>
 {% elif connection.status == 'inactive' %}
-<div><span class="badge badge-warning">Inactive</div>
+<div class="status_detail"><span class="badge badge-warning">Inactive</div>
 {% endif %}
 
 
@@ -71,90 +80,123 @@
                 </div>
             </div>
         </div>
-
     </div>
+</div>
+
+{% if connection.status == 'connected' %}
+<form action="{% url 'cprofiles:remove-connect' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="student_pk" value={{connection.student.pk}}>
+    <input type="hidden" name="mentor_pk" value={{connection.mentor.pk}}>
+    <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
+</form>
+
+{% elif connection.status == 'disconnected' %}
+<a href="{% url 'cprofiles:student-connect-detail' connection.student.slug %}"><button type="submit"
+        class="btnSize btn btn-info">Connect
+        Mentor</button></a>
+
+{% elif connection.status == 'inactive' %}
+<a href="{% url 'cprofiles:student-connect-detail' connection.student.slug %}"><button type="submit"
+        class="btnSize btn btn-info">Connect
+        Mentor</button></a>
+<form action="{% url 'cprofiles:remove-connect' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="student_pk" value={{connection.student.pk}}>
+    <input type="hidden" name="mentor_pk" value={{connection.mentor.pk}}>
+    <button type="submit" class="btnSize btn btn-danger">Disconnect</button>
+</form>
+<form action="{% url 'cprofiles:reactivate-connection' %}" method="POST" class='reactivate-form' id='{{connection.id}}'>
+    {% csrf_token %}
+    <input type="hidden" name="post_id" value={{connection.id}}>
+    <button type="submit" class="btnSize btn btn-success">Reactivate</button>
+</form>
+{% endif %}
+
+<h3>Activity</h3>
+
+<div class="table-responsive-lg">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Meetings</th>
+                <th scope="col">Topics</th>
+                <th scope="col">Step Completed</th>
+                <th scope="col">Support</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for obj in sessions %}
+            <tr>
+                <td>{{obj.created|date:"d M Y"}}</td>
+                <td>{{obj.meet}}</td>
+                <td>
+                    {% for topic in obj.get_topics %}
+                    <li>{{topic}}</li>
+                    {% endfor %}
+                </td>
+                <td>{{obj.step}}</td>
+                <td>{{obj.elaborate}}</td>
+                <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
+                            Form</button></a></td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
 
 
-    {% if connection.status == 'connected' %}
-    <form action="{% url 'profiles:remove-connect' %}" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="student_pk" value={{connection.student.pk}}>
-        <input type="hidden" name="tutor_pk" value={{connection.tutor.pk}}>
-        <button type="submit" class="btn btn-danger">Disconnect</button>
-    </form>
+<h3>Notes</h3>
 
-    {% elif connection.status == 'disconnected' %}
-    <a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
-            class="btn btn-info">Connect
-            Mentor</button></a>
+<a href="{% url 'cprofiles:connection-note-update-profile' connection.pk %}"><button type="submit"
+        class="btn btn-info">Edit</button></a>
 
-    {% elif connection.status == 'inactive' %}
-    <a href="{% url 'profiles:student-detail-view' connection.student.slug %}"><button type="submit"
-            class="btn btn-info">Connect
-            Mentor</button></a>
-    <form action="{% url 'profiles:remove-connect' %}" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="student_pk" value={{connection.student.pk}}>
-        <input type="hidden" name="tutor_pk" value={{connection.tutor.pk}}>
-        <button type="submit" class="btn btn-danger">Disconnect</button>
-    </form>
-    {% endif %}
-
-    <h3>Activity</h3>
-
-    <div class="table-responsive-lg">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Meetings</th>
-                    <th scope="col">Topics</th>
-                    <th scope="col">Step Completed</th>
-                    <th scope="col">Support</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                {% for obj in sessions %}
-                <tr>
-                    <td>{{obj.created|date:"d M Y"}}</td>
-                    <td>{{obj.meet}}</td>
-                    <td>
-                        {% for topic in obj.get_topics %}
-                        <li>{{topic}}</li>
-                        {% endfor %}
-                    </td>
-                    <td>{{obj.step}}</td>
-                    <td>{{obj.elaborate}}</td>
-                    <td><a href="{{obj.get_absolute_url}}"><button type="submit" class="btn btn-info">View Full
-                                Form</button></a></td>
-
-                </tr>
-
-                {% endfor %}
-
-            </tbody>
-        </table>
-    </div>
-
-
-    <h3>Notes</h3>
-
-    <a href="{% url 'cprofiles:connection-note-update-profile' connection.pk %}"><button type="submit"
-            class="btn btn-info">Edit</button></a>
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card h-100">
-                <div class="card-body">
-                    <p class="card-text">{{connection.note}}</p>
-                </div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card h-100">
+            <div class="card-body">
+                <p class="card-text">{{connection.note}}</p>
             </div>
         </div>
     </div>
+</div>
 
-    </br>
+</br>
 
 
-    {% endblock content %}
+{% endblock content %}
+
+
+{% block scripts %}
+<script>
+    $('.reactivate-form').submit(function (e) {
+        e.preventDefault()
+
+        const post_id = $(this).attr('id')
+        const url = $(this).attr('action')
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function (response) {
+                $(`.status_detail`).html("<span class='badge badge-success'>Connected");
+
+            },
+            error: function (response) {
+
+            }
+        })
+
+    })
+</script>
+{% endblock scripts %}
