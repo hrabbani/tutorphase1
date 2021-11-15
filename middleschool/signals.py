@@ -13,7 +13,7 @@ from django.db.models.signals import m2m_changed
 connection = get_connection(host='smtp.gmail.com', 
                                 port=587, 
                                 username='tutoring@peninsulabridge.org', 
-                                password='Tutoring2021@', 
+                                password='Tutor2122@@', 
                                 use_tls=True)
 
 

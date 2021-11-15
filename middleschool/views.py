@@ -36,7 +36,7 @@ import time
 connection = get_connection(host='smtp.gmail.com', 
                                 port=587, 
                                 username='tutoring@peninsulabridge.org', 
-                                password='Tutoring2021@', 
+                                password='Tutor2122@@', 
                                 use_tls=True)
 
 
