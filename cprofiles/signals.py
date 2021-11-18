@@ -15,7 +15,7 @@ from django.utils.html import strip_tags
 connection = get_connection(host='smtp.gmail.com', 
                                 port=587, 
                                 username='karen@peninsulabridge.org', 
-                                password='WESTON1!', 
+                                password='PBridge1989', 
                                 use_tls=True)
 
 

@@ -33,13 +33,26 @@ from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import time
+import environ
+import os
 
+env = environ.Env()
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+
+EMAIL_USERNAME_CHOICE=env('email_username_choice')
+EMAIL_PASSWORD_CHOICE=env('email_password_choice')
 
 
 connection = get_connection(host='smtp.gmail.com', 
                                 port=587, 
-                                username='karen@peninsulabridge.org', 
-                                password='WESTON1!', 
+                                username=EMAIL_USERNAME_CHOICE, 
+                                password=EMAIL_PASSWORD_CHOICE, 
                                 use_tls=True)
 
 

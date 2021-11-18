@@ -30,12 +30,26 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 import csv
 import time
+import environ
+import os
+
+env = environ.Env()
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+
+EMAIL_USERNAME_HIGH_SCHOOL=env('email_username_high_school')
+EMAIL_PASSWORD_HIGH_SCHOOL=env('email_password_high_school')
 
 
 connection = get_connection(host='smtp.gmail.com', 
                                 port=587, 
-                                username='hstutoring@peninsulabridge.org', 
-                                password='bridge89', 
+                                username=EMAIL_USERNAME_HIGH_SCHOOL, 
+                                password=EMAIL_PASSWORD_HIGH_SCHOOL, 
                                 use_tls=True)
 
 
