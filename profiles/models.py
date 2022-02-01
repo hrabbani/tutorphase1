@@ -75,7 +75,8 @@ GRADE_CHOICES = (
     ('10', '10'),
     ('11', '11'),
     ('12', '12'),
-    ('Not in grade school', 'Not in grade school'),
+    ('Graduate', 'Graduate'),
+    ('Professional', 'Professional'),
 )
 
 
@@ -139,6 +140,7 @@ class Profile(models.Model):
     interest = models.ManyToManyField(Interest, blank=True, related_name='interest')
     check = models.CharField(null=True, blank=True, max_length=200, choices=YES_NO)
     status = models.CharField(null=True, blank=True, max_length=200, choices=PROFILE_STATUS, default='active')
+    connect_virtual = models.BooleanField(default=False)
 
 
     def __str__(self):

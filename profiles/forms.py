@@ -8,7 +8,7 @@ class TutorModelForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'phone', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question', 'age', 'ethnic', 'interest', 'academic_advisor', 'check')
+        fields = ('first_name', 'last_name', 'phone', 'grade', 'avatar', 'email', 'subjects', 'languages', 'school', 'student_capacity', 'question', 'age', 'ethnic', 'interest', 'academic_advisor', 'check',  'connect_virtual')
 
 
     def __init__(self, *args, **kwargs):
