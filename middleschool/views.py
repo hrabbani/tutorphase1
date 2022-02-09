@@ -1009,6 +1009,10 @@ def check_connection_status(request):
             email_list.extend(program_manager_email_list)
             student = x.student
             tutor = x.tutor
+
+            tutor_email = x.tutor.email
+            email_list.append(tutor_email)
+
             subject = "Inactive Tutoring Connection " + "| " + student.first_name + " and " + tutor.first_name
             
             html_content = render_to_string("middleschool/connection-inactive-email.html", {'student': student, 'tutor': tutor })
@@ -1045,6 +1049,10 @@ def check_connection_status(request):
 
             student = x.student
             tutor = x.tutor
+
+            tutor_email = x.tutor.email
+            email_list.append(tutor_email)
+            
             subject = "Inactive Tutoring Connection " + "| " + student.first_name + " and " + tutor.first_name
 
             html_content = render_to_string("middleschool/connection-inactive-email.html", {'student': student, 'tutor': tutor })
