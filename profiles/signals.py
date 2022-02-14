@@ -12,6 +12,11 @@ import os
 
 env = environ.Env()
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 EMAIL_USERNAME_HIGH_SCHOOL=env('email_username_high_school')
 EMAIL_PASSWORD_HIGH_SCHOOL=env('email_password_high_school')
 
