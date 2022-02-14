@@ -7,13 +7,18 @@ from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db.models.signals import m2m_changed
+import environ
+import os
 
+env = environ.Env()
 
+EMAIL_USERNAME_HIGH_SCHOOL=env('email_username_high_school')
+EMAIL_PASSWORD_HIGH_SCHOOL=env('email_password_high_school')
 
 connection = get_connection(host='smtp.gmail.com', 
                                 port=587, 
-                                username='penbridgedashboard@gmail.com', 
-                                password='u32UaD&*oeQJ', 
+                                username=EMAIL_USERNAME_HIGH_SCHOOL, 
+                                password=EMAIL_PASSWORD_HIGH_SCHOOL, 
                                 use_tls=True)
 
 
