@@ -177,4 +177,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'humza.rabbani@gmail.com'
-EMAIL_HOST_PASSWORD = 'z*^RYE6SpkYm'
+EMAIL_HOST_PASSWORD = 'lbtbmtfyskanyvgb'
