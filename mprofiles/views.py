@@ -401,8 +401,11 @@ def generate_session_form(request):
         z.append("https://www.admin.peninsulabridge.org/mentoring/" + session_generated_pk + "/submit-feedback/")
 
         email = x.mentor.email
+        name1 = x.mentor.first_name
+        name2 = x.mentor.last_name
 
-        content = "Dear " + mentor.first_name + " " + mentor.last_name + "\nThank you for volunteering your time to support " + student.first_name + "! Please take 3-5 minutes to complete the following feedback form: " +         "https://www.admin.peninsulabridge.org/mentoring/" + session_generated_pk + "/submit-feedback/" + ". We will continue to send this form every month so we can support you with any concerns that arise in a faster and easier manner. \nThis is also a great place to reflect on your mentorship experience, tracking the progress your student is making and identifying the impact you are creating. Thank you for your support! \nIf you have any questions or concerns, please reach out to Komal at komal@peninsulabridge.org. \nYour Mentor Coordinator,\nKomal Goel"
+
+        content = "Dear " + name1 + " " + name2 + "," "\nThank you for volunteering your time to support " + student.first_name + "! Please take 3-5 minutes to complete the following feedback form: " + "https://www.admin.peninsulabridge.org/mentoring/" + session_generated_pk + "/submit-feedback/" + ". We will continue to send this form every month so we can support you with any concerns that arise in a faster and easier manner. \nThis is also a great place to reflect on your mentorship experience, tracking the progress your student is making and identifying the impact you are creating. Thank you for your support! \nIf you have any questions or concerns, please reach out to Komal at komal@peninsulabridge.org. \nYour Mentor Coordinator,\nKomal Goel"
 
         
 
