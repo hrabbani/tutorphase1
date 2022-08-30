@@ -174,7 +174,7 @@ def mentor_connect(request):
 
             content = "Dear " + student.first_name + " " + student.last_name + " and " + mentor.first_name + " " + mentor.last_name + ", Welcome to Peninsula Bridge's High School Mentor Program! We are so excited to introduce you two to each other. "
             
-            send_mail('Introducing you to your Peninsula Bridge Mentor/Mentee,
+            send_mail('Introducing you to your Peninsula Bridge Mentor/Mentee',
             content,
             'Mentor Program - Peninsula Bridge',
             email_list,
